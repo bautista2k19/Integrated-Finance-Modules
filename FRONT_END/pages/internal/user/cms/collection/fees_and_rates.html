@@ -1,0 +1,647 @@
+{% extends "internal/user/cms/layout.html" %} {% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 p-title">Fees and Rates </h1>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Fees & Rates</li>
+                    </ol>
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- NEW TYPES -->
+            <div class="row collapse" id="div_form">
+                <div class="col-md-12">
+                    <div class="card card-primary card-outline card-tabs">
+                        <div class="card-header p-0 pt-1 border-bottom-0">
+                            <ul class="nav nav-tabs" id="patient-bill-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="form-treatment-types-tab" data-toggle="pill"
+                                        href="#form-treatment-types" role="tab" aria-controls="form-treatment-types"
+                                        aria-selected="true">New Treatment Type</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="form-surgery-types-tab" data-toggle="pill"
+                                        href="#form-surgery-types" role="tab" aria-controls="form-surgery-types"
+                                        aria-selected="false">New Surgery Type</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="form-lab-test-types-tab" data-toggle="pill"
+                                        href="#form-lab-test-types" role="tab" aria-controls="form-lab-test-types"
+                                        aria-selected="false">New Lab Test Type</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="form-room-types-tab" data-toggle="pill"
+                                        href="#form-room-types" role="tab" aria-controls="form-room-types"
+                                        aria-selected="false">New Room Type</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="types-tabsContent">
+                                <!-- new treatment type -->
+                                <div class="tab-pane fade show active div_type_form" id="form-treatment-types" role="tabpanel"
+                                    aria-labelledby="form-treatment-types-tab">
+                                    <form id="treatment_types_form" name="treatment_types_form">
+                                        <div class="row">
+                                            <div class="form-group col-md-6 mb-2">
+                                                <label class="form-required-field" for="treatment_type_name">Treatment
+                                                    Type Name</label>
+                                                <input class="form-control" type="text" name="treatment_type_name"
+                                                    id="treatment_type_name" placeholder="Treatment type name" required
+                                                    data-msg-required="Please enter treatment type name." />
+                                            </div>
+                                            <div class="form-group col-md-6 mb-2">
+                                                <label class="form-required-field" for="treatment_fee">Fee</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">₱</span>
+                                                    </div>
+                                                    <input class="form-control" type="number" name="treatment_fee"
+                                                        id="treatment_fee" placeholder="Fee" step="0.01" min="1" required
+                                                        data-msg-required="Please enter Fee." />
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">.00</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-12 mb-2">
+                                                <label class="form-required-field"
+                                                    for="treatment_description">Description</label>
+                                                <textarea class="form-control" id="treatment_description"
+                                                    name="treatment_description" placeholder="Description" required
+                                                    data-msg-required="Please enter description." rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button type="submit" class="btn btn-primary submit float-right ml-2"
+                                                    id="treatment_save_button">
+                                                    Save <i class="fas fa-check ml-1"></i>
+                                                </button>
+                                                <button type="reset" class="cancel_type_form btn btn-default float-right">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- new surgery type -->
+                                <div class="tab-pane fade div_type_form" id="form-surgery-types" role="tabpanel"
+                                    aria-labelledby="form-surgery-types-tab">
+                                    <form id="surgery_types_form" name="surgery_types_form">
+                                        <div class="row">
+                                            <div class="form-group col-md-6 mb-2">
+                                                <label class="form-required-field" for="surgery_type_name">Surgery Type
+                                                    Name</label>
+                                                <input class="form-control" type="text" name="surgery_type_name"
+                                                    id="surgery_type_name" placeholder="Surgery type name" required
+                                                    data-msg-required="Please enter surgery type name." />
+                                            </div>
+                                            <div class="form-group col-md-6 mb-2">
+                                                <label class="form-required-field" for="surgery_fee">Fee</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">₱</span>
+                                                    </div>
+                                                    <input class="form-control" type="number" name="surgery_fee"
+                                                        id="surgery_fee" placeholder="Fee" step="0.01" min="1" required
+                                                        data-msg-required="Please enter Fee." />
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">.00</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-12 mb-2">
+                                                <label class="form-required-field"
+                                                    for="surgery_description">Description</label>
+                                                <textarea class="form-control" id="surgery_description"
+                                                    name="surgery_description" placeholder="Description" required
+                                                    data-msg-required="Please enter description." rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button type="submit" class="btn btn-primary submit float-right ml-2"
+                                                    id="surgery_save_button">
+                                                    Save <i class="fas fa-check ml-1"></i>
+                                                </button>
+                                                <button type="reset" class="cancel_type_form btn btn-default float-right">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- new lab test type -->
+                                <div class="tab-pane fade div_type_form" id="form-lab-test-types" role="tabpanel"
+                                    aria-labelledby="form-lab-test-types-tab">
+                                    <form id="lab_test_types_form" name="lab_test_types_form">
+                                        <div class="row">
+                                            <div class="form-group col-md-6 mb-2">
+                                                <label class="form-required-field" for="lab_test_type_name">Lab Test Type
+                                                    Name</label>
+                                                <input class="form-control" type="text" name="lab_test_type_name"
+                                                    id="lab_test_type_name" placeholder="Lab test type name" required
+                                                    data-msg-required="Please enter lab test type name." />
+                                            </div>
+                                            <div class="form-group col-md-6 mb-2">
+                                                <label class="form-required-field" for="lab_test_fee">Fee</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">₱</span>
+                                                    </div>
+                                                    <input class="form-control" type="number" name="lab_test_fee"
+                                                        id="lab_test_fee" placeholder="Fee" step="0.01" min="1" required
+                                                        data-msg-required="Please enter Fee." />
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">.00</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-12 mb-2">
+                                                <label class="form-required-field"
+                                                    for="lab_test_description">Description</label>
+                                                <textarea class="form-control" id="lab_test_description"
+                                                    name="lab_test_description" placeholder="Description" required
+                                                    data-msg-required="Please enter description." rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button type="submit" class="btn btn-primary submit float-right ml-2"
+                                                    id="lab_test_save_button">
+                                                    Save <i class="fas fa-check ml-1"></i>
+                                                </button>
+                                                <button type="reset" class="cancel_type_form btn btn-default float-right">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- new room type -->
+                                <div class="tab-pane fade div_type_form" id="form-room-types" role="tabpanel"
+                                    aria-labelledby="form-room-types-tab">
+                                    <form id="room_types_form" name="room_types_form">
+                                        <div class="row">
+                                            <div class="form-group col-md-6 mb-2">
+                                                <label class="form-required-field" for="room_type_name">Room Type
+                                                    Name</label>
+                                                <input class="form-control" type="text" name="room_type_name"
+                                                    id="room_type_name" placeholder="Room type name" required
+                                                    data-msg-required="Please enter room type name." />
+                                            </div>
+                                            <div class="form-group col-md-6 mb-2">
+                                                <label class="form-required-field" for="room_fee">Fee</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">₱</span>
+                                                    </div>
+                                                    <input class="form-control" type="number" name="room_fee"
+                                                        id="room_fee" placeholder="Fee" step="0.01" min="1" required
+                                                        data-msg-required="Please enter Fee." />
+                                                    <div class="input-group-append">
+                                                        <span class="input-group-text">.00</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-12 mb-2">
+                                                <label class="form-required-field"
+                                                    for="room_description">Description</label>
+                                                <textarea class="form-control" id="room_description"
+                                                    name="room_description" placeholder="Description" required
+                                                    data-msg-required="Please enter description." rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button type="submit" class="btn btn-primary submit float-right ml-2"
+                                                    id="room_save_button">
+                                                    Save <i class="fas fa-check ml-1"></i>
+                                                </button>
+                                                <button type="reset" class="cancel_type_form btn btn-default float-right">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- UPDATE TYPES -->
+            <!-- treatment type -->
+            <div class="row collapse" id="div_edit_treatment_type">
+                <div class="col-sm-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">
+                                    Update Treatment Type
+                                </h3>
+                                <span type="button" aria-hidden="true"><i
+                                        class="fas fa-times"></i></span>
+                            </div>
+                        </div>
+                        <form id="form_edit_treatment_type" name="form_edit_treatment_type">
+                            <div class="card-body">
+                                <input type="hidden" id="treatment_type_uuid" name="treatment_type_uuid">
+                                <div class="row">
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="treatment_type_name">Treatment
+                                            Type Name</label>
+                                        <input class="form-control" type="text" name="edit_treatment_type_name"
+                                            id="edit_treatment_type_name" placeholder="Treatment type name" required
+                                            data-msg-required="Please enter treatment type name." />
+                                    </div>
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="edit_treatment_type_fee">Fee</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">₱</span>
+                                            </div>
+                                            <input class="form-control" type="number" name="edit_treatment_type_fee"
+                                                id="edit_treatment_type_fee" placeholder="Fee" step="0.01" min="1" required
+                                                data-msg-required="Please enter Fee." />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-12 mb-2">
+                                        <label class="form-required-field"
+                                            for="edit_treatment_type_description">Description</label>
+                                        <textarea class="form-control" id="edit_treatment_type_description"
+                                            name="edit_treatment_type_description" placeholder="Description" required
+                                            data-msg-required="Please enter description." rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary submit float-right ml-2" >
+                                    Save <i class="fas fa-check ml-1"></i>
+                                </button>
+                                <button type="reset" class="cancel_type_form btn btn-default float-right"
+                                    >
+                                    Cancel
+                                </button>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+            <!-- surgery type -->
+            <div class="row collapse" id="div_edit_surgery_type">
+                <div class="col-sm-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">
+                                    Update Surgery Type
+                                </h3>
+                                <span type="button" aria-hidden="true"><i
+                                        class="fas fa-times"></i></span>
+                            </div>
+                        </div>
+                        <form id="form_edit_surgery_type" name="form_edit_surgery_type">
+                            <div class="card-body">
+                                <input type="hidden" id="surgery_type_uuid" name="surgery_type_uuid">
+                                <div class="row">
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="surgery_type_name">Surgery
+                                            Type Name</label>
+                                        <input class="form-control" type="text" name="edit_surgery_type_name"
+                                            id="edit_surgery_type_name" placeholder="Surgery type name" required
+                                            data-msg-required="Please enter surgery type name." />
+                                    </div>
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="edit_surgery_type_fee">Fee</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">₱</span>
+                                            </div>
+                                            <input class="form-control" type="number" name="edit_surgery_type_fee"
+                                                id="edit_surgery_type_fee" placeholder="Fee" step="0.01" min="1" required
+                                                data-msg-required="Please enter Fee." />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-12 mb-2">
+                                        <label class="form-required-field"
+                                            for="edit_surgery_type_description">Description</label>
+                                        <textarea class="form-control" id="edit_surgery_type_description"
+                                            name="edit_surgery_type_description" placeholder="Description" required
+                                            data-msg-required="Please enter description." rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary submit float-right ml-2" >
+                                    Save <i class="fas fa-check ml-1"></i>
+                                </button>
+                                <button type="reset" class="cancel_type_form btn btn-default float-right"
+                                    >
+                                    Cancel
+                                </button>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+            <!-- lab test type-->
+            <div class="row collapse" id="div_edit_lab_test_type">
+                <div class="col-sm-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">
+                                    Update Lab Test Type
+                                </h3>
+                                <span type="button" aria-hidden="true"><i
+                                        class="fas fa-times"></i></span>
+                            </div>
+                        </div>
+                        <form id="form_edit_lab_test_type" name="form_edit_lab_test_type">
+                            <div class="card-body">
+                                <input type="hidden" id="lab_test_type_uuid" name="lab_test_type_uuid">
+                                <div class="row">
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="lab_test_type_name">Lab Test
+                                            Type Name</label>
+                                        <input class="form-control" type="text" name="edit_lab_test_type_name"
+                                            id="edit_lab_test_type_name" placeholder="Lab test type name" required
+                                            data-msg-required="Please enter lab test type name." />
+                                    </div>
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="edit_lab_test_type_fee">Fee</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">₱</span>
+                                            </div>
+                                            <input class="form-control" type="number" name="edit_lab_test_type_fee"
+                                                id="edit_lab_test_type_fee" placeholder="Fee" step="0.01" min="1" required
+                                                data-msg-required="Please enter Fee." />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-12 mb-2">
+                                        <label class="form-required-field"
+                                            for="edit_lab_test_type_description">Description</label>
+                                        <textarea class="form-control" id="edit_lab_test_type_description"
+                                            name="edit_lab_test_type_description" placeholder="Description" required
+                                            data-msg-required="Please enter description." rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary submit float-right ml-2" >
+                                    Save <i class="fas fa-check ml-1"></i>
+                                </button>
+                                <button type="reset" class="cancel_type_form btn btn-default float-right"
+                                    >
+                                    Cancel
+                                </button>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+            <!-- room type  -->
+            <div class="row collapse" id="div_edit_room_type">
+                <div class="col-sm-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">
+                                    Update Room Type
+                                </h3>
+                                <span type="button" aria-hidden="true"><i
+                                        class="fas fa-times"></i></span>
+                            </div>
+                        </div>
+                        <form id="form_edit_room_type" name="form_edit_room_type">
+                            <div class="card-body">
+                                <input type="hidden" id="room_type_uuid" name="room_type_uuid">
+                                <div class="row">
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="room_type_name">Room
+                                            Type Name</label>
+                                        <input class="form-control" type="text" name="edit_room_type_name"
+                                            id="edit_room_type_name" placeholder="Room type name" required
+                                            data-msg-required="Please enter room type name." />
+                                    </div>
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="edit_room_type_fee">Fee</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">₱</span>
+                                            </div>
+                                            <input class="form-control" type="number" name="edit_room_type_fee"
+                                                id="edit_room_type_fee" placeholder="Fee" step="0.01" min="1" required
+                                                data-msg-required="Please enter Fee." />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-12 mb-2">
+                                        <label class="form-required-field"
+                                            for="edit_room_type_description">Description</label>
+                                        <textarea class="form-control" id="edit_room_type_description"
+                                            name="edit_room_type_description" placeholder="Description" required
+                                            data-msg-required="Please enter description." rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary submit float-right ml-2" >
+                                    Save <i class="fas fa-check ml-1"></i>
+                                </button>
+                                <button type="reset" class="cancel_type_form btn btn-default float-right"
+                                    >
+                                    Cancel
+                                </button>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TYPES -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary card-outline card-tabs">
+                        <div class="card-header p-0 pt-1 border-bottom-0">
+                            <div class="d-flex justify-content-between m-2 ml-3 mr-3">
+                                <h3 class="card-title">List of Type</h3>
+                                <button class="btn btn-primary" id="new_record">
+                                    <i class="fas fa-plus" aria-hidden="true"></i> New
+                                </button>
+                            </div>
+                            <ul class="nav nav-tabs" id="patient-bill-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="treatment-types-tab" data-toggle="pill"
+                                        href="#treatment-types" role="tab" aria-controls="treatment-types"
+                                        aria-selected="true">Treatment Types</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="surgery-types-tab" data-toggle="pill" href="#surgery-types"
+                                        role="tab" aria-controls="surgery-types" aria-selected="false">Surgery Types</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="lab-test-types-tab" data-toggle="pill"
+                                        href="#lab-test-types" role="tab" aria-controls="lab-test-types"
+                                        aria-selected="false">Lab Test Types</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="room-types-tab" data-toggle="pill" href="#room-types"
+                                        role="tab" aria-controls="room-types" aria-selected="false">Room Types</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="treatment-types-tabsContent">
+                                <div class="tab-pane fade show active" id="treatment-types" role="tabpanel"
+                                    aria-labelledby="treatment-types-tab">
+                                    <table class="display table table-hover table-bordered" id="treatment_types_table"
+                                        style="width: 100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Treatment Type</th>
+                                                <th>Description</th>
+                                                <th>Fee</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="surgery-types" role="tabpanel"
+                                    aria-labelledby="surgery-types-tab">
+                                    <div>
+                                        <table class="display table table-hover table-bordered" id="surgery_types_table"
+                                            style="width: 100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Surgery Type</th>
+                                                    <th>Description</th>
+                                                    <th>Fee</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="lab-test-types" role="tabpanel"
+                                    aria-labelledby="lab-test-types-tab">
+                                    <div>
+                                        <table class="display table table-hover table-bordered"
+                                            id="lab_test_types_table" style="width: 100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Lab Test Type</th>
+                                                    <th>Description</th>
+                                                    <th>Fee</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="room-types" role="tabpanel"
+                                    aria-labelledby="room-types-tab">
+                                    <div>
+                                        <table class="display table table-hover table-bordered" id="room_types_table"
+                                            style="width: 100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Room Type</th>
+                                                    <th>Description</th>
+                                                    <th>Fee</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal_delete">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"> <i class="fas fa-exclamation-triangle mr-1"></i> Confirmation</h4>
+                <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                </button>
+            </div>
+            <form id="form_delete">
+                <div class="modal-body">
+                    <input type="hidden" id="delete_uuid">
+                    <p>Are you sure you want to deactivate this record?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-danger submit" id="delete_button">
+                        Yes, Deactivate it
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+{% endblock %} {% block customjs %}
+<script src="{{ url_for('assets', path='/') }}cms/custom_js/collection/fees_and_rates.js"></script>
+{% endblock %}

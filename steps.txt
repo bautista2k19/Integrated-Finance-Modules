@@ -1,0 +1,10 @@
+# 1: open myphpadmin
+# 2: create database "homies"
+# 3: import the "homies.sql"
+# 4: go to vs code terminal in bash environment
+# 5: type the command 'pip3 install virtualenv'
+# 6: type the command 'virtualenv venv'
+# 7: type the command 'source venv/bin/activate'
+# 8: type the command 'pip3 install -r requirements.txt' OR 'pip list --format=freeze > requirements.txt'
+# 9: type the command 'uvicorn API.main:app --reload'
+# 10: go to http://localhost:8000/

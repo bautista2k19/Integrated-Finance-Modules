@@ -1,0 +1,1688 @@
+{% extends "internal/user/cms/layout.html" %} {% block content %}
+
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 p-title">Outpatient Payments</h1>
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item active">Outpatient Payments</li>
+          </ol>
+        </div>
+        <!-- /.col -->
+      </div>
+
+      <input type="hidden" id="payment_term_id">
+
+      <!-- Lab Request Form -->
+      <div class="row collapse" id="lab_request_div">
+        <div class="col-sm-12">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">
+                  Lab Request Payment
+                </h3>
+                <span type="button" aria-hidden="true" onclick="return hideDiv()"><i
+                    class="fas fa-times"></i></span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="lab_request_payment_stepper" class="bs-stepper">
+                <div class="bs-stepper-header" role="tablist">
+                  <!-- your steps here -->
+                  <div class="step" data-target="#review-lab-request-part">
+                    <button type="button" class="step-trigger" role="tab" aria-controls="review-lab-request-part"
+                      id="review-lab-request-part-trigger">
+                      <span class="bs-stepper-circle">1</span>
+                      <span class="bs-stepper-label">Lab Request Summary</span>
+                    </button>
+                  </div>
+                  <div class="line"></div>
+                  <div class="step" data-target="#lab-request-payment-part">
+                    <button type="button" class="step-trigger" role="tab" aria-controls="lab-request-payment-part"
+                      id="lab-request-payment-part-trigger">
+                      <span class="bs-stepper-circle">2</span>
+                      <span class="bs-stepper-label">Payment</span>
+                    </button>
+                  </div>
+                  <div class="line"></div>
+                  <div class="step" data-target="#lab-request-receipt-part">
+                    <button type="button" class="step-trigger" role="tab" aria-controls="lab-request-receipt-part"
+                      id="lab-request-receipt-part-trigger">
+                      <span class="bs-stepper-circle">3</span>
+                      <span class="bs-stepper-label">Print Receipt</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="bs-stepper-content">
+                  <!-- your steps content here -->
+                  <div id="review-lab-request-part" class="content" role="tabpanel"
+                    aria-labelledby="review-lab-request-part-trigger">
+                    <div class="row mt-2">
+                      <div class="col-md-8 mx-auto">
+                        <div class="form-group mb-2">
+                          <label class="form-required-field" for="lab_request_id"> Lab Request | Patient Name</label>
+                          <select class="form-control select2" name="lab_request_id" id="lab_request_id" style="width:100%"
+                            required data-msg-required="Please select lab request.">
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-8 mx-auto">
+                        <table class="table table-borderless table-hover">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>Lab Request No. </p>
+                                <b id="td_lab_request_no"></b>
+                              </td>
+                              <td>
+                                <p>Request Date</p>
+                                <p id="td_lab_request_date_of_request"></p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>Lab Test Type</p>
+                              </td>
+                              <td><b id="td_lab_test_type"></td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <b>Total Amount</b>
+                              </td>
+                              <td><b id="td_lab_request_total_amount"></b></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-primary float-right" onclick="stepper.next()">Next<i class="fas fa-chevron-circle-right ml-1"></i></button>
+                  </div>
+                  <div id="lab-request-payment-part" class="content" role="tabpanel"
+                    aria-labelledby="lab-request-payment-part-trigger">
+                    <form id="lab_request_payment_form">
+                      <input type="hidden" id="lab_request_uuid">
+                      <div class="row">
+                        <div class="col-md-6 mb-2">
+                          <div class="form-group">
+                            <label class="form-required-field" for="lab_request_payment_method_id">Payment
+                              Method</label>
+                            <select class="form-control select2" name="lab_request_payment_method_id"
+                              id="lab_request_payment_method_id" style="width:100%" required
+                              data-msg-required="Please select payment method.">
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="lab_request_payment_cash">
+                        <div class="row">
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label for="lab_request_payment_cash_tendered">Cash Tendered</label>
+                              <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">₱</span>
+                                </div>
+                                <input class="form-control" type="number" name="lab_request_payment_cash_tendered"
+                                  id="lab_request_payment_cash_tendered" placeholder="Cash Tendered" step="0.01" required
+                                  data-msg-required="Please enter cash tendered." />
+                                <div class="input-group-append">
+                                  <span class="input-group-text">.00</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6 mb-2">
+                            <label>Change:</label><br>
+                            <span id="lab_request_payment_change"
+                                class="text-muted">0.00</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="lab_request_payment_check">
+                        <div class="row">
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="lab_request_payment_bank_name">Bank Name</label>
+                              <input class="form-control" type="text" name="lab_request_payment_bank_name" id="lab_request_payment_bank_name"
+                                placeholder="Bank Name" required data-msg-required="Please enter bank name." />
+                            </div>
+                          </div>
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="lab_request_payment_bank_address">Bank Address</label>
+                              <input class="form-control" type="text" name="lab_request_payment_bank_address" id="lab_request_payment_bank_address"
+                                placeholder="Bank Address" required data-msg-required="Please enter bank address." />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="lab_request_payment_check_no">Check No.</label>
+                              <input class="form-control" type="text" name="lab_request_payment_check_no" id="lab_request_payment_check_no"
+                                placeholder="Check No." required data-msg-required="Please enter check no." />
+                            </div>
+                          </div>
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="lab_request_payment_check_date">Check Date</label>
+                              <input class="form-control" type="date" name="lab_request_payment_check_date" id="lab_request_payment_check_date"
+                                required data-msg-required="Please enter check date" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="lab_request_payment_account_name">Account Name</label>
+                              <input class="form-control" type="text" name="lab_request_payment_account_name" id="lab_request_payment_account_name"
+                                placeholder="Account Name" required data-msg-required="Please enter account name." />
+                            </div>
+                          </div>
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="lab_request_payment_account_no">Account No.</label>
+                              <input class="form-control" type="text" name="lab_request_payment_account_no" id="lab_request_payment_account_no"
+                                placeholder="Account No." required data-msg-required="Please enter account number." />
+                            </div>
+                          </div>
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="lab_request_payment_rt_number">R/T No.</label>
+                              <input class="form-control" type="text" name="lab_request_payment_rt_number" id="lab_request_payment_rt_number"
+                                placeholder="R/T No." required data-msg-required="Please enter r/t no." />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="lab_request_payment_payee_name">Payee Name</label>
+                              <input class="form-control" type="text" name="lab_request_payment_payee_name" id="lab_request_payment_payee_name"
+                                placeholder="Payee Name" required data-msg-required="Please enter payee name." />
+                            </div>
+                          </div>
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="lab_request_payment_check_amount">Check Amount</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">₱</span>
+                                </div>
+                                <input class="form-control" type="number" name="lab_request_payment_check_amount"
+                                  id="lab_request_payment_check_amount" placeholder="Check Amount" required min="1" step="0.01"
+                                  data-msg-required="Please enter amount." />
+                                <div class="input-group-append">
+                                  <span class="input-group-text">.00</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4 mb-2">
+                            <label for="lab_request_payment_check_amount_in_words">Amount in words</label>
+                            <div id="lab_request_payment_check_amount_in_words"></div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-8 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="lab_request_payment_check_description">Description</label>
+                              <textarea class="form-control" id="lab_request_payment_check_description" name="lab_request_payment_check_description"
+                                placeholder="Description" required data-msg-required="Please enter description."
+                                rows="5"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-primary" onclick="stepper.previous()"><i class="fas fa-chevron-circle-left mr-1"></i>Previous</button>
+                      <button type="submit" class="btn btn-primary float-right"><i class='fas fa-money-check-alt mr-1'></i>Pay</button>
+                    </form>
+                  </div>
+                  <div id="lab-request-receipt-part" class="content" role="tabpanel"
+                    aria-labelledby="lab-request-receipt-part-trigger">
+                      <div id="lab_request_payment_receipt">
+                        <div class="container-fluid p-0">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class="card">
+                                <div class="card-body m-sm-3 m-md-5">
+                                  <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                      <div class="text-muted">LOGO</div>
+                                      <strong>HOMIES</strong>
+                                      <div>Address</div>
+                                      <div>Tel No.</div>
+                                    </div>
+                                    <div class="col-md-6 mb-2 text-md-right">
+                                      <div class="text-muted">OFFICIAL RECEIPT</div>
+                                      <strong id="rec_lab_request_or_no"><i>No data</i></strong>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-md-6">
+                                      <div class="text-muted"> Date of Request</div>
+                                      <strong id="rec_lab_request_date_of_request"><i>No data</i></strong>
+                                    </div>
+                                    <div class="col-md-6 text-md-right">
+                                      <div class="text-muted">Payment Date</div>
+                                      <strong id="rec_lab_request_date_of_payment"><i>No data</i></strong>
+                                    </div>
+                                  </div>
+                                  <hr class="my-4" />
+                                  <div class="row mb-4 bg-light">
+                                    <div class="col-md-6">
+                                      <div class="text-muted">Received From</div>
+                                      <strong id="rec_lab_request_outpatient_name">
+                                      </strong>
+                                      <div>
+                                        Outpatient
+                                      </div>
+                                      <p id="rec_lab_request_outpatient_address">
+                                        Address
+                                      </p>
+                                    </div>
+                                    <div class="col-md-6 text-md-right">
+                                      <div class="text-muted">BALANCE DUE</div>
+                                      <div class="text-muted">Upon Receipt</div>
+                                      <p>
+                                        <strong id="rec_lab_request_remaining_balance" class="text-xl">0</strong>
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div class="">In <span>Full Payment</span> on <b>Lab Request No. <span id="rec_lab_request_no">123</span></b></div>
+                                  <table class="table table-sm table-bordered" id="lab_request_receipt_table">
+                                    <thead>
+                                      <tr>
+                                        <th>Description</th>
+                                        <th class="text-center">Amount</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                  </table>
+                                  <br>
+                                  <table class="table table-sm table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <th><i>Payment Details</i></th>
+                                        <th>Amount</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <td>Cash</td>
+                                        <td class="text-right" id="rec_lab_request_cash_amount">0</td>
+                                      </tr>
+                                      <tr>
+                                        <td>Check</td>
+                                        <td class="text-right" id="rec_lab_request_check_amount">0</td>
+                                      </tr>
+                                      <tr>
+                                        <th>Total Amount Paid</th>
+                                        <th class="text-right" id="rec_lab_request_total_paid"></th>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                  <br>
+                                  <div class="text-right">
+                                    <p class="text-sm">
+                                      ________________________<br>
+                                      Authorized Signature <br>
+                                      <small>Note: Payment not valid unless signed by Cashier</small>
+                  
+                                    </p>
+                                    
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                  
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-info float-right" id="lab_request_payment_receipt_btn">
+                        Print this Receipt <i class="fas fa-print ml-1"></i>
+                      </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="reset" class="btn btn-default float-right" onclick="return hideDiv()">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Treatment Form -->
+      <div class="row collapse" id="treatment_div">
+        <div class="col-sm-12">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">
+                  Treatment Payment
+                </h3>
+                <span type="button" aria-hidden="true" onclick="return hideDiv()"><i
+                    class="fas fa-times"></i></span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="treatment_payment_stepper" class="bs-stepper">
+                <div class="bs-stepper-header" role="tablist">
+                  <!-- your steps here -->
+                  <div class="step" data-target="#review-treatment-part">
+                    <button type="button" class="step-trigger" role="tab" aria-controls="review-treatment-part"
+                      id="review-treatment-part-trigger">
+                      <span class="bs-stepper-circle">1</span>
+                      <span class="bs-stepper-label">Treatment Summary</span>
+                    </button>
+                  </div>
+                  <div class="line"></div>
+                  <div class="step" data-target="#treatment-payment-part">
+                    <button type="button" class="step-trigger" role="tab" aria-controls="treatment-payment-part"
+                      id="treatment-payment-part-trigger">
+                      <span class="bs-stepper-circle">2</span>
+                      <span class="bs-stepper-label">Payment</span>
+                    </button>
+                  </div>
+                  <div class="line"></div>
+                  <div class="step" data-target="#treatment-receipt-part">
+                    <button type="button" class="step-trigger" role="tab" aria-controls="treatment-receipt-part"
+                      id="treatment-receipt-part-trigger">
+                      <span class="bs-stepper-circle">3</span>
+                      <span class="bs-stepper-label">Print Receipt</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="bs-stepper-content">
+                  <!-- your steps content here -->
+                  <div id="review-treatment-part" class="content" role="tabpanel"
+                    aria-labelledby="review-treatment-part-trigger">
+                    <div class="row mt-2">
+                      <div class="col-md-8 mx-auto">
+                        <div class="form-group mb-2">
+                          <label class="form-required-field" for="treatment_id"> Treatment | Patient Name</label>
+                          <select class="form-control select2" name="treatment_id" id="treatment_id" style="width:100%"
+                            required data-msg-required="Please select treatment.">
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-8 mx-auto">
+                        <table class="table table-borderless table-hover">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>Treatment No. </p>
+                                <b id="td_treatment_no"></b>
+                              </td>
+                              <td>
+                                <p>Date of Treatment</p>
+                                <p id="td_treatment_date_of_treatment"></p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>Treatment Type</p>
+                              </td>
+                              <td><b id="td_treatment_type"></td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <b>Treatment Amount</b>
+                              </td>
+                              <td><b id="td_treatment_amount"></b></td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <b>Professional Fee</b>
+                              </td>
+                              <td><b id="td_treatment_prof_fee"></b></td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <b>Total Amount</b>
+                              </td>
+                              <td><b id="td_treatment_total_amount"></b></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-primary float-right" onclick="stepper.next()">Next<i class="fas fa-chevron-circle-right ml-1"></i></button>
+                  </div>
+                  <div id="treatment-payment-part" class="content" role="tabpanel"
+                    aria-labelledby="treatment-payment-part-trigger">
+                    <form id="treatment_payment_form">
+                      <input type="hidden" id="treatment_uuid">
+                      <div class="row">
+                        <div class="col-md-6 mb-2">
+                          <div class="form-group">
+                            <label class="form-required-field" for="treatment_payment_method_id">Payment
+                              Method</label>
+                            <select class="form-control select2" name="treatment_payment_method_id"
+                              id="treatment_payment_method_id" style="width:100%" required
+                              data-msg-required="Please select payment method.">
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="treatment_payment_cash">
+                        <div class="row">
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label for="treatment_payment_cash_tendered">Cash Tendered</label>
+                              <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">₱</span>
+                                </div>
+                                <input class="form-control" type="number" name="treatment_payment_cash_tendered"
+                                  id="treatment_payment_cash_tendered" placeholder="Cash Tendered" step="0.01" required
+                                  data-msg-required="Please enter cash tendered." />
+                                <div class="input-group-append">
+                                  <span class="input-group-text">.00</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6 mb-2">
+                            <label>Change:</label><br>
+                            <span id="treatment_payment_change"
+                                class="text-muted">0.00</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="treatment_payment_check">
+                        <div class="row">
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="treatment_payment_bank_name">Bank Name</label>
+                              <input class="form-control" type="text" name="treatment_payment_bank_name" id="treatment_payment_bank_name"
+                                placeholder="Bank Name" required data-msg-required="Please enter bank name." />
+                            </div>
+                          </div>
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="treatment_payment_bank_address">Bank Address</label>
+                              <input class="form-control" type="text" name="treatment_payment_bank_address" id="treatment_payment_bank_address"
+                                placeholder="Bank Address" required data-msg-required="Please enter bank address." />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="treatment_payment_check_no">Check No.</label>
+                              <input class="form-control" type="text" name="treatment_payment_check_no" id="treatment_payment_check_no"
+                                placeholder="Check No." required data-msg-required="Please enter check no." />
+                            </div>
+                          </div>
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="treatment_payment_check_date">Check Date</label>
+                              <input class="form-control" type="date" name="treatment_payment_check_date" id="treatment_payment_check_date"
+                                required data-msg-required="Please enter check date" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="treatment_payment_account_name">Account Name</label>
+                              <input class="form-control" type="text" name="treatment_payment_account_name" id="treatment_payment_account_name"
+                                placeholder="Account Name" required data-msg-required="Please enter account name." />
+                            </div>
+                          </div>
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="treatment_payment_account_no">Account No.</label>
+                              <input class="form-control" type="text" name="treatment_payment_account_no" id="treatment_payment_account_no"
+                                placeholder="Account No." required data-msg-required="Please enter account number." />
+                            </div>
+                          </div>
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="treatment_payment_rt_number">R/T No.</label>
+                              <input class="form-control" type="text" name="treatment_payment_rt_number" id="treatment_payment_rt_number"
+                                placeholder="R/T No." required data-msg-required="Please enter r/t no." />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="treatment_payment_payee_name">Payee Name</label>
+                              <input class="form-control" type="text" name="treatment_payment_payee_name" id="treatment_payment_payee_name"
+                                placeholder="Payee Name" required data-msg-required="Please enter payee name." />
+                            </div>
+                          </div>
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="treatment_payment_check_amount">Check Amount</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">₱</span>
+                                </div>
+                                <input class="form-control" type="number" name="treatment_payment_check_amount"
+                                  id="treatment_payment_check_amount" placeholder="Check Amount" required min="1" step="0.01"
+                                  data-msg-required="Please enter amount." />
+                                <div class="input-group-append">
+                                  <span class="input-group-text">.00</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4 mb-2">
+                            <label for="treatment_payment_check_amount_in_words">Amount in words</label>
+                            <div id="treatment_payment_check_amount_in_words"></div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-8 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="treatment_payment_check_description">Description</label>
+                              <textarea class="form-control" id="treatment_payment_check_description" name="treatment_payment_check_description"
+                                placeholder="Description" required data-msg-required="Please enter description."
+                                rows="5"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-primary" onclick="stepper.previous()"><i class="fas fa-chevron-circle-left mr-1"></i>Previous</button>
+                      <button type="submit" class="btn btn-primary float-right"><i class='fas fa-money-check-alt mr-1'></i>Pay</button>
+                    </form>
+                  </div>
+                  <div id="treatment-receipt-part" class="content" role="tabpanel"
+                    aria-labelledby="treatment-receipt-part-trigger">
+                      <div id="treatment_payment_receipt">
+                        <div class="container-fluid p-0">
+                          <div class="row">
+                            <div class="col-12">
+                              <div class="card">
+                                <div class="card-body m-sm-3 m-md-5">
+                                  <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                      <div class="text-muted">LOGO</div>
+                                      <strong>HOMIES</strong>
+                                      <div>Address</div>
+                                      <div>Tel No.</div>
+                                    </div>
+                                    <div class="col-md-6 mb-2 text-md-right">
+                                      <div class="text-muted">OFFICIAL RECEIPT</div>
+                                      <strong id="rec_treatment_or_no"><i>No data</i></strong>
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-md-6">
+                                      <div class="text-muted">Treatment Date</div>
+                                      <strong id="rec_treatment_date_of_treatment"><i>No data</i></strong>
+                                    </div>
+                                    <div class="col-md-6 text-md-right">
+                                      <div class="text-muted">Payment Date</div>
+                                      <strong id="rec_treatment_date_of_payment"><i>No data</i></strong>
+                                    </div>
+                                  </div>
+                                  <hr class="my-4" />
+                                  <div class="row mb-4 bg-light">
+                                    <div class="col-md-6">
+                                      <div class="text-muted">Received From</div>
+                                      <strong id="rec_treatment_outpatient_name">
+                                      </strong>
+                                      <div>
+                                        Outpatient
+                                      </div>
+                                      <p id="rec_treatment_outpatient_address">
+                                        Address
+                                      </p>
+                                    </div>
+                                    <div class="col-md-6 text-md-right">
+                                      <div class="text-muted">BALANCE DUE</div>
+                                      <div class="text-muted">Upon Receipt</div>
+                                      <p>
+                                        <strong id="rec_treatment_remaining_balance" class="text-xl">0</strong>
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div class="">In <span>Full Payment</span> on <b>Treatment No. <span id="rec_treatment_no">123</span></b></div>
+                                  <table class="table table-sm table-bordered" id="treatment_receipt_table">
+                                    <thead>
+                                      <tr>
+                                        <th>Description</th>
+                                        <th class="text-center">Amount</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                  </table>
+                                  <br>
+                                  <table class="table table-sm table-bordered">
+                                    <thead>
+                                      <tr>
+                                        <th><i>Payment Details</i></th>
+                                        <th>Amount</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <td>Cash</td>
+                                        <td class="text-right" id="rec_treatment_cash_amount">0</td>
+                                      </tr>
+                                      <tr>
+                                        <td>Check</td>
+                                        <td class="text-right" id="rec_treatment_check_amount">0</td>
+                                      </tr>
+                                      <tr>
+                                        <th>Total Amount Paid</th>
+                                        <th class="text-right" id="rec_treatment_total_paid"></th>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                  <br>
+                                  <div class="text-right">
+                                    <p class="text-sm">
+                                      ________________________<br>
+                                      Authorized Signature <br>
+                                      <small>Note: Payment not valid unless signed by Cashier</small>
+                  
+                                    </p>
+                                    
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                  
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-info float-right" id="treatment_payment_receipt_btn">
+                        Print this Receipt <i class="fas fa-print ml-1"></i>
+                      </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="reset" class="btn btn-default float-right" onclick="return hideDiv()">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- View Lab Request Payment -->
+      <div class="row collapse" id="view_request_payment_div">
+        <div class="col-sm-12">
+          <div class="card card-primary card-outline">
+          <div class="card-header">
+            <div class="d-flex justify-content-between">
+              <h3 class="card-title" id="view_request_card_title">
+                View Lab Request Payment
+              </h3>
+              <span type="button" aria-hidden="true" onclick="return hideDiv()"><i
+                  class="fas fa-times"></i></span>
+            </div>
+          </div>
+          <form id="view_request_payment_form">
+            <input type="hidden" name="edit_outpatient_request_uuid" id="edit_outpatient_request_uuid">
+            <input type="hidden" name="edit_patient_cash_payment_id" id="edit_patient_cash_payment_id">
+            <input type="hidden" name="edit_patient_check_payment_id" id="edit_patient_check_payment_id">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <label id="view_request_payment_or"></label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-8 mb-2">
+                  <div class="form-group">
+                    <label class="form-required-field" for="view_request_payment_request_id">Lab Request No. | Patient Name </label>
+                    <select class="form-control select2" name="view_request_payment_request_id"
+                      id="view_request_payment_request_id" style="width:100%" required
+                      data-msg-required="Please select request no." disabled>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="view_request_payment_payment_date">Date of Payment</label>
+                    <input class="form-control" type="datetime" name="view_request_payment_payment_date" id="view_request_payment_payment_date"
+                     disabled required data-msg-required="Please enter date of payment."/>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label class="form-required-field" for="view_request_payment_method">Payment Method</label>
+                    <select class="form-control select2" name="view_request_payment_method"
+                      id="view_request_payment_method" style="width:100%" required
+                      data-msg-required="Please select payment method" disabled>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="view_request_payment_amount_paid">Amount Paid</label>
+                    <div class="input-group form-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">₱</span>
+                      </div>
+                      <input class="form-control" type="number" name="view_request_payment_amount_paid"
+                        id="view_request_payment_amount_paid" placeholder="Amount Paid" step="0.01" required
+                        data-msg-required="Please enter amount paid." disabled />
+                      <div class="input-group-append">
+                        <span class="input-group-text">.00</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="view_request_payment_status">Status</label>
+                    <input class="form-control" type="text" name="view_request_payment_status" id="view_request_payment_status"
+                     disabled required
+                     data-msg-required="Please enter status."/>
+                  </div>
+                </div>
+              </div>
+              <div class="collapse view_request_payment_check_info">
+                <div class="row ">
+                  <div class="col-md-4 mb-2">
+                    <label>Check Information</label>
+                  </div>
+                </div>
+                <div class="row ">
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_request_payment_bank_name">Bank Name</label>
+                      <input class="form-control" type="text" name="view_request_payment_bank_name" id="view_request_payment_bank_name"
+                       disabled required
+                       data-msg-required="Please enter bank name."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_request_payment_bank_address">Bank Address</label>
+                      <input class="form-control" type="text" name="view_request_payment_bank_address" id="view_request_payment_bank_address"
+                       disabled required
+                       data-msg-required="Please enter bank address."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_request_payment_check_no">Check Number</label>
+                      <input class="form-control" type="text" name="view_request_payment_check_no" id="view_request_payment_check_no"
+                       disabled required
+                       data-msg-required="Please enter check number."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_request_payment_check_date">Check Date</label>
+                      <input class="form-control" type="date" name="view_request_payment_check_date" id="view_request_payment_check_date"
+                       disabled required
+                       data-msg-required="Please enter check date."/>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_request_payment_acc_name">Account Name</label>
+                      <input class="form-control" type="text" name="view_request_payment_acc_name" id="view_request_payment_acc_name"
+                       disabled required
+                       data-msg-required="Please enter account name."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_request_payment_acc_no">Account Number</label>
+                      <input class="form-control" type="text" name="view_request_payment_acc_no" id="view_request_payment_acc_no"
+                       disabled required
+                       data-msg-required="Please enter account number."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_request_payment_rt_number">R/T Number</label>
+                      <input class="form-control" type="text" name="view_request_payment_rt_number" id="view_request_payment_rt_number"
+                       disabled required
+                       data-msg-required="Please enter r/t number."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_request_payment_check_amount">Check Amount</label>
+                      <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">₱</span>
+                        </div>
+                        <input class="form-control" type="number" name="view_request_payment_check_amount"
+                          id="view_request_payment_check_amount" placeholder="Amount Paid" step="0.01" required
+                          data-msg-required="Please enter check amount." disabled />
+                        <div class="input-group-append">
+                          <span class="input-group-text">.00</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label class="form-required-field" for="view_request_payment_check_description">Description</label>
+                      <textarea class="form-control" id="view_request_payment_check_description" name="view_request_payment_check_description"
+                        placeholder="Description" required data-msg-required="Please enter description."
+                        rows="5" disabled></textarea>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label for="view_request_payment_payee_name">Payee Name</label>
+                      <input class="form-control" type="text" name="view_request_payment_payee_name" id="view_request_payment_payee_name"
+                       disabled required
+                       data-msg-required="Please enter payee name."/>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label for="view_request_payment_check_status">Check Status</label>
+                      <input class="form-control" type="text" name="view_request_payment_check_status" id="view_request_payment_check_status"
+                       disabled required
+                       data-msg-required="Please enter check status."/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary collapse submit float-right ml-2" id="edit_op_request_payment_button">
+                Save <i class="fas fa-check ml-1"></i>
+              </button>
+              <button type="reset" class="btn btn-default float-right" onclick="return hideDiv()" id="cancel_edit_op_request_payment_button">
+                Close
+              </button>
+            </div>
+          </form>
+        </div>
+        </div>
+      </div>
+
+      <!-- View / Print Lab Request Receipt -->
+      <div class="row collapse" id="view_receipt_request_payment_div">
+        <div class="col-sm-12">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">
+                  Print Receipt
+                </h3>
+                <span type="button" aria-hidden="true" onclick="return hideDiv()">
+                  <i class="fas fa-times"></i></span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="view_receipt_request_payment_receipt">
+                <div class="container-fluid p-0">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="card">
+                        <div class="card-body m-sm-3 m-md-5">
+                          <div class="row">
+                            <div class="col-md-6 mb-2">
+                              <div class="text-muted">LOGO</div>
+                              <strong>HOMIES</strong>
+                              <div>Address</div>
+                              <div>Tel No.</div>
+                            </div>
+                            <div class="col-md-6 mb-2 text-md-right">
+                              <div class="text-muted">OFFICIAL RECEIPT</div>
+                              <strong id="view_rec_lab_request_or_no"><i>No data</i></strong>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="text-muted"> Date of Request</div>
+                              <strong id="view_rec_lab_request_date_of_request"><i>No data</i></strong>
+                            </div>
+                            <div class="col-md-6 text-md-right">
+                              <div class="text-muted">Payment Date</div>
+                              <strong id="view_rec_lab_request_date_of_payment"><i>No data</i></strong>
+                            </div>
+                          </div>
+                          <hr class="my-4" />
+                          <div class="row mb-4 bg-light">
+                            <div class="col-md-6">
+                              <div class="text-muted">Received From</div>
+                              <strong id="view_rec_lab_request_outpatient_name">
+                              </strong>
+                              <div>
+                                Outpatient
+                              </div>
+                              <p id="view_rec_lab_request_outpatient_address">
+                                Address
+                              </p>
+                            </div>
+                            <div class="col-md-6 text-md-right">
+                              <div class="text-muted">BALANCE DUE</div>
+                              <div class="text-muted">Upon Receipt</div>
+                              <p>
+                                <strong id="view_rec_lab_request_remaining_balance" class="text-xl">0</strong>
+                              </p>
+                            </div>
+                          </div>
+                          <div class="">In <span>Full Payment</span> on <b>Lab Request No. <span id="view_rec_lab_request_no">123</span></b></div>
+                          <table class="table table-sm table-bordered" id="lab_request_view_receipt_table">
+                            <thead>
+                              <tr>
+                                <th>Description</th>
+                                <th class="text-center">Amount</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                          </table>
+                          <br>
+                          <table class="table table-sm table-bordered">
+                            <thead>
+                              <tr>
+                                <th><i>Payment Details</i></th>
+                                <th>Amount</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>Cash</td>
+                                <td class="text-right" id="view_rec_lab_request_cash_amount">0</td>
+                              </tr>
+                              <tr>
+                                <td>Check</td>
+                                <td class="text-right" id="view_rec_lab_request_check_amount">0</td>
+                              </tr>
+                              <tr>
+                                <th>Total Amount Paid</th>
+                                <th class="text-right" id="view_rec_lab_request_total_paid"></th>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <br>
+                          <div class="text-right">
+                            <p class="text-sm">
+                              ________________________<br>
+                              Authorized Signature <br>
+                              <small>Note: Payment not valid unless signed by Cashier</small>
+          
+                            </p>
+                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+          
+                </div>  
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-info float-right ml-1" id="view_receipt_request_payment_receipt_btn">
+                Print this Receipt <i class="fas fa-print"></i>
+              </button>
+              <button type="reset" class="btn btn-default float-right" onclick="return hideDiv()">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- View / Print Treatment Receipt -->
+      <div class="row collapse" id="view_receipt_treatment_payment_div">
+        <div class="col-sm-12">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">
+                  Print Receipt
+                </h3>
+                <span type="button" aria-hidden="true" onclick="return hideDiv()">
+                  <i class="fas fa-times"></i></span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="view_receipt_treatment_payment_receipt">
+                <div class="container-fluid p-0">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="card">
+                        <div class="card-body m-sm-3 m-md-5">
+                          <div class="row">
+                            <div class="col-md-6 mb-2">
+                              <div class="text-muted">LOGO</div>
+                              <strong>HOMIES</strong>
+                              <div>Address</div>
+                              <div>Tel No.</div>
+                            </div>
+                            <div class="col-md-6 mb-2 text-md-right">
+                              <div class="text-muted">OFFICIAL RECEIPT</div>
+                              <strong id="view_rec_treatment_or_no"><i>No data</i></strong>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="text-muted">Treatment Date</div>
+                              <strong id="view_rec_treatment_date_of_treatment"><i>No data</i></strong>
+                            </div>
+                            <div class="col-md-6 text-md-right">
+                              <div class="text-muted">Payment Date</div>
+                              <strong id="view_rec_treatment_date_of_payment"><i>No data</i></strong>
+                            </div>
+                          </div>
+                          <hr class="my-4" />
+                          <div class="row mb-4 bg-light">
+                            <div class="col-md-6">
+                              <div class="text-muted">Received From</div>
+                              <strong id="view_rec_treatment_outpatient_name">
+                              </strong>
+                              <div>
+                                Outpatient
+                              </div>
+                              <p id="view_rec_treatment_outpatient_address">
+                                Address
+                              </p>
+                            </div>
+                            <div class="col-md-6 text-md-right">
+                              <div class="text-muted">BALANCE DUE</div>
+                              <div class="text-muted">Upon Receipt</div>
+                              <p>
+                                <strong id="view_rec_treatment_remaining_balance" class="text-xl">0</strong>
+                              </p>
+                            </div>
+                          </div>
+                          <div class="">In <span>Full Payment</span> on <b>Treatment No. <span id="view_rec_treatment_no">123</span></b></div>
+                          <table class="table table-sm table-bordered" id="treatment_view_receipt_table">
+                            <thead>
+                              <tr>
+                                <th>Description</th>
+                                <th class="text-center">Amount</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                          </table>
+                          <br>
+                          <table class="table table-sm table-bordered">
+                            <thead>
+                              <tr>
+                                <th><i>Payment Details</i></th>
+                                <th>Amount</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>Cash</td>
+                                <td class="text-right" id="view_rec_treatment_cash_amount">0</td>
+                              </tr>
+                              <tr>
+                                <td>Check</td>
+                                <td class="text-right" id="view_rec_treatment_check_amount">0</td>
+                              </tr>
+                              <tr>
+                                <th>Total Amount Paid</th>
+                                <th class="text-right" id="view_rec_treatment_total_paid"></th>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <br>
+                          <div class="text-right">
+                            <p class="text-sm">
+                              ________________________<br>
+                              Authorized Signature <br>
+                              <small>Note: Payment not valid unless signed by Cashier</small>
+          
+                            </p>
+                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+          
+                </div>  
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-info float-right ml-1" id="view_receipt_treatment_payment_receipt_btn">
+                Print this Receipt <i class="fas fa-print"></i>
+              </button>
+              <button type="reset" class="btn btn-default float-right" onclick="return hideDiv()">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="row collapse" id="edit_request_payment_div">
+        <div class="col-sm-12">
+          <div class="card card-primary card-outline">
+          <div class="card-header">
+            <div class="d-flex justify-content-between">
+              <h3 class="card-title" id="edit_request_card_title">
+                Update Lab Request Payment
+              </h3>
+              <span type="button" aria-hidden="true" onclick="return hideDiv()"><i
+                  class="fas fa-times"></i></span>
+            </div>
+          </div>
+          <form id="edit_request_payment_form">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <label id="edit_request_payment_or"></label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label class="form-required-field" for="edit_request_payment_request_id">Lab Request No. | Patient Name </label>
+                    <select class="form-control select2" name="edit_request_payment_request_id"
+                      id="edit_request_payment_request_id" style="width:100%" required
+                      data-msg-required="Please select request no.">
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="edit_request_payment_amount_paid">Amount Paid</label>
+                    <div class="input-group form-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">₱</span>
+                      </div>
+                      <input class="form-control" type="number" name="edit_request_payment_amount_paid"
+                        id="edit_request_payment_amount_paid" placeholder="Amount Paid" step="0.01" required
+                        data-msg-required="Please enter amount paid."  />
+                      <div class="input-group-append">
+                        <span class="input-group-text">.00</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="edit_request_payment_payment_date">Date of Payment</label>
+                    <input class="form-control" type="datetime" name="edit_request_payment_payment_date" id="edit_request_payment_payment_date"
+                     />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label class="form-required-field" for="edit_request_payment_method">Payment Method</label>
+                    <select class="form-control select2" name="edit_request_payment_method"
+                      id="edit_request_payment_method" style="width:100%" required
+                      data-msg-required="Please select payment method" >
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="edit_request_payment_status">Status</label>
+                    <input class="form-control" type="text" name="edit_request_payment_status" id="edit_request_payment_status"
+                     />
+                  </div>
+                </div>
+              </div>
+              <div class="collapse edit_request_payment_check_info">
+                <div class="row ">
+                  <div class="col-md-4 mb-2">
+                    <label>Check Information</label>
+                  </div>
+                </div>
+                <div class="row ">
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="edit_request_payment_bank_name">Bank Name</label>
+                      <input class="form-control" type="text" name="edit_request_payment_bank_name" id="edit_request_payment_bank_name"
+                       />
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="edit_request_payment_bank_address">Bank Address</label>
+                      <input class="form-control" type="text" name="edit_request_payment_bank_address" id="edit_request_payment_bank_address"
+                       />
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="edit_request_payment_check_no">Check Number</label>
+                      <input class="form-control" type="text" name="edit_request_payment_check_no" id="edit_request_payment_check_no"
+                       />
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="edit_request_payment_check_date">Check Date</label>
+                      <input class="form-control" type="date" name="edit_request_payment_check_date" id="edit_request_payment_check_date"
+                       />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="edit_request_payment_acc_name">Account Name</label>
+                      <input class="form-control" type="text" name="edit_request_payment_acc_name" id="edit_request_payment_acc_name"
+                       />
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="edit_request_payment_acc_no">Account Number</label>
+                      <input class="form-control" type="text" name="edit_request_payment_acc_no" id="edit_request_payment_acc_no"
+                       />
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="edit_request_payment_rt_no">R/T Number</label>
+                      <input class="form-control" type="text" name="edit_request_payment_rt_no" id="edit_request_payment_rt_no"
+                       />
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="edit_request_payment_check_amount">Check Amount</label>
+                      <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">₱</span>
+                        </div>
+                        <input class="form-control" type="number" name="edit_request_payment_check_amount"
+                          id="edit_request_payment_check_amount" placeholder="Amount Paid" step="0.01" required
+                          data-msg-required="Please enter check amount."  />
+                        <div class="input-group-append">
+                          <span class="input-group-text">.00</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label class="form-required-field" for="edit_request_payment_description">Description</label>
+                      <textarea class="form-control" id="edit_request_payment_description" name="edit_request_payment_description"
+                        placeholder="Description" required data-msg-required="Please enter description."
+                        rows="5" ></textarea>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label for="edit_request_payment_payee_name">Payee Name</label>
+                      <input class="form-control" type="text" name="edit_request_payment_payee_name" id="edit_request_payment_payee_name"
+                       />
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label for="edit_request_payment_check_status">Check Status</label>
+                      <input class="form-control" type="text" name="edit_request_payment_check_status" id="edit_request_payment_check_status"
+                       />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="reset" class="btn btn-default float-right" onclick="return hideDiv()">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+        </div>
+      </div> -->
+
+      <!-- View Treatment Payment -->
+      <div class="row collapse" id="view_treatment_payment_div">
+        <div class="col-sm-12">
+          <div class="card card-primary card-outline">
+          <div class="card-header">
+            <div class="d-flex justify-content-between">
+              <h3 class="card-title" id="view_treatment_card_title">
+                View Treatment Payment
+              </h3>
+              <span type="button" aria-hidden="true" onclick="return hideDiv()"><i
+                  class="fas fa-times"></i></span>
+            </div>
+          </div>
+          <form id="view_treatment_payment_form">
+            <input type="hidden" name="edit_outpatient_treatment_uuid" id="edit_outpatient_treatment_uuid">
+            <input type="hidden" name="edit_t_patient_cash_payment_id" id="edit_t_patient_cash_payment_id">
+            <input type="hidden" name="edit_t_patient_check_payment_id" id="edit_t_patient_check_payment_id">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <label id="view_treatment_payment_or"></label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-8 mb-2">
+                  <div class="form-group">
+                    <label class="form-required-field" for="view_treatment_payment_treatment_id">Treatment No. | Patient Name </label>
+                    <select class="form-control select2" name="view_treatment_payment_treatment_id"
+                      id="view_treatment_payment_treatment_id" style="width:100%" required
+                      data-msg-required="Please select treatment no." disabled>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="view_treatment_payment_payment_date">Date of Payment</label>
+                    <input class="form-control" type="date" name="view_treatment_payment_payment_date" id="view_treatment_payment_payment_date"
+                     disabled required
+                     data-msg-required="Please enter date of payment."/>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label class="form-required-field" for="view_treatment_payment_method">Payment Method</label>
+                    <select class="form-control select2" name="view_treatment_payment_method"
+                      id="view_treatment_payment_method" style="width:100%" required
+                      data-msg-required="Please select payment method" disabled>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="view_treatment_payment_amount_paid">Amount Paid</label>
+                    <div class="input-group form-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">₱</span>
+                      </div>
+                      <input class="form-control" type="number" name="view_treatment_payment_amount_paid"
+                        id="view_treatment_payment_amount_paid" placeholder="Amount Paid" step="0.01" required
+                        data-msg-required="Please enter amount paid." disabled />
+                      <div class="input-group-append">
+                        <span class="input-group-text">.00</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="view_treatment_payment_status">Status</label>
+                    <input class="form-control" type="text" name="view_treatment_payment_status" id="view_treatment_payment_status"
+                     disabled required
+                     data-msg-required="Please enter status."/>
+                  </div>
+                </div>
+              </div>
+              <div class="collapse view_treatment_payment_check_info">
+                <div class="row ">
+                  <div class="col-md-4 mb-2">
+                    <label>Check Information</label>
+                  </div>
+                </div>
+                <div class="row ">
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_treatment_payment_bank_name">Bank Name</label>
+                      <input class="form-control" type="text" name="view_treatment_payment_bank_name" id="view_treatment_payment_bank_name"
+                       disabled required
+                       data-msg-required="Please enter bank name."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_treatment_payment_bank_address">Bank Address</label>
+                      <input class="form-control" type="text" name="view_treatment_payment_bank_address" id="view_treatment_payment_bank_address"
+                       disabled required
+                       data-msg-required="Please enter bank address."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_treatment_payment_check_no">Check Number</label>
+                      <input class="form-control" type="text" name="view_treatment_payment_check_no" id="view_treatment_payment_check_no"
+                       disabled required
+                       data-msg-required="Please enter check number."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_treatment_payment_check_date">Check Date</label>
+                      <input class="form-control" type="date" name="view_treatment_payment_check_date" id="view_treatment_payment_check_date"
+                       disabled required
+                       data-msg-required="Please enter check date."/>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_treatment_payment_acc_name">Account Name</label>
+                      <input class="form-control" type="text" name="view_treatment_payment_acc_name" id="view_treatment_payment_acc_name"
+                       disabled required
+                       data-msg-required="Please enter account name."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_treatment_payment_acc_no">Account Number</label>
+                      <input class="form-control" type="text" name="view_treatment_payment_acc_no" id="view_treatment_payment_acc_no"
+                       disabled required
+                       data-msg-required="Please enter account number."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_treatment_payment_rt_number">R/T Number</label>
+                      <input class="form-control" type="text" name="view_treatment_payment_rt_number" id="view_treatment_payment_rt_number"
+                       disabled required
+                       data-msg-required="Please enter r/t number."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_treatment_payment_check_amount">Check Amount</label>
+                      <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">₱</span>
+                        </div>
+                        <input class="form-control" type="number" name="view_treatment_payment_check_amount"
+                          id="view_treatment_payment_check_amount" placeholder="Amount Paid" step="0.01" required
+                          data-msg-required="Please enter check amount." disabled />
+                        <div class="input-group-append">
+                          <span class="input-group-text">.00</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label class="form-required-field" for="view_treatment_payment_check_description">Description</label>
+                      <textarea class="form-control" id="view_treatment_payment_check_description" name="view_treatment_payment_check_description"
+                        placeholder="Description" required data-msg-required="Please enter description."
+                        rows="5" disabled></textarea>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label for="view_treatment_payment_payee_name">Payee Name</label>
+                      <input class="form-control" type="text" name="view_treatment_payment_payee_name" id="view_treatment_payment_payee_name"
+                       disabled required
+                       data-msg-required="Please enter payee name."/>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label for="view_treatment_payment_check_status">Check Status</label>
+                      <input class="form-control" type="text" name="view_treatment_payment_check_status" id="view_treatment_payment_check_status"
+                       disabled required
+                       data-msg-required="Please enter check status."/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary collapse submit float-right ml-2" id="edit_op_treatment_payment_button">
+                Save <i class="fas fa-check ml-1"></i>
+              </button>
+              <button type="reset" class="btn btn-default float-right" id="cancel_edit_op_treatment_payment_button" onclick="return hideDiv()">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+        </div>
+      </div>
+
+      <!-- datatables -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card card-primary card-outline card-tabs">
+            <div class="card-header p-0 pt-1 border-bottom-0">
+              <ul class="nav nav-tabs" id="patient-payment-tabs" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="outpatient-payments-tab" data-toggle="pill" href="#outpatient-payments"
+                    role="tab" aria-controls="outpatient-payments" aria-selected="false">Lab Request Payments</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="treatment-payments-tab" data-toggle="pill"
+                    href="#treatment-payments" role="tab" aria-controls="treatment-payments"
+                    aria-selected="false">Treatment Payments</a>
+                </li>
+              </ul>
+            </div>
+            
+            <div class="card-body">
+              <div class="tab-content" id="patient-payment-tabsContent">
+                <div class="tab-pane fade show active" id="outpatient-payments" role="tabpanel"
+                  aria-labelledby="outpatient-payments-tab">
+                  <div>
+                    <div class="d-flex justify-content-between">
+                      <h3 class="card-title">List of Lab Request Payments</h3>
+                      <button class="btn btn-primary" onclick="return newRecord('Lab')">
+                        <i class="fas fa-plus" aria-hidden="true"></i> New
+                      </button>
+                    </div>
+                    <table class="display table table-hover table-bordered" id="lab_request_payments_table"
+                      style="width: 100%">
+                      <thead>
+                        <tr>
+                          <th>Or No.</th>
+                          <th>Lab Request No.</th>
+                          <th>Patient Name</th>
+                          <th>Amount Paid</th>
+                          <th>Date of Payment</th>
+                          <th>Payment Method</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tfoot>
+                        <tr>
+                          <td colspan="7"></td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="treatment-payments" role="tabpanel"
+                  aria-labelledby="treatment-payments-tab">
+                  <div>
+                    <div class="d-flex justify-content-between">
+                      <h3 class="card-title">List of Treatment Payments</h3>
+                      <button class="btn btn-primary" onclick="return newRecord('Treatment')">
+                        <i class="fas fa-plus" aria-hidden="true" ></i> New
+                      </button>
+                    </div>
+                    <table class="display table table-hover table-bordered" id="treatment_payments_table"
+                      style="width: 100%">
+                      <thead>
+                        <tr>
+                          <th>Or No.</th>
+                          <th>Treatment No.</th>
+                          <th>Patient Name</th>
+                          <th>Amount Paid</th>
+                          <th>Date of Payment</th>
+                          <th>Payment Method</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tfoot>
+                        <tr>
+                          <td colspan="7"></td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+</div>
+<!-- modal -->
+<div class="modal fade" id="modal_submit_confirmation">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title"> <i class="fas fa-question-circle mr-1"></i> Confirmation</h4>
+              <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true"><i class="fas fa-times"></i></span>
+              </button>
+          </div>
+          <form id="form_delete">
+              <div class="modal-body">
+                  <p>Are you sure you want to continue?</p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">
+                      Close
+                  </button>
+                  <button type="button" class="btn btn-success" id="confirm_submit">
+                      Confirm Payment
+                  </button>
+              </div>
+          </form>
+      </div>
+      <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+{% endblock %} {% block customjs %}
+<!-- BS-Stepper -->
+<script src="{{ url_for('assets', path='/') }}plugins/bs-stepper/js/bs-stepper.min.js"></script>
+<script src="{{ url_for('assets', path='/') }}plugins/jquery-num2words/jquery.num2words.js"></script>
+<script src="{{ url_for('assets', path='/') }}cms/custom_js/collection/outpatient_payment.js"></script>
+{% endblock %}

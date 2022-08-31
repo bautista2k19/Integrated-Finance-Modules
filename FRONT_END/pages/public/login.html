@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log In | Homies</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ url_for('assets', path='/plugins/fontawesome-free/css/all.min.css') }}">
+   <!-- icheck -->
+  <link rel="stylesheet" href="{{ url_for('assets', path='/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ url_for('assets', path='/dist/css/adminlte.min.css') }}">
+  <!-- toastr -->
+  <link rel="stylesheet" href="{{ url_for('assets', path='/plugins/toastr/toastr.min.css') }}">
+  <!-- login -->
+  <link rel="stylesheet" href="{{ url_for('assets', path='/general_ledger/css/public/login.css') }}">
+</head>
+<body class="hold-transition login-page bg-white">
+<div class="login-box">
+  <div class="login-logo">
+    <div class="">HoMIES</div>
+  </div>
+ 
+  <div class="card shadow-none">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Log in to start your session</p>
+      
+      <!-- form -->
+      <form id="form" name="form">
+
+        <!-- EMAIL -->
+        <div class="form-group row">
+          <div class="col">
+            <label for="username">Email</label>
+            <div class="input-group">
+              <input 
+                type="text" 
+                class="form-control" 
+                id="username" 
+                name="username" 
+                placeholder="Enter email"
+                autocomplete="off" 
+                autofocus
+              />
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-envelope"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="form-group row">
+          <div class="col">
+            <div class="d-flex justify-content-between">
+              <label for="password">Password</label>
+              <a href="#" tabindex="-1">I forgot my password</a>
+            </div>
+            <div class="input-group">
+              <input 
+                type="password" 
+                class="form-control" 
+                id="password" 
+                name="password" 
+                placeholder="Enter password"
+                autocomplete="off"
+              />
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-lock"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- REMEMBER ME -->
+        <div class="row mt-3"> 
+          <div class="col-8">
+            <div class="icheck-primary">
+              <input 
+                type="checkbox" 
+                class="form-control" 
+                id="rememberMe"
+              />
+              <label for="rememberMe">Remember Me</label>
+            </div>
+          </div>
+          <div class="col-4">
+            <button type="submit" class="btn btn-primary w-100">
+              <span>Log In</span>
+              <i class="fas fa-sign-in-alt ml-1"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="dropdown-divider mt-5 mb-1"></div>
+        <div class="d-flex justify-content-between text-sm">
+          <div>
+            <a href="./">Home</a>
+          </div>
+          <div>
+            <a href="#">About Us</a>
+            <span class="text-secondary">&middot;</span>
+            <a href="#">Terms and Policies</a>
+          </div>
+        </div>
+        
+      </form>
+      <!-- /form -->
+      
+    </div>
+    <!-- /login-card-body -->
+  </div>
+</div>
+<!-- /login-box -->
+
+<!-- jQuery -->
+<script src="{{ url_for('assets', path='/plugins/jquery/jquery.min.js') }}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{ url_for('assets', path='/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<!-- jquery-validation -->
+<script src="{{ url_for('assets', path='/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
+<script src="{{ url_for('assets', path='/plugins/jquery-validation/additional-methods.min.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ url_for('assets', path='/dist/js/adminlte.min.js') }}"></script>
+<!-- toastr -->
+<script src="{{ url_for('assets', path='/plugins/toastr/toastr.min.js') }}"></script>
+<!-- login -->
+<script src="{{ url_for('assets', path='/general_ledger/js/public/login.js') }}"></script>
+</body>
+</html>

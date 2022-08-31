@@ -1,0 +1,216 @@
+{% extends 'internal/shared/base.html' %}
+
+<!-- browser title -->
+{% block browser_title %}Ledger | General Ledger{% endblock browser_title %}
+
+
+
+<!-- ASSETS -->
+
+{% block specific_assets %}
+  <link rel="stylesheet" href="{{ url_for('assets', path='/general_ledger/css/internal/general_ledger/accountant/ledger.css') }}" />
+{% endblock specific_assets %}
+
+<!-- /.ASSETS -->
+
+
+
+<!-- SIDEBAR -->
+
+{% block project_name %}HoMIES{% endblock project_name %}
+
+<!-- /.SIDEBAR -->
+
+
+
+<!-- CONTENT -->
+
+{% block content_title %}Ledger{% endblock content_title %}
+
+{% block content_subtitle %}General Ledger/Ledger{% endblock content_subtitle %}
+
+{% block main_content %}
+  <div class="row">
+    
+    <!-- TOTAL ASSETS -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-info"><i class="fas fa-truck"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Assets</span>
+          <span class="info-box-number" id="total_assets"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+    <!-- TOTAL EQUITIES -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-warning"><i class="fas fa-coins"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Equities</span>
+          <span class="info-box-number" id="total_equities"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+    <!-- TOTAL REVENUES -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-success"><i class="fas fa-hand-holding-usd"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Revenues</span>
+          <span class="info-box-number" id="total_revenues"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <!-- TOTAL LIABILITIES -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-warning"><i class="fas fa-dollar-sign"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Liabilities</span>
+          <span class="info-box-number" id="total_liabilities"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+    <!-- TOTAL EXPENSES -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-danger"><i class="fas fa-dollar-sign"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Expenses</span>
+          <span class="info-box-number" id="total_expenses"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+    <!-- TOTAL PROFIT -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-primary"><i class="fas fa-dollar-sign"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Profit</span>
+          <span class="info-box-number" id="total_profit"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+  </div>
+
+  <!-- card -->
+  <div class="card card-outline card-primary">
+    <!-- card-header -->
+    <div class="card-header">
+      <h3 class="card-title">List of Ledger Accounts</h3>
+    </div>
+    <!-- /card-header -->
+    <!-- card-body -->
+    <div class="card-body">
+      
+      <!-- select accounting period -->
+      <div class="row mb-3">
+        <div class="col-auto align-self-center">
+          <span class="">Accounting Period: </span>
+        </div>
+        <div class="col">
+          <select 
+            class="form-control form-control-sm" 
+            id="ap_month" 
+            autocomplete="off" 
+            style="width: 100%;"
+          >
+            <!-- <option value="" selected disabled hidden>Month</option> -->
+          </select>
+        </div>
+        <div class="col">
+          <select 
+            class="form-control form-control-sm" 
+            id="ap_year" 
+            autocomplete="off" 
+            style="width: 100%;"
+          >
+            <!-- <option value="" selected disabled hidden>Year</option> -->
+          </select>
+        </div>
+      </div>
+      <!-- /select accounting period -->
+
+      <!-- select a journal entry -->
+      <div class="row justify-content-end mb-3">
+        <div class="col-auto align-self-center">
+          <span class="">Entries To Post: </span>
+        </div>
+        <div class="col-auto">        
+          <select 
+            class="form-control form-control-sm" 
+            id="journal_entry" 
+            autocomplete="off" 
+            style="width: 100%;"
+          ><option></option>
+          </select>
+        </div>
+      </div>
+      <!-- /select a journal entry -->
+        
+      <!-- table -->
+      <table id="table" class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Account Number</th>
+            <th>Account Title</th>
+            <th>Accounts</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <!-- /.table -->
+    </div>
+    <!-- /.card-body -->
+  </div>
+  <!-- /.card -->
+   
+{% endblock main_content %}
+
+<!-- /.CONTENT -->
+
+
+
+<!-- FOOTER -->
+
+{% block system_version %}1.0.0{% endblock system_version %}
+{% block system_name %}HoMIES{% endblock system_name %}
+
+<!-- /.FOOTER -->
+
+
+
+<!-- SCRIPTS -->
+
+{% block specific_scripts %}
+  <!-- ledger -->
+  <script src="{{ url_for('assets', path='/general_ledger/js/internal/general_ledger/accountant/ledger.js') }}"></script>
+{% endblock specific_scripts %}
+
+<!-- /.SCRIPTS -->

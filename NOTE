@@ -1,0 +1,394 @@
+#accountId
+from lib2to3.pgen2 import token
+
+
+id
+pr
+debitOrCredit
+[type]
+
+
+
+#remove the selected account
+
+//agents: 
+    1. entry_type, 
+
+        1.1. expected result
+            1.1.1. disabled adjustable 
+            1.1.2. disabled accounts
+            1.1.3. removed selected accounts
+
+        1.2. pseudo code
+
+    2. Remove Account, 
+
+        2.1. expected result
+            [2.1.1.] disabled adjustable 
+            [2.1.2.] disabled accounts
+            2.1.3. removed selected account/s
+
+        2.2. pseudo code
+        
+    3. adjustable,
+
+        3.1. expected result
+            3.1.1. unchecked adjustable 
+            3.1.2. disabled accounts
+            3.1.3. removed selected accounts
+
+        3.2. pseudo code
+
+    4. deselect, 
+        ekis
+
+        4.1. expected result
+            4.1.1. removed selected account
+
+        4.2. pseudo code
+
+
+
+
+
+
+
+1. Land Improvements
+   Dep. Exp.–
+   Acc. Dep. – 
+
+2. Buildings & Other Structures
+3. Motor Vehicles
+4. Furniture & Fixtures
+5. Machinery & Equipment
+6. Trees, Plants & Crops
+7. Land
+   
+
+1. Patents/Copyrights
+2. Softwares/Websites/Apps
+3. Other Intangible Assets
+4. Allowance For Bad Debts
+
+    
+//amount
+1
+1.1
+1.11
+
+/if no decimal point
+1.00
+
+/else if theres only one digit after decimal point
+1.10
+
+/else
+1.11
+
+amount = amount.toString()
+
+//algorithm 1
+amount = 
+!(/\./g).test(amount)
+? amount + '0.00'
+: parseFloat(amount).toLocaleString('en', {maximumFractionDigits:2, useGrouping: false});
+
+
+
+
+//algorithm 2
+
+amount = '1 000 000 000 000.00'
+
+
+//13
+let length = amount.length - 3
+
+while True 
+/if length > 3
+
+amount = 
+`${amount.slice(0,length-3)},
+${amount.slice(length-3)}`;
+
+length =
+amount.length - (3 + ((i+1) * 4))
+
+else 
+break
+return amount
+
+
+
+
+
+
+/
+// old_id: id of overwritten initial entry
+
+
+
+update journal_accounts as na
+  set na.is_adjustable = (
+    CASE
+     WHEN EXISTS (
+       SELECT 1 from journal_entries as ae
+         WHERE ae.originating_entry = {old_id}
+           AND ae.adjusted_account = (
+            SELECT oa.id FROM journal_accounts as oa
+              WHERE oa.journal_entry = {old_id}
+               AND oa.account_title = na.account_title
+               AND (
+                  (na.debit > 0 AND oa.debit > 0)
+                OR (na.credit > 0 AND oa.credit > 0)
+              )
+           )
+     ) 
+       THEN 1
+     ELSE 0
+    END
+  )
+
+
+//factors
+
+old_id: id of overwritten initial entry
+oa_account_title
+na.account_title
+oa.debit
+na.debit
+oa.credit
+na.credit
+
+1. find if old.account == adjusted_account && old_id == originating_entry
+
+   
+
+2. get old.account
+
+3. find if oa.account_title = na.account_title 
+   && (
+        (oa.debit > 0 && na.debit > 0)
+      || (oa.credit > 0 && na.credit > 0)
+    )
+
+
+
+    sql = """
+      UPDATE journal_accounts
+        SET balance = (
+          CASE 
+            WHEN (salvage_value > 0 AND useful_life > 0)
+              OR (rate > 0 AND month_no > 0)
+              THEN 0
+            WHEN debit > 0
+              THEN debit
+            ELSE credit
+          END
+        )
+        WHERE journal_entry = :journal_entry"""
+
+
+
+    id
+    username
+    user_type
+
+
+
+    id
+    username
+    user_type
+   
+    password
+    employee_id
+    employee_information = relationship("Employee", primaryjoin="and_(User.employee_id==Employee.id)", back_populates="user_credentials")
+
+
+
+
+    
+   
+    
+    
+    
+    
+
+
+
+  access_token = token.create_access_token(
+        data={"sub": user.username} #, expires_delta=access_token_expires
+    )
+    return {"data":{user},"access_token": access_token, "token_type": "bearer"}
+
+      
+                 
+   
+    
+    
+    $.cookie("TOKEN", data.access_token);
+					sessionStorage.setItem("USERNAME", data.data[0].username);
+					sessionStorage.setItem("USER_ID", data.data[0].id);
+					sessionStorage.setItem("USER_TYPE", data.data[0].user_type);
+					sessionStorage.setItem("EMPLOYEE_ID", data.data[0].employee_id);
+
+					window.location.replace("/AR_AP/admin/dashboard");
+   
+    
+
+
+ id            = Column(CHAR(36),     primary_key=True)
+    profile_pic_url    = Column(VARCHAR(255))   
+    username              = Column(VARCHAR(255), nullable=False, unique=True, index=True)
+    password           = Column(VARCHAR(255), nullable=False)
+    mobile             = Column(VARCHAR(50),  nullable=False, unique=True)
+    landline           = Column(VARCHAR(50))
+    first_name         = Column(VARCHAR(50),  nullable=False)
+    last_name          = Column(VARCHAR(50),  nullable=False)
+    middle_name        = Column(VARCHAR(50))
+    user_type          = Column(VARCHAR(50),  nullable=False, server_default="Admin")
+   
+    status             = Column(VARCHAR(50),  nullable=False, server_default="Active")
+    created_at         = Column(TIMESTAMP(2), nullable=False, server_default=func.current_timestamp())
+    updated_at         = Column(TIMESTAMP(2),                       onupdate=func.current_timestamp())
+    created_by         = Column(CHAR(36),     ForeignKey("users.id"))
+    updated_by         = Column(CHAR(36),     ForeignKey("users.id"))
+
+    u_created_by        = relationship("User", remote_side=id, foreign_keys=[created_by])
+    u_updated_by        = relationship("User", remote_side=id, foreign_keys=[updated_by])
+    
+
+
+
+
+   accountant@email.com
+admin123
+
+
+
+ id =                        
+ email = accountant@email.com      
+ password = $2b$12$IDNn2QNLC654dhEBo8XZWOutKe9rPHvYbtEocJHgWPrGWpsRFlAGe
+ user_type_id = USERTYPE-001 
+ employee_id = EMP-001 
+ status = Active 
+ created_by = NULL 
+ created_at = 2021-11-18 22:21:02
+ updated_by = NULL
+ updated_at = NULL
+
+
+
+   
+
+
+
+#GL
+//create token: 
+ data={"sub": user.email},
+
+ 'user_profile_pic': user.profile_pic_url,
+        'user_fullname': user_fullname,
+        'user_position': user.user_type, # temporary
+        'user_department': 'Information Technology (IT) Department' if user.user_type == 'System Administrator' else 'Finance', # temporary
+        'endpoint': '/index', # temporary
+        'detail': 'Logging in...'
+
+// verify token
+  username: EmailStr = payload.get("sub")
+  id, user_type, email
+
+
+
+#sa kanila
+// create token: 
+
+ data={"sub": user.username} 
+
+ return {"data":{user},"access_token": access_token, "token_type": "bearer"}
+
+// verify token
+
+  username: str = payload.get("sub")
+  id: str =payload.get("id")
+  return id
+
+
+
+
+
+
+
+
+
+// NAKAKALITO, PAAYOS MUNA PARA MAKAUSAD WAHAHA
+
+Employee = employees
+
+User = users
+
+Room_type = room_types
+Room = rooms
+Inpatient = inpatients
+Prescription = prescriptions
+
+Lab_test_type = lab_test_types
+
+Treatment_type = treatment_types
+Treatment = treatment_types
+Surgery_type = surgery_types
+
+Surgery = surgeries
+Medicine = medicines
+Purchase_order = purchase_order
+
+Payment_term = payment_terms
+Inpatient_payment = inpatient_payments
+
+lab_requests
+
+surgery_in_charges
+
+medicine_pr
+
+medicalsupplies_pr
+
+medicalsupplies
+
+treatment_bill
+
+lab_requests_bill
+
+room_bill
+
+inpatient_bills
+
+
+
+//WALANG KAPAREHO, SA AR/AP ITO, PERO BAKA MAY SIMILARITIES PARIN, PA DOUBLE-CHECK NALANG UNG TABLE NAMES BELOW
+
+patient_registration
+insurances
+discount_privillages
+discharge_management
+specialization
+doctor_profile
+treatment_service_name
+lab_service_name
+hospital_service_name
+hospital_services
+hospital_charges_bill
+pharmacy_bill
+doctor_fee_bill
+accounts_receivable_ledgers
+utilities
+
+
+
+
+
+
+
+
+
+

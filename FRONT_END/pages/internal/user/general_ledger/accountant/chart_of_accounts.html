@@ -1,0 +1,269 @@
+{% extends 'internal/shared/base.html' %}
+
+<!-- browser title -->
+{% block browser_title %}Chart of Accounts | General Ledger{% endblock browser_title %}
+
+
+
+<!-- ASSETS -->
+
+{% block specific_assets %}
+  <link rel="stylesheet" href="{{ url_for('assets', path='/general_ledger/css/internal/general_ledger/accountant/chart_of_accounts.css') }}" />
+{% endblock specific_assets %}
+
+<!-- /ASSETS -->
+
+
+
+<!-- SIDEBAR -->
+<!-- /SIDEBAR -->
+
+
+
+<!-- CONTENT -->
+
+{% block content_title %}Chart of Accounts{% endblock content_title %}
+{% block content_subtitle %}General Ledger/Chart of Accounts{% endblock content_subtitle %}
+
+{% block main_content %}
+  <!-- cards -->
+  <div class="row">
+    
+    <!-- TOTAL ASSETS -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-info"><i class="fas fa-truck"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Assets</span>
+          <span class="info-box-number" id="total_assets"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+    <!-- TOTAL CONTRA ASSETS -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-warning"><i class="fas fa-truck"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Contra Assets</span>
+          <span class="info-box-number" id="total_contra_assets"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+    <!-- TOTAL REVENUES -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-success"><i class="fas fa-hand-holding-usd"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Revenues</span>
+          <span class="info-box-number" id="total_revenues"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+  </div>
+  <!-- /cards -->
+
+  <!-- cards -->
+  <div class="row">
+
+    <!-- TOTAL EQUITIES -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-primary"><i class="fas fa-coins"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Equities</span>
+          <span class="info-box-number" id="total_equities"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+    <!-- TOTAL LIABILITIES -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-warning"><i class="fas fa-dollar-sign"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Liabilities</span>
+          <span class="info-box-number" id="total_liabilities"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+    <!-- TOTAL EXPENSES -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-danger"><i class="fas fa-dollar-sign"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Expenses</span>
+          <span class="info-box-number" id="total_expenses"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+  </div>
+  <!-- /cards -->
+  
+  <!-- form_modal -->
+  <div class="modal fade" id="form_modal">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title"><i class="fas fa-list mr-3 text-secondary"></i>Account</h4>
+          <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close" form="form">
+            <span aria-hidden="true"><i class="fas fa-times"></i></span>
+          </button>
+        </div>
+        <div class="modal-body pb-0">
+          
+          <!-- form -->
+          <form id="form">
+            <input type="text" class="d-none" id="uuid" />
+            
+            <!-- ACCOUNT TITLE -->
+            <div class="form-group row">
+              <div class="col">
+                <label for="account_title">Account Title<span> *</span></label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="account_title" 
+                  name="account_title" 
+                  placeholder="Enter account title" 
+                  autocomplete="off" 
+                />
+              </div>
+            </div>
+            
+            <!-- ACCOUNT TYPE -->
+            <div class="form-group row">
+              <div class="col">
+                <label for="account_type">Account Type<span> *</span></label>
+                <select 
+                  class="form-control" 
+                  id="account_type" 
+                  name="account_type" 
+                  autocomplete="off" 
+                  style="width: 100%;"
+                >
+                  <option></option>
+                  <!-- <option value="" selected disabled hidden>Select account type</option> -->
+                </select>
+              </div>
+            </div>
+
+            <!-- ACCOUNT NUMBER -->
+            <div class="form-group row">
+              <div class="col">
+                <label for="account_number">Account Number<span> *</span></label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="account_number" 
+                  name="account_number" 
+                  placeholder="XXXX" 
+                  autocomplete="off" 
+                  disabled 
+                />
+              </div>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="form-group row">
+              <div class="col">
+                <label for="description">Description</label>
+                <textarea 
+                  rows="3" 
+                  class="form-control" 
+                  id="description" 
+                  name="description" 
+                  placeholder="Enter description" 
+                  autocomplete="off"
+                ></textarea>
+              </div>
+            </div>
+            
+          </form>
+          <!-- /form -->
+
+        </div>
+        <!-- /modal-body -->
+        <div class="modal-footer text-right">
+          <button type="button" class="btn btn-sm btn-default mr-2" data-dismiss="modal" form="form">Cancel</button>
+          <button type="submit" class="btn btn-sm btn-primary" id="submitButton" form="form">
+            <span>Submit</span><i class="fas fa-check ml-2"></i>
+          </button>
+        </div>
+        <!-- /modal-footer -->
+      </div>
+      <!-- /modal-content -->
+    </div>
+    <!-- /modal-dialog -->
+  </div>
+  <!-- /form_modal -->
+  
+  <!-- card -->
+  <div class="card card-outline card-primary">
+    <div class="card-header">
+      <h3 class="card-title">List of Accounts</h3>
+      <div class="text-right">
+        <button 
+          type="button" 
+          class="btn btn-sm btn-primary" 
+          data-toggle="modal" 
+          data-target="#form_modal" 
+          data-backdrop="static"
+          onclick="loadAccountTypes();"
+        >
+          <span>Add Account</span><i class="fa fa-plus ml-2"></i>
+        </button>
+      </div>
+      <!-- /add button -->
+    </div>
+    <!-- /card-header -->
+    <div class="card-body">
+      <table id="table" class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Account Number</th>
+            <th>Account Title</th>
+            <th>Account Type</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <!-- /table -->
+    </div>
+    <!-- /card-body -->
+  </div>
+  <!-- /card -->    
+{% endblock main_content %}
+
+<!-- /CONTENT -->
+
+
+
+<!-- SCRIPTS -->
+
+{% block specific_scripts %}
+  <!-- chart of accounts -->
+  <script src="{{ url_for('assets', path='/general_ledger/js/internal/general_ledger/accountant/chart_of_accounts.js') }}"></script>
+{% endblock specific_scripts %}
+
+<!-- /SCRIPTS -->

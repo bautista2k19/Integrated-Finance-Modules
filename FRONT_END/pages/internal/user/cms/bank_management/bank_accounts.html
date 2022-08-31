@@ -1,0 +1,424 @@
+{% extends "internal/user/cms/layout.html" %} {% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 p-title">Bank Accounts</h1>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Bank Accounts</li>
+                    </ol>
+                </div>
+                <!-- /.col -->
+            </div>
+
+
+            <!-- New bank account Card -->
+            <div class="row collapse" id="div_form">
+                <div class="col-sm-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title" id="div_form_card_title">
+                                    Bank Accounts
+                                </h3>
+                                <span type="button" aria-hidden="true" onclick="return formReset('hide','')"><i
+                                        class="fas fa-times"></i></span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="uuid" name="uuid">
+                        <form id="form_id" name="form_id">
+                            <div class="card-body" id="form_card_body">
+                                <div class="row form_div">
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="account_name">Account Name</label>
+                                        <input class="form-control" type="text" name="account_name" id="account_name"
+                                            placeholder="Account Name" required
+                                            data-msg-required="Please enter account name." />
+                                    </div>
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="account_no">Account Number</label>
+                                        <input class="form-control" type="text" name="account_no" id="account_no"
+                                            placeholder="Account Number" required
+                                            data-msg-required="Please enter account no." />
+                                    </div>
+                                </div>
+                                <div class="row form_div">
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="bank_name">Bank Name</label>
+                                        <input class="form-control" type="text" name="bank_name" id="bank_name"
+                                            placeholder="Bank Name" required
+                                            data-msg-required="Please enter bank name." />
+                                    </div>
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="bank_address">Bank Address</label>
+                                        <input class="form-control" type="text" name="bank_address" id="bank_address"
+                                            placeholder="Bank Address" required
+                                            data-msg-required="Please enter bank address." />
+                                    </div>
+                                </div>
+                                <div class="row form_div">
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="initial_amount">Initial Amount</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">₱</span>
+                                            </div>
+                                            <input class="form-control" type="number" name="initial_amount"
+                                                id="initial_amount" placeholder="Initial Amount" step="0.01" min="0"
+                                                required data-msg-required="Please enter initial amount." />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="remaining_amount">Remaining
+                                            amount</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">₱</span>
+                                            </div>
+                                            <input class="form-control" type="number" name="remaining_amount"
+                                                id="remaining_amount" placeholder="Remaining amount" step="0.01" min="0"
+                                                required data-msg-required="Please enter remaining amount." />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary submit float-right ml-2" id="save_button">
+                                    Save <i class="fas fa-check ml-1"></i>
+                                </button>
+                                <button type="reset" class="btn btn-default float-right"
+                                    onclick="return formReset('hide','')">
+                                    Cancel
+                                </button>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- New deposit Card -->
+            <div class="row collapse" id="deposit_div">
+                <div class="col-sm-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title" id="deposit_div_card_title">
+                                    Bank Deposit
+                                </h3>
+                                <span type="button" aria-hidden="true" onclick="return hideCard()"><i class="fas fa-times"></i></span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="uuidDeposit" name="uuidDeposit">
+                        <form id="deposit_form" name="deposit_form">
+                            <div class="card-body">
+                                <div class="row ">
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label>Account Information</label>
+                                        <div>
+                                            Account Name: <span id="deposit_account_name"></span>
+                                        </div>
+                                        <div>
+                                            Account Number: <span id="deposit_account_number"></span>
+                                        </div>
+                                        <div>
+                                            Bank Name: <span id="deposit_bank_name"></span>
+                                        </div>
+                                        <div>
+                                            Bank Address: <span id="deposit_bank_address"></span>
+                                        </div>
+                                        <div>
+                                            Remaining Amount: <span id="deposit_remaining_amount"></span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row ">
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="date_of_deposit">Date of Deposit</label>
+                                        <input class="form-control" type="date" name="date_of_deposit"
+                                            id="date_of_deposit" required
+                                            data-msg-required="Please enter date of deposit." />
+                                    </div>
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="amount">
+                                            Amount</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">₱</span>
+                                            </div>
+                                            <input class="form-control" type="number" name="amount" id="amount"
+                                                placeholder="Amount" step="0.01" min="1" required
+                                                data-msg-required="Please enter amount." />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-12 mb-2">
+                                        <label class="form-required-field"
+                                            for="description">Description</label>
+                                        <textarea class="form-control" id="description"
+                                            name="description" placeholder="Description" required
+                                            data-msg-required="Please enter description." rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary submit float-right ml-2" >
+                                    Save <i class="fas fa-check ml-1"></i>
+                                </button>
+                                <button type="reset" class="btn btn-default float-right"
+                                    onclick="return hideCard()">
+                                    Cancel
+                                </button>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+            <input type="hidden" id="bank_account_id">
+             <!-- New withdrawal Card -->
+             <div class="row collapse" id="withdrawal_div">
+                <div class="col-sm-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title" id="withdrawal_div_card_title">
+                                    Bank Withdrawal
+                                </h3>
+                                <span type="button" aria-hidden="true" onclick="return hideCard()"><i class="fas fa-times"></i></span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="uuidWithdrawal" name="uuidWithdrawal">
+                        <form id="withdrawal_form" name="withdrawal_form">
+                            <div class="card-body">
+                                <div class="row ">
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label>Account Information</label>
+                                        <div>
+                                            Account Name: <span id="withdrawal_account_name"></span>
+                                        </div>
+                                        <div>
+                                            Account Number: <span id="withdrawal_account_number"></span>
+                                        </div>
+                                        <div>
+                                            Bank Name: <span id="withdrawal_bank_name"></span>
+                                        </div>
+                                        <div>
+                                            Bank Address: <span id="withdrawal_bank_address"></span>
+                                        </div>
+                                        <div>
+                                            Remaining Amount: <span id="withdrawal_remaining_amount"></span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row ">
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="date_of_withdrawal">Date of Withdrawal</label>
+                                        <input class="form-control" type="date" name="date_of_withdrawal"
+                                            id="date_of_withdrawal" required
+                                            data-msg-required="Please enter date of withdrawal." />
+                                    </div>
+                                    <div class="form-group col-md-6 mb-2">
+                                        <label class="form-required-field" for="amount">
+                                            Amount</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">₱</span>
+                                            </div>
+                                            <input class="form-control" type="number" name="amount" id="amount"
+                                                placeholder="Amount" step="0.01" min="1" required
+                                                data-msg-required="Please enter amount." />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-12 mb-2">
+                                        <label class="form-required-field"
+                                            for="description">Description</label>
+                                        <textarea class="form-control" id="description"
+                                            name="description" placeholder="Description" required
+                                            data-msg-required="Please enter description." rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary submit float-right ml-2">
+                                    Save <i class="fas fa-check ml-1"></i>
+                                </button>
+                                <button type="reset" class="btn btn-default float-right"
+                                    onclick="return hideCard()">
+                                    Cancel
+                                </button>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+
+            <!--  DataTable -->
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card card-outline card-primary">
+                        <div class="card-body">
+                            <ul class="nav nav-pills flex-column">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link active" type="button" id="bank_accounts_menu"><i
+                                            class=" fas fa-user-tie mr-1"> </i>
+                                         Accounts</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link" type="button" id="deposits_menu"><i class="fas fa-donate mr-1"> </i>
+                                         Deposits</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link" type="button" id="withdrawals_menu"><i class="fas fa-money-bill-wave mr-1"> </i>
+                                         Withdrawals</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+                <div class="col-md-9" id="bank_accounts_div">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header border-0">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">List of Bank Accounts</h3>
+                                <button class="btn btn-primary" id="new_record">
+                                    <i class="fas fa-plus" aria-hidden="true"></i> New
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body mt-0 pt-0">
+                            <table class="table table-hover table-bordered" id="bank_accounts_table"
+                                style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>Account Name/No.</th>
+                                        <th>Bank Name/Address</th>
+                                        <th>Initial Amount</th>
+                                        <th>Remaining Amount</th>
+                                        <th>Total Deposit</th>
+                                        <th>Total Withdrawal</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <div class="col-md-9 collapse" id="deposits_div">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header border-0">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">List of Deposits</h3>
+                            </div>
+                        </div>
+                        <div class="card-body mt-0 pt-0">
+                            <table class="table table-hover table-bordered" id="deposits_table" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>Deposit No.</th>
+                                        <th>Account Name</th>
+                                        <th>Bank Name</th>
+                                        <th>Amount</th>
+                                        <th>Description</th>
+                                        <th>Date of Deposit</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <div class="col-md-9 collapse" id="withdrawals_div">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header border-0">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="card-title">List of Withdrawals</h3>
+                            </div>
+                        </div>
+                        <div class="card-body mt-0 pt-0">
+                            <table class="table table-hover table-bordered" id="withdrawals_table" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>Withdrawal No.</th>
+                                        <th>Account Name</th>
+                                        <th>Bank Name</th>
+                                        <th>Amount</th>
+                                        <th>Description</th>
+                                        <th>Date of Withdrawal</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modal_delete">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"> <i class="fas fa-exclamation-triangle mr-1"></i> Confirmation</h4>
+                <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fas fa-times"></i></span>
+                </button>
+            </div>
+            <form id="form_delete">
+                <input type="hidden" id="delete_uuid">
+                <div class="modal-body">
+                    <p>Are you sure you want to deactivate this record?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-danger" id="delete_button">
+                        Yes, deactivate it
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+{% endblock %} {% block customjs %}
+<script src="{{ url_for('assets', path='/') }}plugins/jquery.serializejson.js"></script>
+<script src="{{ url_for('assets', path='/') }}cms/custom_js/bank_management/bank_accounts.js"></script>
+{% endblock %}

@@ -1,0 +1,190 @@
+      <!-- Main Sidebar Container -->
+      <aside class="main-sidebar main-sidebar-custom sidebar-light-primary">
+        <!-- Brand Logo -->
+        <a href="dashboard" class="brand-link">
+          <img
+            src="{{ url_for('static', path='/') }}img/AdminLTELogo.png"
+            alt="AdminLTE Logo"
+            class="brand-image img-circle border"
+            style="opacity: 0.8"
+          />
+          <span class="brand-text font-weight-light">HoMIES</span>
+        </a>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+              <img
+                src="{{ url_for('static', path='/') }}img/user2-160x160.jpg"
+                id="user_image"
+                class="img-circle elevation-2"
+                alt="User Image"
+              />
+            </div>
+            <div class="info">
+              <!-- User Name -->
+              <span id="user_name" class="d-block"></span>
+              <!-- User Type -->
+              <div
+                class="small text-secondary text-truncate"
+                id="user_type"
+              ></div>
+              <!-- User Department -->
+              <div
+                class="small text-secondary text-truncate"
+                id="department"
+              ></div>
+            </div>
+          </div>
+          <!-- Sidebar Menu -->
+          <nav class="mt-2">
+            <ul
+              class="nav nav-pills nav-sidebar flex-column"
+              data-widget="treeview"
+              role="menu"
+              data-accordion="false"
+            >
+              <!-- Add icons to the links using the .nav-icon class
+                            with font-awesome or any other icon font library -->
+              <!-- Module Name -->
+              <li class="nav-header font-weight-bold text-wrap">
+                CASHIERING MANAGEMENT SYSTEM
+              </li>
+              <li class="nav-header">CORE</li>
+              <li class="nav-item">
+                <a href="dashboard" class="nav-link">
+                  <i class="nav-icon fas fa-home"></i>
+                  <p>Dashboard</p>
+                </a>
+              </li>
+              <li class="nav-header">COLLECTION</li>
+              <li class="nav-item">
+                <a href="fees&rates" class="nav-link">
+                  <i class="nav-icon fas fa-tag"></i>
+                  <p>Fees & Rates</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="payment_methods" class="nav-link">
+                  <i class="nav-icon fa fa-list" aria-hidden="true"></i>
+                  <p>Payment Methods</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="payment_terms" class="nav-link">
+                  <i class="nav-icon fas fa-handshake"></i>
+                  <p>Payment Terms</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="patient_payments" class="nav-link">
+                  <i class="nav-icon fas fa-hand-holding-usd"></i>
+                  <p>Patient Payments</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="collection" class="nav-link">
+                  <i class="nav-icon fas fa-coins"></i>
+                  <p>Collection</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="deposits" class="nav-link">
+                  <i class="nav-icon fas fa-donate"></i>
+                  <p>Deposits</p>
+                </a>
+              </li>
+              <li class="nav-header">DISBURSEMENT</li>
+              <li class="nav-item">
+                <a href="hospital_payables" class="nav-link">
+                  <i class="nav-icon fas fa-clipboard-list"></i>
+                  <p>Hospital Payable</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="hospital_payments" class="nav-link">
+                  <i class="nav-icon"
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      x="0px"
+                      y="0px"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 172 172"
+                      style="fill: #000000"
+                    >
+                      <g
+                        fill="none"
+                        fill-rule="nonzero"
+                        stroke="none"
+                        stroke-width="1"
+                        stroke-linecap="butt"
+                        stroke-linejoin="miter"
+                        stroke-miterlimit="10"
+                        stroke-dasharray=""
+                        stroke-dashoffset="0"
+                        font-family="none"
+                        font-weight="none"
+                        font-size="none"
+                        text-anchor="none"
+                        style="mix-blend-mode: normal"
+                      >
+                        <path d="M0,172v-172h172v172z" fill="none"></path>
+                        <g fill="#333333">
+                          <path
+                            d="M54.74732,17.40576c-1.32962,0.01767 -2.65753,0.10175 -3.97876,0.25195l-34.34961,3.81604c-0.31332,0.05027 -0.6338,0.03237 -0.93958,-0.05249l-7.41687,-1.85815v28.81189h5.375c0.4823,0.00076 0.95552,0.1313 1.37,0.37793l7.04419,4.22022c3.76078,2.2724 8.07244,3.47058 12.46643,3.46435h3.49585c3.07721,0.00733 6.12623,-0.58643 8.97583,-1.74793l8.65564,-3.43811c0.76383,-0.29736 1.6206,-0.23767 2.33582,0.16272l16.28772,9.40625c1.88575,1.07488 4.23184,0.91598 5.95544,-0.40334c1.7236,-1.31933 2.48955,-3.54254 1.94434,-5.64353c-0.36726,-1.3814 -1.278,-2.55533 -2.52478,-3.25439l-20.02502,-11.55835c-1.04508,-0.62107 -1.55755,-1.85527 -1.25977,-3.03394c0.31651,-1.17665 1.38504,-1.99313 2.60352,-1.98938h10.4823c2.37224,-0.01299 4.7035,0.61835 6.74499,1.82666l10.80249,6.23584h21.53149l-34.9375,-20.15625c-6.25865,-3.6523 -13.39339,-5.53215 -20.63916,-5.43799zM70.78833,40.3125l4.67688,2.6875h2.57727l-2.76623,-1.58521c-1.2192,-0.72557 -2.61249,-1.10654 -4.03125,-1.10229zM84.12085,48.375c3.20154,3.01771 4.2374,7.68357 2.61361,11.77255c-1.62379,4.08898 -5.5784,6.77305 -9.97799,6.77226c-1.88562,0.00179 -3.73881,-0.49047 -5.375,-1.42773l-9.59522,-5.55872c-3.46286,3.91154 -8.22895,6.43169 -13.41125,7.09143v16.47668c9.72866,1.23406 17.38948,8.89487 18.62354,18.62354h59.50293c1.23406,-9.72866 8.89487,-17.38948 18.62354,-18.62354v-16.50293c-9.72866,-1.23406 -17.38948,-8.89487 -18.62354,-18.62354zM131.92896,48.375c1.14183,6.75891 6.43713,12.05421 13.19604,13.19604v-10.50854c0,-1.48427 -1.20323,-2.6875 -2.6875,-2.6875zM56.22229,56.73145l-7.41687,2.96045c-0.14754,0.04063 -0.29149,0.0933 -0.43042,0.15747v1.72168c3.24858,-0.55845 6.24869,-2.09697 8.5979,-4.40918zM96.07813,59.14075c4.38906,-0.18304 8.66282,1.43252 11.83327,4.47318c3.17045,3.04066 4.96313,7.2432 4.9636,11.63608c0,8.90559 -7.21941,16.125 -16.125,16.125c-8.75927,-0.02144 -15.8995,-7.03153 -16.08203,-15.78892c-0.18253,-8.75739 6.65939,-16.05892 15.41016,-16.44533zM96.75,64.5c-5.93706,0 -10.75,4.81294 -10.75,10.75c0,5.93706 4.81294,10.75 10.75,10.75c5.93706,0 10.75,-4.81294 10.75,-10.75c0,-5.93706 -4.81294,-10.75 -10.75,-10.75zM48.375,88.92896v10.50854c0,1.48427 1.20323,2.6875 2.6875,2.6875h10.50854c-1.14183,-6.75891 -6.43713,-12.05421 -13.19604,-13.19604zM145.125,88.92896c-6.75891,1.14183 -12.05421,6.43713 -13.19604,13.19604h10.50854c1.48427,0 2.6875,-1.20323 2.6875,-2.6875zM127.9502,118.25c-3.07381,0.00206 -6.11942,0.58625 -8.97583,1.72168l-8.65039,3.46436c-0.31533,0.13282 -0.65525,0.19723 -0.99731,0.18896h-18.8125c-2.96853,0 -5.375,2.40647 -5.375,5.375c0,2.96853 2.40647,5.375 5.375,5.375h26.875v5.375h-28.245c-2.35864,-0.00118 -4.67557,-0.62204 -6.71875,-1.80042l-28.67542,-16.55542c-1.23309,-0.72263 -2.70605,-0.91575 -4.08374,-0.5354c-2.09337,0.56755 -3.64049,2.33765 -3.92279,4.48814c-0.28229,2.15049 0.75557,4.25992 2.63153,5.34853l36.63293,21.17456c7.44115,4.30823 16.06774,6.1167 24.61267,5.15979l34.34961,-3.81604c0.20558,-0.02703 0.41381,-0.02703 0.61939,0l19.3479,2.34106v-29.24231h-11.61084c-0.4823,-0.00076 -0.95552,-0.1313 -1.37,-0.37793l-7.07044,-4.24646c-3.75711,-2.25555 -8.05802,-3.4442 -12.44018,-3.43811z"
+                          ></path>
+                        </g>
+                      </g></svg></i>
+                  <p>Hospital Payments</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="disbursement" class="nav-link">
+                  <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                  <p>Disbursement</p>
+                </a>
+              </li>
+              <li class="nav-header">USER MANAGEMENT</li>
+              <li class="nav-item">
+                <a href="employees" class="nav-link">
+                  <i class="nav-icon fas fa-user-tie"></i>
+                  <p>Employees</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="users" class="nav-link">
+                  <i class="nav-icon fas fa-users"></i>
+                  <p>Users</p>
+                </a>
+              </li>
+              <li class="nav-header">System Settings</li>
+              <li class="nav-item">
+                <a href="settings" class="nav-link">
+                  <i class="nav-icon fas fa-cog"></i>
+                  <p>Settings</p>
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+
+        <!-- Sidebar Custom -->
+        <div class="sidebar-custom">
+          <a href="#" class="btn btn-sm btn-light"
+            ><i class="fas fa-cogs"></i
+          ></a>
+          <button
+            class="btn btn-sm btn-danger hide-on-collapse pos-right"
+            data-toggle="modal"
+            data-target="#logoutModal"
+          >
+            <span>Log out</span>
+            <i class="fas fa-sign-out-alt ml-1"></i>
+          </button>
+        </div>
+        <!-- /.sidebar-custom -->
+      </aside>

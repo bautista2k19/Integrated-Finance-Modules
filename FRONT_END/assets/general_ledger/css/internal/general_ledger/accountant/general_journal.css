@@ -1,0 +1,164 @@
+textarea {
+  resize: none;
+}
+
+.select2-selection--single.is-invalid {
+  border: 1px solid #ef4444 !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23EF4444' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23EF4444' stroke='none'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(.375em + 1.25rem) center;
+  background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+}
+
+
+
+
+td > label,
+li > label {
+  display: block;
+  width: 100%;
+  height: calc(1.8125rem + 2px);
+  padding: 0.25rem 0.5rem;
+  margin-bottom: 0;
+  font-size: .875rem;
+  font-weight: 400 !important;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.2rem;
+  box-shadow: inset 0 0 0 transparent;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+/* Account table */
+.account-table {
+  width: 100% !important;
+}
+.account-table > thead > tr > th:first-of-type,
+.account-table > tbody > tr > td:first-of-type {
+  width: 45% !important;
+}
+.account-table > thead > tr > th:nth-of-type(2),
+.account-table > tbody > tr > td:nth-of-type(2) {
+  width: 1% !important;
+}
+.account-table > thead > tr > th:nth-of-type(3),
+.account-table > tbody > tr > td:nth-of-type(3),
+.account-table > thead > tr > th:last-of-type,
+.account-table > tbody > tr > td:last-of-type {
+  width: 27% !important;
+  text-align: right !important;
+}
+
+.icheck-danger > input:first-child:not(:checked):not(:disabled) + label::before,
+.icheck-danger > input:first-child:not(:checked):not(:disabled) + input[type="hidden"] + label::before {
+  border-color: #EF4444;
+}
+
+
+
+
+
+.img-thumbnail {
+  height: 12.8rem;
+}
+#iframePlaceholder {
+  height: 100%;
+}
+#imgPlaceholder {
+  color: #777;
+  font-size: 5rem;
+}
+.border-is-invalid {
+  border: 1px solid #EF4444 !important;
+  border-radius: 0.25rem;
+}
+.border-is-invalid > input {
+  border-color: #fff !important;
+}
+label[for="source_document"],
+#source_document_filename {
+  cursor: pointer;
+}
+#source_document_file_cancel {
+  background-color: transparent !important;
+  border-left: none;
+}
+
+.applied-depreciation > div:last-child,
+.applied-interest > div:last-child {
+  height: auto;
+}
+.applied-depreciation > div:last-child.scrollable,
+.applied-interest > div:last-child.scrollable {
+  height: 12.8rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+/* Accounts view table */
+#table-1,
+#table-2 {
+  width: 100% !important;
+}
+#table-1 > tbody > tr > td:nth-of-type(1),
+#table-2 > tbody > tr > td:nth-of-type(1) {
+  width: 35% !important;
+}
+#table-1 > tbody > tr > td:nth-of-type(2),
+#table-2 > tbody > tr > td:nth-of-type(2) {
+  width: 15% !important;
+}
+#table-1 > tbody > tr > td:nth-of-type(3),
+#table-2 > tbody > tr > td:nth-of-type(3) {
+  width: 10% !important;
+}
+#table-1 > tbody > tr > td:nth-of-type(4),
+#table-2 > tbody > tr > td:nth-of-type(4) {
+  text-align: right !important;
+  width: 20% !important;
+}
+#table-1 > tbody > tr > td:nth-of-type(5), 
+#table-2 > tbody > tr > td:nth-of-type(5) {
+  text-align: right !important;
+  width: 20% !important;
+}
+
+/* Applied depreciation / interest table */
+#applied-interest-table,
+#applied-depreciation-table {
+  width: 100% !important;
+}
+#applied-interest-table > tbody > tr > td:nth-of-type(1),
+#applied-depreciation-table > tbody > tr > td:nth-of-type(1) {
+  width: 50% !important;
+}
+#applied-interest-table > tbody > tr > td:nth-of-type(2),
+#applied-depreciation-table > tbody > tr > td:nth-of-type(2) {
+  text-align: right !important;
+  width: 25% !important;
+}
+#applied-interest-table > tbody > tr > td:nth-of-type(3),
+#applied-depreciation-table > tbody > tr > td:nth-of-type(3) {
+  text-align: right !important;
+  width: 25% !important;
+}
+
+#source-data-table > tbody > tr > td:nth-of-type(2) {
+  color: #777 !important;
+}
+#source-data-table > tbody > tr > td:nth-of-type(4) {
+  width: 50% !important;
+}
+
+@media screen and (max-width: 992px) {
+}
+
+@media screen and (max-width: 768px) {
+  #table_filter {
+    display: flex;
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,416 @@
+{% extends "internal/user/cms/layout.html" %} {% block content %}
+<style>
+  .subBillTr:hover { 
+    cursor:pointer
+}
+</style>
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 p-title">Inpatient Bills</h1>
+        </div>
+
+        <!-- Main content -->
+        <!-- /.col -->
+      </div>
+      <!-- view sub-bill -->
+      <div class="row collapse" id="view_sub_bill_div">
+        <div class="col-sm-12">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <h3 class="card-title" id="view_sub_bill_div_title">
+                            View Bill
+                        </h3>
+                        <span type="button" aria-hidden="true" onclick="return hideDiv()"><i
+                                class="fas fa-times"></i></span>
+                    </div>
+                </div>
+                  <div class="card-body">
+                    <div id="view_prescription_bill_div">
+                      <div class="row">
+                        <div class="form-group col-md-6 mb-3">
+                            <label class="" for="prescription_bill_no">Prescription Bill No.</label>
+                            <input class="form-control" type="text" name="prescription_bill_no" id="prescription_bill_no"
+                                readonly/>
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="" for="pres_date_of_billing">Date of Billing</label>
+                          <input class="form-control" type="date" name="pres_date_of_billing" id="pres_date_of_billing"
+                              readonly/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="form-required-field" for="medicine_amount">Medicine Amount</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">₱</span>
+                            </div>
+                            <input class="form-control" type="number" name="medicine_amount"
+                              id="medicine_amount" readonly />
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="form-required-field" for="medical_amount">Medical Supplies Amount</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">₱</span>
+                            </div>
+                            <input class="form-control" type="number" name="medical_amount"
+                              id="medical_amount" readonly />
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="form-required-field" for="pres_total_amount">Total Amount</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">₱</span>
+                            </div>
+                            <input class="form-control" type="number" name="pres_total_amount"
+                              id="pres_total_amount" readonly />
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="" for="pres_status">Status</label>
+                          <input class="form-control" type="text" name="pres_status" id="pres_status"
+                              readonly/>
+                      </div>
+                      </div>
+                    </div>
+                    <div id="view_room_bill_div">
+                      <div class="row">
+                        <div class="form-group col-md-6 mb-3">
+                            <label class="" for="room_bill_no">Room Bill No.</label>
+                            <input class="form-control" type="text" name="room_bill_no" id="room_bill_no"
+                                readonly/>
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="" for="room_date_of_billing">Date of Billing</label>
+                          <input class="form-control" type="date" name="room_date_of_billing" id="room_date_of_billing"
+                              readonly/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="" for="room_no">Room No.</label>
+                          <input class="form-control" type="text" name="room_no" id="room_no"
+                              readonly/>
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="" for="room_type">Room Type</label>
+                          <input class="form-control" type="text" name="room_type" id="room_type"
+                              readonly/>
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="" for="date_of_admission">Date of Admission</label>
+                          <input class="form-control" type="date" name="date_of_admission" id="date_of_admission"
+                              readonly/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="" for="no_of_days">No. of Days</label>
+                          <input class="form-control" type="text" name="no_of_days" id="no_of_days"
+                              readonly/>
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="form-required-field" for="room_total_amount">Total Amount</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">₱</span>
+                            </div>
+                            <input class="form-control" type="number" name="room_total_amount"
+                              id="room_total_amount" readonly />
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="" for="room_status">Status</label>
+                          <input class="form-control" type="text" name="room_status" id="room_status"
+                              readonly/>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="view_request_bill_div">
+                      <div class="row">
+                        <div class="form-group col-md-6 mb-3">
+                            <label class="" for="request_bill_no">Lab Request Bill No.</label>
+                            <input class="form-control" type="text" name="request_bill_no" id="request_bill_no"
+                                readonly/>
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="" for="request_date_of_billing">Date of Billing</label>
+                          <input class="form-control" type="date" name="request_date_of_billing" id="request_date_of_billing"
+                              readonly/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="" for="request_no">Lab Request No.</label>
+                          <input class="form-control" type="text" name="request_no" id="request_no"
+                              readonly/>
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="" for="request_type">Lab Test Type</label>
+                          <input class="form-control" type="text" name="request_type" id="request_type"
+                              readonly/>
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="" for="date_of_request">Date of Request</label>
+                          <input class="form-control" type="date" name="date_of_request" id="date_of_request"
+                              readonly/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="form-required-field" for="request_total_amount">Total Amount</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">₱</span>
+                            </div>
+                            <input class="form-control" type="number" name="request_total_amount"
+                              id="request_total_amount" readonly />
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="" for="request_status">Status</label>
+                          <input class="form-control" type="text" name="request_status" id="request_status"
+                              readonly/>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="view_treatment_bill_div">
+                      <div class="row">
+                        <div class="form-group col-md-6 mb-3">
+                            <label class="" for="treatment_bill_no">Treatment Bill No.</label>
+                            <input class="form-control" type="text" name="treatment_bill_no" id="treatment_bill_no"
+                                readonly/>
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="" for="treatment_date_of_billing">Date of Billing</label>
+                          <input class="form-control" type="date" name="treatment_date_of_billing" id="treatment_date_of_billing"
+                              readonly/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="" for="treatment_no">Treatment No.</label>
+                          <input class="form-control" type="text" name="treatment_no" id="treatment_no"
+                              readonly/>
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="" for="treatment_type">Treatment Type</label>
+                          <input class="form-control" type="text" name="treatment_type" id="treatment_type"
+                              readonly/>
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="" for="date_of_treatment">Date of Treatment</label>
+                          <input class="form-control" type="date" name="date_of_treatment" id="date_of_treatment"
+                              readonly/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="form-required-field" for="treatment_total_amount">Total Amount</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">₱</span>
+                            </div>
+                            <input class="form-control" type="number" name="treatment_total_amount"
+                              id="treatment_total_amount" readonly />
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="" for="treatment_status">Status</label>
+                          <input class="form-control" type="text" name="treatment_status" id="treatment_status"
+                              readonly/>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="view_surgery_bill_div">
+                      <div class="row">
+                        <div class="form-group col-md-6 mb-3">
+                            <label class="" for="surgery_bill_no">Surgery Bill No.</label>
+                            <input class="form-control" type="text" name="surgery_bill_no" id="surgery_bill_no"
+                                readonly/>
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="" for="surgery_date_of_billing">Date of Billing</label>
+                          <input class="form-control" type="date" name="surgery_date_of_billing" id="surgery_date_of_billing"
+                              readonly/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="" for="surgery_no">Surgery No.</label>
+                          <input class="form-control" type="text" name="surgery_no" id="surgery_no"
+                              readonly/>
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="" for="surgery_type">Surgery Type</label>
+                          <input class="form-control" type="text" name="surgery_type" id="surgery_type"
+                              readonly/>
+                        </div>
+                        <div class="form-group col-md-4 mb-3">
+                          <label class="" for="date_of_surgery">Date of Surgery</label>
+                          <input class="form-control" type="date" name="date_of_surgery" id="date_of_surgery"
+                              readonly/>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="form-required-field" for="surgery_total_amount">Total Amount</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">₱</span>
+                            </div>
+                            <input class="form-control" type="number" name="surgery_total_amount"
+                              id="surgery_total_amount" readonly />
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6 mb-3">
+                          <label class="" for="surgery_status">Status</label>
+                          <input class="form-control" type="text" name="surgery_status" id="surgery_status"
+                              readonly/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                     
+                      <button type="reset" class="btn btn-default float-right"
+                          onclick="return hideDiv()">
+                          Close
+                      </button>
+                  </div>
+            </div>
+        </div>
+    </div>
+      <!--  DataTable -->
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card card-primary card-outline">
+            <div class="card-header border-0">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">List of Inpatient Bills</h3>
+              </div>
+            </div>
+            <div class="card-body mt-0 pt-0">
+              <table class="table table-hover table-bordered" id="inpatient_bill_table" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th>Inpatient Bill No.</th>
+                    <th>Inpatient Name</th>
+                    <th>Total Bill</th>
+                    <th>Remaining Balance</th>
+                    <th>Date of Billing</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+          <!-- /.card -->
+        </div>
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <!-- Main content -->
+
+  <!-- /.content -->
+</div>
+
+<!-- modal -->
+<div class="modal fade" id="modal_select_sub_bill">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"> <i class="fas fa-eye mr-1"></i> View Sub-bills </h4>
+        <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"><i class="fas fa-times"></i></span>
+        </button>
+      </div>
+      <form id="form_delete">
+        <div class="modal-body">
+        <p><b>List of Sub-Bills</b></p>
+        <div id="sub_bill_list_div">
+          <div class="row">
+            <input class="form-control" type="text" id="search_sub_bill_input" onkeyup="searchSubBill()"
+              placeholder="Search for a specific sub-bill...">
+              <table class="table table-hover" id="sub_bill_list_table">
+                <thead>
+                  <tr>
+                    <th colspan="2"><span id="modal_inpatient_bill_no"></span></th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+{% endblock %} {% block customjs %}
+<script src="{{ url_for('assets', path='/') }}ap_ar/inpatient_bill.js"></script>
+<script>
+  function searchSubBill() {
+    var input, filter, table, tr, td, i;
+    input = document.getElementById("search_sub_bill_input");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("sub_bill_list_table");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }       
+    }
+  }
+  </script>
+{% endblock %}

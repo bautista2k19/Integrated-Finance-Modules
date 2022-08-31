@@ -1,0 +1,154 @@
+{% extends 'internal/shared/base.html' %}
+
+<!-- Browser title -->
+{% block browser_title %}Data Source | General Ledger{% endblock browser_title %}
+
+<!-- ASSETS -->
+{% block specific_assets %}
+    <link rel="stylesheet" href="{{ url_for('assets', path='/general_ledger/css/internal/general_ledger/accountant/data_source.css') }}" />
+{% endblock specific_assets %}
+<!-- /ASSETS -->
+
+<!-- SIDEBAR -->
+<!-- /SIDEBAR -->
+
+<!-- CONTENT -->
+{% block content_title %}Data Source{% endblock content_title %}
+{% block content_subtitle %}General Ledger / Data Source{% endblock content_subtitle %}
+
+{% block main_content %}
+  <!-- form_modal -->
+  <div class="modal fade" id="form_modal">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title"><i class="fas fa-database mr-3 text-secondary"></i>Data Source</h4>
+          <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close" form="form">
+            <span aria-hidden="true"><i class="fas fa-times"></i></span>
+          </button>
+        </div>
+        <!-- /modal-header -->
+        <div class="modal-body pb-0">
+
+          <!-- form -->
+          <form
+            id="form"
+            autocomplete="off"
+          >
+            <input
+              type="text"
+              id="uuid"
+              class="d-none"
+            />
+
+            <!-- NAME -->
+            <div class="form-group row">
+              <div class="col">
+                <label for="name">Name<span> *</span></label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  class="form-control"
+                  placeholder="Enter name"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+            
+            <!-- ENDPOINT -->
+            <div class="form-group row">
+              <div class="col">
+                <label for="endpoint">Endpoint<span> *</span></label>
+                <input
+                  type="text"
+                  id="endpoint"
+                  name="endpoint"
+                  class="form-control"
+                  placeholder="Enter endpoint"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="form-group row">
+              <div class="col">
+                <label for="description">Description</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  class="form-control"
+                  placeholder="Enter description"
+                  autocomplete="off"
+                  rows="3"
+                ></textarea>
+              </div>
+            </div>
+          
+          </form>
+          <!-- /form -->
+
+        </div>
+        <!-- /modal-body -->
+        <div class="modal-footer text-right">
+          <button type="button" class="btn btn-sm btn-default mr-2" data-dismiss="modal" form="form">Cancel</button>
+          <button type="submit" class="btn btn-sm btn-primary" id="submitButton" form="form">
+            <span>Submit</span><i class="fas fa-check ml-2"></i>
+          </button>
+        </div>
+        <!-- /modal-footer -->
+      </div>
+      <!-- /modal-content -->
+    </div>
+    <!-- /modal-dialog -->
+  </div>
+  <!-- /form_modal -->
+
+  <!-- card -->
+  <div class="card card-outline card-primary">
+    <div class="card-header">
+      <h3 class="card-title">List of Data Sources</h3>
+      <div class="text-right">
+        <button
+          type="button"
+          class="btn btn-sm btn-primary"
+          data-toggle="modal" 
+          data-target="#form_modal" 
+          data-backdrop="static"
+        >
+          <span>Add Data Source</span><i class="fa fa-plus ml-2"></i>
+        </button>
+      </div>
+      <!-- /add button -->
+    </div>
+    <!-- /card-header -->
+
+    <div class="card-body">
+      <table id="table" class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Endpoint</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <!-- /table -->
+    </div>
+    <!-- /card-body -->
+  </div>
+  <!-- /card -->
+{% endblock main_content %}
+<!-- /CONTENT -->
+
+<!-- SCRIPTS -->
+{% block specific_scripts %}
+    <!-- data_source -->
+    <script src="{{ url_for('assets', path='/general_ledger/js/internal/general_ledger/accountant/data_source.js') }}"></script>
+{% endblock specific_scripts %}
+<!-- /SCRIPTS -->

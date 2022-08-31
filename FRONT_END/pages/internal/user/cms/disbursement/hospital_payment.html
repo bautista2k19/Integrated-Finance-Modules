@@ -1,0 +1,1063 @@
+{% extends "internal/user/cms/layout.html" %} {% block content %}
+
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 p-title">Hospital Payments</h1>
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item active">Hospital Payments</li>
+          </ol>
+        </div>
+        <!-- /.col -->
+      </div>
+
+      <!-- Full Payment -->
+      <div class="row collapse" id="pov_form_div">
+        <div class="col-sm-12">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">
+                  Procurement Full Payment
+                </h3>
+                <span type="button" aria-hidden="true" onclick="return hideDiv()"><i
+                    class="fas fa-times"></i></span>
+              </div>
+            </div>
+            <form id="pov_payment_form" name="pov_payment_form">
+              <div class="card-body">
+                <div class="row">
+                  <input type="hidden" id="uuid" name="uuid">
+                  <input type="hidden" id="payment_term_id" name="payment_term_id">
+                  <div class="form-group col-md-6 mb-2">
+                    <label class="">Bill Summary</label>
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Description</th>
+                          <th>Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Product Amount</td>
+                          <td id="product_total_bill"></td>
+                        </tr>
+                        <tr>
+                          <th>Total Tax</th>
+                          <th class="text-muted" id=pov_bill_total_tax></th>
+                        </tr>
+                        <tr>
+                          <th>Total Discount</th>
+                          <th class="text-muted" id=pov_bill_total_discount></th>
+                        </tr>
+                        <tr>
+                          <th>Total Bill</th>
+                          <th class="text-muted" id=pov_total_bill></th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group mb-2">
+                      <label class="form-required-field" for="pov_bill_id"> Purchase Order Vendor Bill | Vendor
+                        Name</label>
+                      <select class="form-control select2" name="pov_bill_id" id="pov_bill_id" style="width:100%"
+                        required data-msg-required="Please select purchase order vendor bill.">
+                      </select>
+                    </div>
+                    <div class="form-group mb-2">
+                      <label class="form-required-field" for="pov_payment_method_id">Payment Method</label>
+                      <select class="form-control select2" name="pov_payment_method_id" id="pov_payment_method_id"
+                        style="width:100%" required data-msg-required="Please select payment method.">
+                      </select>
+                    </div>
+                    <!-- FULL PAYMENT CASH METHOD -->
+                    <div class="pov_cash_payment collapse">
+                      <label for="pov_cash_tendered">Cash Tendered</label>
+                      <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">₱</span>
+                        </div>
+                        <input class="form-control" type="number" name="pov_cash_tendered" id="pov_cash_tendered"
+                          placeholder="Cash Tendered" step="0.01" required
+                          data-msg-required="Please enter cash tendered." />
+                        <div class="input-group-append">
+                          <span class="input-group-text">.00</span>
+                        </div>
+                      </div>
+                      <label>Change: <span id="pov_change" class="text-muted">0.00</span></label>
+                    </div>
+
+                    <!-- FULL PAYMENT CHECK METHOD -->
+                    <div class="pov_check_payment collapse">
+                      <div class="form-group mb-2">
+                        <label class="form-required-field" for="pov_bank_name">Bank Name</label>
+                        <input class="form-control" type="text" name="pov_bank_name" id="pov_bank_name"
+                          placeholder="Bank Name" required data-msg-required="Please enter bank name." />
+                      </div>
+                      <div class="form-group mb-2">
+                        <label class="form-required-field" for="pov_bank_address">Bank Address</label>
+                        <input class="form-control" type="text" name="pov_bank_address" id="pov_bank_address"
+                          placeholder="Bank Address" required data-msg-required="Please enter bank address." />
+                      </div>
+                      <div class="d-flex">
+                        <div class="form-group mb-2 flex-fill mr-1">
+                          <label class="form-required-field" for="pov_check_no">Check No.</label>
+                          <input class="form-control" type="text" name="pov_check_no" id="pov_check_no"
+                            placeholder="Check No." required data-msg-required="Please enter check no." />
+                        </div>
+                        <div class="form-group mb-2 flex-fill ml-1">
+                          <label class="form-required-field" for="pov_check_date">Check Date</label>
+                          <input class="form-control" type="date" name="pov_check_date" id="pov_check_date" required
+                            data-msg-required="Please enter check date" />
+                        </div>
+                      </div>
+
+                      <div class="d-flex">
+                        <div class="form-group mb-2 flex-grow-1 mr-1">
+                          <label class="form-required-field" for="pov_account_name">Account Name</label>
+                          <input class="form-control" type="text" name="pov_account_name" id="pov_account_name"
+                            placeholder="Account Name" required data-msg-required="Please enter account name." />
+                        </div>
+                        <div class="form-group mb-2 mr-1 ml-1">
+                          <label class="form-required-field" for="pov_account_no">Account No.</label>
+                          <input class="form-control" type="text" name="pov_account_no" id="pov_account_no"
+                            placeholder="Account No." required data-msg-required="Please enter account number." />
+                        </div>
+                        <div class="form-group mb-2 ml-1">
+                          <label class="form-required-field" for="pov_rt_number">R/T No.</label>
+                          <input class="form-control" type="text" name="pov_rt_number" id="pov_rt_number"
+                            placeholder="R/T No." required data-msg-required="Please enter r/t no." />
+                        </div>
+                      </div>
+                      <div class="form-group mb-2">
+                        <label class="form-required-field" for="pov_payee_name">Payee Name</label>
+                        <input class="form-control" type="text" name="pov_payee_name" id="pov_payee_name"
+                          placeholder="Payee Name" required data-msg-required="Please enter payee name." />
+                      </div>
+                      <div class="d-flex">
+                        <div class="form-group mb-2 flex-fill mr-1">
+                          <label class="form-required-field" for="pov_check_amount">Check Amount</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">₱</span>
+                            </div>
+                            <input class="form-control" type="number" name="pov_check_amount" id="pov_check_amount"
+                              placeholder="Check Amount" required min="1" step="0.01"
+                              data-msg-required="Please enter amount." />
+                            <div class="input-group-append">
+                              <span class="input-group-text">.00</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group mb-2">
+                        <label for="pov_check_amount_in_words">Amount in words</label>
+                        <div id="pov_check_amount_in_words"></div>
+                      </div>
+                      <div class="form-group mb-2">
+                        <label class="form-required-field" for="pov_check_description">Description</label>
+                        <textarea class="form-control" id="pov_check_description" name="pov_check_description"
+                          placeholder="Description" required data-msg-required="Please enter description."
+                          rows="5"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <button type="submit" class="btn btn-primary submit float-right ml-2" id="save_button">
+                  Save <i class="fas fa-check ml-1"></i>
+                </button>
+                <button type="reset" class="btn btn-default float-right" onclick="return hideDiv()">
+                  Cancel
+                </button>
+              </div>
+          </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Partial Payment -->
+      <div class="row collapse" id="po_form_div">
+        <div class="col-sm-12">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">
+                  Procurement Partial Payment
+                </h3>
+                <span type="button" aria-hidden="true" onclick="return hideDiv()"><i
+                    class="fas fa-times"></i></span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="po_bill_payment_stepper" class="bs-stepper">
+                <div class="bs-stepper-header" role="tablist">
+                  <!-- your steps here -->
+                  <div class="step" data-target="#review-po-bill-part">
+                    <button type="button" class="step-trigger" role="tab" aria-controls="review-po-bill-part"
+                      id="review-po-bill-part-trigger">
+                      <span class="bs-stepper-circle">1</span>
+                      <span class="bs-stepper-label">Purhcase Order Bill Summary</span>
+                    </button>
+                  </div>
+                  <div class="line"></div>
+                  <div class="step" data-target="#po-bill-payment-part">
+                    <button type="button" class="step-trigger" role="tab" aria-controls="po-bill-payment-part"
+                      id="po-bill-payment-part-trigger">
+                      <span class="bs-stepper-circle">2</span>
+                      <span class="bs-stepper-label">Payment</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="bs-stepper-content">
+                  <!-- your steps content here -->
+                  <div id="review-po-bill-part" class="content" role="tabpanel"
+                    aria-labelledby="review-po-bill-part-trigger">
+                    <div class="row mt-2">
+                      <div class="col-md-8 mx-auto">
+                        <div class="form-group mb-2">
+                          <label class="form-required-field" for="po_bill_id"> Purchase Order Bill | Vendor Name</label>
+                          <select class="form-control select2" name="po_bill_id" id="po_bill_id" style="width:100%"
+                            required data-msg-required="Please select purchase order bill.">
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-8 mx-auto">
+                        <table class="table table-borderless table-hover">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <p>Purchase Order Bill No. </p>
+                                <b id="td_po_bill_no"></b>
+                              </td>
+                              <td>
+                                <p>Date of Billing</p>
+                                <p id="td_po_date_of_billing"></p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>Product Amount</p>
+                              </td>
+                              <td><b id="td_po_product_amount"></td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <p>Total Tax</p>
+                              </td>
+                              <td><b id="td_po_tax"></b></td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <b>Sub Total</b>
+                              </td>
+                              <td><b id="td_po_sub_total"></b></td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <b>Total Amount</b>
+                              </td>
+                              <td><b id="td_po_total_amount"></b></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-primary float-right" onclick="stepper.next()">Next<i class="fas fa-chevron-circle-right ml-1"></i></button>
+                  </div>
+                  <div id="po-bill-payment-part" class="content" role="tabpanel"
+                    aria-labelledby="po-bill-payment-part-trigger">
+                    <form id="po_payment_form">
+                      <input type="hidden" id="po_bill_uuid">
+                      <div class="row">
+                        <div class="col-md-6 mb-2">
+                          <div class="form-group">
+                            <label class="form-required-field" for="po_payment_method_id">Payment
+                              Method</label>
+                            <select class="form-control select2" name="po_payment_method_id" id="po_payment_method_id"
+                              style="width:100%" required data-msg-required="Please select payment method.">
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="po_cash_payment">
+                        <div class="row">
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label for="po_cash_tendered">Cash Tendered</label>
+                              <div class="input-group form-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">₱</span>
+                                </div>
+                                <input class="form-control" type="number" name="po_cash_tendered" id="po_cash_tendered"
+                                  placeholder="Cash Tendered" step="0.01" required
+                                  data-msg-required="Please enter cash tendered." />
+                                <div class="input-group-append">
+                                  <span class="input-group-text">.00</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 mb-2">
+                            <label>Change:</label><br>
+                            <span id="po_change" class="text-muted">0.00</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="po_check_payment">
+                        <div class="row">
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="po_bank_name">Bank Name</label>
+                              <input class="form-control" type="text" name="po_bank_name" id="po_bank_name"
+                                placeholder="Bank Name" required data-msg-required="Please enter bank name." />
+                            </div>
+                          </div>
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="po_bank_address">Bank Address</label>
+                              <input class="form-control" type="text" name="po_bank_address" id="po_bank_address"
+                                placeholder="Bank Address" required data-msg-required="Please enter bank address." />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="po_check_no">Check No.</label>
+                              <input class="form-control" type="text" name="po_check_no" id="po_check_no"
+                                placeholder="Check No." required data-msg-required="Please enter check no." />
+                            </div>
+                          </div>
+                          <div class="col-md-6 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="po_check_date">Check Date</label>
+                              <input class="form-control" type="date" name="po_check_date" id="po_check_date" required
+                                data-msg-required="Please enter check date" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="po_account_name">Account Name</label>
+                              <input class="form-control" type="text" name="po_account_name" id="po_account_name"
+                                placeholder="Account Name" required data-msg-required="Please enter account name." />
+                            </div>
+                          </div>
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="po_account_no">Account No.</label>
+                              <input class="form-control" type="text" name="po_account_no" id="po_account_no"
+                                placeholder="Account No." required data-msg-required="Please enter account number." />
+                            </div>
+                          </div>
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="po_rt_number">R/T No.</label>
+                              <input class="form-control" type="text" name="po_rt_number" id="po_rt_number"
+                                placeholder="R/T No." required data-msg-required="Please enter r/t no." />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="po_payee_name">Payee Name</label>
+                              <input class="form-control" type="text" name="po_payee_name" id="po_payee_name"
+                                placeholder="Payee Name" required data-msg-required="Please enter payee name." />
+                            </div>
+                          </div>
+                          <div class="col-md-4 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="po_check_amount">Check Amount</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">₱</span>
+                                </div>
+                                <input class="form-control" type="number" name="po_check_amount" id="po_check_amount"
+                                  placeholder="Check Amount" required min="1" step="0.01"
+                                  data-msg-required="Please enter amount." />
+                                <div class="input-group-append">
+                                  <span class="input-group-text">.00</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-4 mb-2">
+                            <label for="po_check_amount_in_words">Amount in words</label>
+                            <div id="po_check_amount_in_words"></div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-8 mb-2">
+                            <div class="form-group">
+                              <label class="form-required-field" for="po_check_description">Description</label>
+                              <textarea class="form-control" id="po_check_description" name="po_check_description"
+                                placeholder="Description" required data-msg-required="Please enter description."
+                                rows="5"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-primary" onclick="stepper.previous()"><i class="fas fa-chevron-circle-left mr-1"></i>Previous</button>
+                      <button type="submit" class="btn btn-primary float-right"><i class='fas fa-money-check-alt mr-1'></i>Pay</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="reset" class="btn btn-default float-right" onclick="return hideDiv()">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- print check -->
+      <div class="row collapse" id="print_check_div">
+        <div class="col-sm-12">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">
+                  Print Check
+                </h3>
+                <span type="button" aria-hidden="true" onclick="return hideDiv()"><i
+                    class="fas fa-times"></i></span>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="container p-4 border border-secondary" id="print_check">
+                  <div class="text-right">
+                    <b class="text-xl" id="print_check_no">0151</b>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div>
+                        HOMIES
+                      </div>
+                      <div>Address</div>
+                    </div>
+                    <div class="col-md-6 mt-4 text-right">
+                      <div>Date: <u><span id="print_check_date"></span></u> </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-10 mt-5 mb-2 mx-auto">
+                      Pay to the Order of: <input type="text" style="border-top: none;border-right: none;border-left: none;" size="60" id="print_payee_name" class="text-uppercase">
+                      ₱ <input type="text" style="border-top: none;border-right: none;border-left: none;" id="print_check_amount">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-10 mb-2 mx-auto">
+                      Amount in words <input type="text" style="border-top: none;border-right: none;border-left: none;" size="60" id="print_amount_in_words" class="text-uppercase">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-10 mb-2 mx-auto">
+                      <div id="print_bank_name">Bank Name</div>
+                      <div id="print_bank_address">Bank Address</div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 mt-3 text-center">
+                      <div id=""><input type="text" style="border-top: none;border-right: none;border-left: none;" size="40" id="print_description" class="text-center"></div>
+                      <div>Description</div>
+                    </div>
+                    <div class="col-md-6 mt-3 text-center">
+                      <div><input type="text" style="border-top: none;border-right: none;border-left: none;" size="40" class="text-center"></div>
+                      <div>Signature</div>
+
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4 mt-5 text-center">
+                      <span id="print_rt_number"> 1 2 3 4 5 6 7 8 9</span>
+                    </div>
+                    <div class="col-md-4 mt-5 text-center">
+                      <span id="print_account_number">0 0 0 0 1 2 3 4 5 6 7 8 9</span>
+                    </div>
+                    <div class="col-md-4 mt-5 text-center">
+                      <span id="print_check_number1"> 0 1 5 1 </span>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-info float-right ml-1" id="print_check_btn">
+                Print this Check <i class="fas fa-print ml-1"></i>
+              </button>
+              <button type="reset" class="btn btn-default float-right" onclick="return hideDiv()">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- View POV Payment -->
+      <div class="row collapse" id="view_pov_payment_div">
+        <div class="col-sm-12">
+          <div class="card card-primary card-outline">
+          <div class="card-header">
+            <div class="d-flex justify-content-between">
+              <h3 class="card-title" id="view_pov_payment_card_title">
+                View POV Payment
+              </h3>
+              <span type="button" aria-hidden="true" onclick="return hideDiv()"><i
+                  class="fas fa-times"></i></span>
+            </div>
+          </div>
+          <form id="view_pov_payment_form">
+            <input type="hidden" name="edit_pov_payment_uuid" id="edit_pov_payment_uuid">
+            <input type="hidden" name="edit_pov_hospital_cash_payment_id" id="edit_pov_hospital_cash_payment_id">
+            <input type="hidden" name="edit_pov_hospital_check_payment_id" id="edit_pov_hospital_check_payment_id">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <label id="view_pov_payment_or"></label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label class="form-required-field" for="view_pov_payment_pov_bill_id">POV Bill No. | Vendor Name </label>
+                    <select class="form-control select2" name="view_pov_payment_pov_bill_id"
+                      id="view_pov_payment_pov_bill_id" style="width:100%" required
+                      data-msg-required="Please select pov bill no." disabled>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="view_pov_payment_amount_paid">Total Amount Paid</label>
+                    <div class="input-group form-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">₱</span>
+                      </div>
+                      <input class="form-control" type="number" name="view_pov_payment_amount_paid"
+                        id="view_pov_payment_amount_paid" placeholder="Amount Paid" step="0.01" required
+                        data-msg-required="Please enter amount paid." disabled />
+                      <div class="input-group-append">
+                        <span class="input-group-text">.00</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="view_pov_payment_payment_date">Date of Payment</label>
+                    <input class="form-control" type="datetime-local" name="view_pov_payment_payment_date" id="view_pov_payment_payment_date"
+                     disabled/>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label class="form-required-field" for="view_pov_payment_term">Payment Term</label>
+                    <select class="form-control select2" name="view_pov_payment_term"
+                      id="view_pov_payment_term" style="width:100%" required
+                      data-msg-required="Please select payment term." disabled>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label class="form-required-field" for="view_pov_payment_method">Payment Method</label>
+                    <select class="form-control select2" name="view_pov_payment_method"
+                      id="view_pov_payment_method" style="width:100%" required
+                      data-msg-required="Please select payment method" disabled>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="view_pov_payment_status">Status</label>
+                    <input class="form-control" type="text" name="view_pov_payment_status" id="view_pov_payment_status"
+                     disabled/>
+                  </div>
+                </div>
+              </div>
+              <div class="collapse view_pov_payment_check_info">
+                <div class="row ">
+                  <div class="col-md-4 mb-2">
+                    <label>Check Information</label>
+                  </div>
+                </div>
+                <div class="row ">
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_pov_payment_bank_name">Bank Name</label>
+                      <input class="form-control" type="text" name="view_pov_payment_bank_name" id="view_pov_payment_bank_name"
+                       disabled/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_pov_payment_bank_address">Bank Address</label>
+                      <input class="form-control" type="text" name="view_pov_payment_bank_address" id="view_pov_payment_bank_address"
+                       disabled/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_pov_payment_check_no">Check Number</label>
+                      <input class="form-control" type="text" name="view_pov_payment_check_no" id="view_pov_payment_check_no"
+                       disabled/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_pov_payment_check_date">Check Date</label>
+                      <input class="form-control" type="date" name="view_pov_payment_check_date" id="view_pov_payment_check_date"
+                       disabled/>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_pov_payment_acc_name">Account Name</label>
+                      <input class="form-control" type="text" name="view_pov_payment_acc_name" id="view_pov_payment_acc_name"
+                       disabled/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_pov_payment_acc_no">Account Number</label>
+                      <input class="form-control" type="text" name="view_pov_payment_acc_no" id="view_pov_payment_acc_no"
+                       disabled/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_pov_payment_rt_number">R/T Number</label>
+                      <input class="form-control" type="text" name="view_pov_payment_rt_number" id="view_pov_payment_rt_number"
+                       disabled/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_pov_payment_check_amount">Check Amount</label>
+                      <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">₱</span>
+                        </div>
+                        <input class="form-control" type="number" name="view_pov_payment_check_amount"
+                          id="view_pov_payment_check_amount" placeholder="Amount Paid" step="0.01" required
+                          data-msg-required="Please enter check amount." disabled />
+                        <div class="input-group-append">
+                          <span class="input-group-text">.00</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label class="form-required-field" for="view_pov_payment_check_description">Description</label>
+                      <textarea class="form-control" id="view_pov_payment_check_description" name="view_pov_payment_check_description"
+                        placeholder="Description" required data-msg-required="Please enter description."
+                        rows="5" disabled></textarea>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label for="view_pov_payment_payee_name">Payee Name</label>
+                      <input class="form-control" type="text" name="view_pov_payment_payee_name" id="view_pov_payment_payee_name"
+                       disabled/>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label for="view_pov_payment_check_status">Check Status</label>
+                      <input class="form-control" type="text" name="view_pov_payment_check_status" id="view_pov_payment_check_status"
+                       disabled/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="collapse view_pov_sub_payments">
+                <div class="collapse view_sub_po_payment">
+                  <div class="row">
+                    <div class="col-md-12 mb-2">
+                      <table class="table table-sm table-bordered" id="view_sub_po_payment_table">
+                        <thead>
+                          <tr>
+                            <th>Payment No.</th>
+                            <th>Purchase Order Bill No.</th>
+                            <th>Amount Paid</th>
+                            <th>Date of Payment</th>
+                            <th>Payment Method</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary collapse submit float-right ml-2" id="edit_pov_payment_button">
+                Save <i class="fas fa-check ml-1"></i>
+              </button>
+              <button type="reset" class="btn btn-default float-right" id="cancel_edit_pov_payment_button" onclick="return hideDiv()">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+        </div>
+      </div>
+
+       <!-- View PO Payment -->
+       <div class="row collapse" id="view_po_payment_div">
+        <div class="col-sm-12">
+          <div class="card card-primary card-outline">
+          <div class="card-header">
+            <div class="d-flex justify-content-between">
+              <h3 class="card-title" id="view_po_card_title">
+                View PO Payment
+              </h3>
+              <span type="button" aria-hidden="true" onclick="return hideDiv()"><i
+                  class="fas fa-times"></i></span>
+            </div>
+          </div>
+          <form id="view_po_payment_form">
+            <input type="hidden" name="edit_po_payment_uuid" id="edit_po_payment_uuid">
+            <input type="hidden" name="edit_po_hospital_cash_payment_id" id="edit_po_hospital_cash_payment_id">
+            <input type="hidden" name="edit_po_hospital_check_payment_id" id="edit_po_hospital_check_payment_id">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <label id="view_po_payment_or"></label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-8 mb-2">
+                  <div class="form-group">
+                    <label class="form-required-field" for="view_po_payment_po_bill_id">Purchase Order Bill No. | Vendor Name </label>
+                    <select class="form-control select2" name="view_po_payment_po_bill_id"
+                      id="view_po_payment_po_bill_id" style="width:100%" required
+                      data-msg-required="Please select po bill no." disabled>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="view_po_payment_payment_date">Date of Payment</label>
+                    <input class="form-control" type="date" name="view_po_payment_payment_date" id="view_po_payment_payment_date"
+                     disabled required
+                     data-msg-required="Please enter date of payment."/>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label class="form-required-field" for="view_po_payment_method">Payment Method</label>
+                    <select class="form-control select2" name="view_po_payment_method"
+                      id="view_po_payment_method" style="width:100%" required
+                      data-msg-required="Please select payment method" disabled>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="view_po_payment_amount_paid">Amount Paid</label>
+                    <div class="input-group form-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">₱</span>
+                      </div>
+                      <input class="form-control" type="number" name="view_po_payment_amount_paid"
+                        id="view_po_payment_amount_paid" placeholder="Amount Paid" step="0.01" required
+                        data-msg-required="Please enter amount paid." disabled />
+                      <div class="input-group-append">
+                        <span class="input-group-text">.00</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-group">
+                    <label for="view_po_payment_status">Status</label>
+                    <input class="form-control" type="text" name="view_po_payment_status" id="view_po_payment_status"
+                     disabled required
+                     data-msg-required="Please enter status."/>
+                  </div>
+                </div>
+              </div>
+              <div class="collapse view_po_payment_check_info">
+                <div class="row ">
+                  <div class="col-md-4 mb-2">
+                    <label>Check Information</label>
+                  </div>
+                </div>
+                <div class="row ">
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_po_payment_bank_name">Bank Name</label>
+                      <input class="form-control" type="text" name="view_po_payment_bank_name" id="view_po_payment_bank_name"
+                       disabled required
+                       data-msg-required="Please enter bank name."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_po_payment_bank_address">Bank Address</label>
+                      <input class="form-control" type="text" name="view_po_payment_bank_address" id="view_po_payment_bank_address"
+                       disabled required
+                       data-msg-required="Please enter bank address."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_po_payment_check_no">Check Number</label>
+                      <input class="form-control" type="text" name="view_po_payment_check_no" id="view_po_payment_check_no"
+                       disabled required
+                       data-msg-required="Please enter check number."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_po_payment_check_date">Check Date</label>
+                      <input class="form-control" type="date" name="view_po_payment_check_date" id="view_po_payment_check_date"
+                       disabled required
+                       data-msg-required="Please enter check date."/>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_po_payment_acc_name">Account Name</label>
+                      <input class="form-control" type="text" name="view_po_payment_acc_name" id="view_po_payment_acc_name"
+                       disabled required
+                       data-msg-required="Please enter account name."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_po_payment_acc_no">Account Number</label>
+                      <input class="form-control" type="text" name="view_po_payment_acc_no" id="view_po_payment_acc_no"
+                       disabled required
+                       data-msg-required="Please enter account number."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_po_payment_rt_number">R/T Number</label>
+                      <input class="form-control" type="text" name="view_po_payment_rt_number" id="view_po_payment_rt_number"
+                       disabled required
+                       data-msg-required="Please enter r/t number."/>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mb-2">
+                    <div class="form-group">
+                      <label for="view_po_payment_check_amount">Check Amount</label>
+                      <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">₱</span>
+                        </div>
+                        <input class="form-control" type="number" name="view_po_payment_check_amount"
+                          id="view_po_payment_check_amount" placeholder="Amount Paid" step="0.01" required
+                          data-msg-required="Please enter check amount." disabled />
+                        <div class="input-group-append">
+                          <span class="input-group-text">.00</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label class="form-required-field" for="view_po_payment_check_description">Description</label>
+                      <textarea class="form-control" id="view_po_payment_check_description" name="view_po_payment_check_description"
+                        placeholder="Description" required data-msg-required="Please enter description."
+                        rows="5" disabled></textarea>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label for="view_po_payment_payee_name">Payee Name</label>
+                      <input class="form-control" type="text" name="view_po_payment_payee_name" id="view_po_payment_payee_name"
+                       disabled required data-msg-required="Please enter payee name."/>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-group">
+                      <label for="view_po_payment_check_status">Check Status</label>
+                      <input class="form-control" type="text" name="view_po_payment_check_status" id="view_po_payment_check_status"
+                       disabled required data-msg-required="Please enter check status."/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary collapse submit float-right ml-2" id="edit_po_payment_button">
+                Save <i class="fas fa-check ml-1"></i>
+              </button>
+              <button type="reset" class="btn btn-default float-right" id="cancel_edit_po_payment_button" onclick="return hideDiv()">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+        </div>
+      </div>
+
+      <!-- DataTable -->
+      <div class="row">
+        <div class="col-md-3">
+          <div class="card card-outline card-primary">
+            <div class="card-body">
+              <ul class="nav nav-pills flex-column">
+                <li class="nav-item dropdown">
+                  <a class="nav-link active" type="button" id="pov_payment_menu"><i class=" fas fa-file"></i>
+                    Procurement Full Payment</a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link" type="button" id="po_payment_menu"><i class="fas fa-file"></i> Procurement Partial
+                    Payment</a>
+                </li>
+              </ul>
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+        <!-- /.card -->
+        <div class="col-md-9" id="pov_payments_div">
+          <div class="card card-primary card-outline card-tabs">
+            <div class="card-header border-0">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">List of Purchase Order Vendor Payments</h3>
+                <button class="btn btn-primary" onclick="return showPovFormDiv('Full Payment')">
+                  <i class="fas fa-plus" aria-hidden="true"></i> New
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="display table table-hover table-bordered" id="pov_payments_table" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th>Payment No.</th>
+                    <th>Purchase Order Vendor Bill No.</th>
+                    <th>Vendor Name</th>
+                    <th>Total Amount Paid</th>
+                    <th>Payment Term</th>
+                    <th>Date of Payment</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <td colspan="7"></td>
+                  </tr>
+                </tfoot>
+              </table>
+
+            </div>
+          </div>
+          <!-- /.card -->
+        </div>
+        <div class="col-md-9 collapse" id="po_payments_div">
+          <div class="card card-primary card-outline card-tabs">
+            <div class="card-header border-0">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">List of Purchase Order Payments</h3>
+                <button class="btn btn-primary" onclick="return showPovFormDiv('Partial Payment')">
+                  <i class="fas fa-plus" aria-hidden="true"></i> New
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="display table table-hover table-bordered" id="po_payments_table" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th>Payment No.</th>
+                    <th>Purchase Order Bill No.</th>
+                    <th>Vendor Name</th>
+                    <th>Total Amount Paid</th>
+                    <th>Payment Method</th>
+                    <th>Date of Payment</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <td colspan="7"></td>
+                  </tr>
+                </tfoot>
+              </table>
+
+            </div>
+          </div>
+          <!-- /.card -->
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+</div>
+<div class="modal fade" id="modal_submit_confirmation">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title"> <i class="fas fa-question-circle mr-1"></i> Confirmation</h4>
+              <button type="button" class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true"><i class="fas fa-times"></i></span>
+              </button>
+          </div>
+          <form id="form_delete">
+              <div class="modal-body">
+                  <p>Are you sure you want to continue?</p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">
+                      Close
+                  </button>
+                  <button type="button" class="btn btn-success" id="confirm_submit">
+                      Confirm Payment
+                  </button>
+              </div>
+          </form>
+      </div>
+      <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+{% endblock %} {% block customjs %}
+<!-- BS-Stepper -->
+<script src="{{ url_for('assets', path='/') }}plugins/bs-stepper/js/bs-stepper.min.js"></script>
+<script src="{{ url_for('assets', path='/') }}plugins/jquery-num2words/jquery.num2words.js"></script>
+<script src="{{ url_for('assets', path='/') }}cms/custom_js/disbursement/hospital_payment.js"></script>
+{% endblock %}

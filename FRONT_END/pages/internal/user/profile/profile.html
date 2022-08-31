@@ -1,0 +1,342 @@
+{% extends "internal/user/cms/layout.html" %} {% block content %}
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<div class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1 class="m-0 p-title">Profile</h1>
+				</div>
+				<!-- /.col -->
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">Profile</li>
+					</ol>
+				</div>
+				<!-- /.col -->
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card card-primary card-outline">
+						<div class="card-header">
+							<div class="d-flex align-items-center">
+								<h4 class="card-title" id="div_form_card_title">My Profile</h4>
+							</div>
+						</div>
+						<style>
+							.profile p {
+								display: inline
+							}
+						</style>
+						<form id="form_id" name="form_id" enctype="multipart/form-data">
+							<div class="card-body" id="form_card_body">
+								<div class="row form_div">
+									<div class="col-sm-12">
+										<h5 class="text-info">Personal Information</h5>
+									</div>
+								</div>
+								<input type="hidden" name="uuid" id="uuid">
+								<div class='row view_div profile'>
+									<div class='col-md-4 text-center'>
+										<div class='card'>
+											<div class='card-body'>
+												<img id='my_photo' src='' class='rounded-circle' width='150'></img><br>
+												<label id="my_name_label">
+												</label>
+												<p id="my_job_p" style="display:block">
+												</p>
+											</div>
+										</div>
+									</div>
+									<div class='col-md-8'>
+										<div class='col-md-12'>
+											<h5 class='text-info'>Personal Information</h5>
+										</div>
+										<div class='col-md-12'>
+											<table class='table table-borderless view-info-table'>
+												<tr>
+													<th>Full Name</th>
+													<td>
+														<p id="my_full_name"></p>
+													</td>
+												</tr>
+												<tr>
+													<th>Gender</th>
+													<td>
+														<p id="my_gender"></p>
+													</td>
+												</tr>
+												<tr>
+													<th>Birthdate</th>
+													<td>
+														<p id="my_birth_date"></p>
+													</td>
+												</tr>
+												<tr>
+													<th>Phone Number</th>
+													<td>
+														<p id="my_contact_number"></p>
+													</td>
+												</tr>
+												<tr>
+													<th>Civil Status</th>
+													<td>
+														<p id="my_civil_status"></p>
+													</td>
+												</tr>
+												<tr>
+													<th>Address</th>
+													<td>
+														<p id="my_address"></p>
+													</td>
+												</tr>
+											</table>
+										</div>
+										<div class='col-md-12'>
+											<h5 class='text-info'>Job Information</h5>
+										</div>
+										<div class='col-md-12'>
+											<table class='table table-borderless view-info-table'>
+												<tr>
+													<th>Department</th>
+													<td>
+														<p id="my_department"></p>
+													</td>
+												</tr>
+												<tr>
+													<th>Job</th>
+													<td>
+														<p id="my_job"></p>
+													</td>
+												</tr>
+												<tr>
+													<th>Hired Date</th>
+													<td>
+														<p id="my_hired_date"></p>
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
+								</div>
+								<div class="row form_div">
+									<input type="hidden" id="uuid" name="uuid">
+									<div class="col-md-6 mb-2">
+										<img src="{{ url_for('assets', path='/') }}img/avatar5.png"
+											class="rounded img-thumbnail" style="object-fit: cover"
+											id="photo_path_placeholder" name="photo_path_placeholder" alt="" />
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-6">
+										<label class="form-required-field" for="photo">Photo</label>
+										<!-- <input
+											type="file"
+											class="form-control"
+											name="photo"
+											id="photo"
+											accept="image/*"
+										/> -->
+										<div class="custom-file">
+											<input type="file" class="custom-file-input" id="photo" name="photo"
+												accept="image/*" required data-msg-required="Please select a photo."
+												data-msg-accept="Please select a valid image."
+												onchange="$(this).next().after().text($(this).val().split('\\').slice(-1)[0])" />
+											<label class="custom-file-label" id="photo_label">Choose image</label>
+										</div>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="first_name">First Name</label>
+										<input class="form-control" type="text" name="first_name" id="first_name"
+											required data-msg-required="Please enter first name." />
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label for="middle_name">Middle Name</label>
+										<input class="form-control" type="text" name="middle_name" id="middle_name" />
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="last_name">Last Name</label>
+										<input class="form-control" type="text" name="last_name" id="last_name" required
+											data-msg-required="Please enter last name." />
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label for="extension_name">Extension Name</label>
+										<input class="form-control" type="text" name="extension_name"
+											id="extension_name" />
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="birth_date">Birthdate</label>
+										<input class="form-control" type="date" name="birth_date" id="birth_date" required
+											data-msg-required="Please enter birth_date." />
+									</div>
+									<!-- <div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="birthplace">Birthplace</label>
+										<input class="form-control" type="text" name="birthplace" id="birthplace"
+											required data-msg-required="Please enter birthplace." />
+									</div> -->
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="gender">Gender</label>
+										<select class="form-control" name="gender" id="gender" required
+											data-msg-required="Please select gender.">
+											<option value="">-- Select --</option>
+											<option value="Male">Male</option>
+											<option value="Female">Female</option>
+										</select>
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="civil_status">Civil Status</label>
+										<select class="form-control" name="civil_status" id="civil_status" required
+											data-msg-required="Please select civil status.">
+											<option value="">-- Select --</option>
+											<option value="Single">Single</option>
+											<option value="Married">Married</option>
+											<option value="Separated">Separated</option>
+											<option value="Widowed">Widowed</option>
+										</select>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="col-sm-12">
+										<h5 class="text-info">Address</h5>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-4 mb-3">
+										<label for="house_number">House No.</label>
+										<input class="form-control" type="text" name="house_number" id="house_number" />
+									</div>
+									<div class="form-group col-md-4 mb-3">
+										<label for="street">Street</label>
+										<input class="form-control" type="text" name="street" id="street" />
+									</div>
+									<div class="form-group col-md-4 mb-3">
+										<label class="form-required-field" for="barangay">Barangay</label>
+										<input class="form-control" type="text" name="barangay" id="barangay" required
+											data-msg-required="Please enter barangay." />
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-4 mb-3">
+										<label class="form-required-field" for="city">City</label>
+										<input class="form-control" type="text" name="city" id="city" required
+											data-msg-required="Please enter city." />
+									</div>
+									<div class="form-group col-md-4 mb-3">
+										<label class="form-required-field" for="province">Province</label>
+										<input class="form-control" type="text" name="province" id="province" required
+											data-msg-required="Please enter province." />
+									</div>
+									<div class="form-group col-md-4 mb-3">
+										<label class="form-required-field" for="region"
+											>Region</label
+										>
+										<input
+											class="form-control"
+											type="text"
+											name="region"
+											id="region"
+											placeholder="Region"
+											required
+											data-msg-required="Please enter region."
+										/>
+									</div>
+									<div class="form-group col-md-4 mb-3">
+										<label class="form-required-field" for="zip_code"
+											>Zip Code</label
+										>
+										<input
+											class="form-control"
+											type="text"
+											name="zip_code"
+											id="zip_code"
+											placeholder="Zip Code"
+                                            maxlength="4"
+                                            minlength="4"
+											required
+											data-msg-required="Please enter zip_code."
+										/>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="col-sm-12">
+										<h5 class="text-info">Contact Information</h5>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="contact_number">Phone
+											No.(09/639)</label>
+										<input class="form-control" type="number" name="contact_number"
+											id="contact_number" pattern="(09|\639)\d{9}$"
+											data-msg-pattern="Please enter a valid phone number." required
+											data-msg-required="Please enter phone number." />
+									</div>
+									<!-- <div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="email">Email Address</label>
+										<input class="form-control" type="email" name="email" id="email" required
+											data-msg-required="Please enter email address." />
+									</div> -->
+								</div>
+								<div class="row form_div">
+									<div class="col-sm-12">
+										<h5 class="text-info">Job Information</h5>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="department_id">Department</label>
+										<select class="form-control select2" name="department_id" id="department_id"
+										  style="width:100%" required data-msg-required="Please select department.">
+										</select>
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="job_id">Job</label>
+										<select class="form-control select2" name="job_id" id="job_id"
+										  style="width:100%" required data-msg-required="Please select job.">
+										</select>
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="employee_type_id">Employee Type</label>
+										<select class="form-control select2" name="employee_type_id" id="employee_type_id"
+										  style="width:100%" required data-msg-required="Please select employee type.">
+										</select>
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="hire_date">Hired Date</label>
+										<input class="form-control" type="date" name="hire_date" id="hire_date" required
+											data-msg-required="Please enter hired date." />
+									</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<button type="submit" class="btn btn-primary submit float-right ml-2 update_button">
+									Save <i class="fas fa-check ml-1"></i>
+								</button>
+								<button type="reset" class="btn btn-default float-right update_button"
+									id="cancel_button" onclick="return formReset('hide','')">
+									Cancel
+								</button>
+								
+								<button type="button" class="btn btn-info float-right mr-2" id="edit_button">
+									Edit  <i class="fas fa-edit ml-1"></i>
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.container-fluid -->
+	</div>
+	<!-- /.content-header -->
+</div>
+
+<!-- /.modal -->
+{% endblock %} {% block customjs %}
+<script src="{{ url_for('assets', path='/') }}profile/profile.js"></script>
+{% endblock %}

@@ -1,0 +1,406 @@
+{% extends 'internal/shared/base.html' %}
+
+<!-- browser title -->
+{% block browser_title %}General Journal | General Ledger{% endblock browser_title %}
+
+
+
+<!-- ASSETS -->
+
+{% block specific_assets %}
+  <link rel="stylesheet" href="{{ url_for('assets', path='/general_ledger/css/internal/general_ledger/accountant/general_journal.css') }}" />
+{% endblock specific_assets %}
+
+<!-- /ASSETS -->
+
+
+
+<!-- SIDEBAR -->
+<!-- /SIDEBAR -->
+
+
+
+<!-- CONTENT -->
+
+{% block content_title %}General Journal{% endblock content_title %}
+{% block content_subtitle %}General Ledger/General Journal{% endblock content_subtitle %}
+
+{% block main_content %}
+  <!-- cards -->
+  <div class="row">
+
+    <!-- TOTAL ENTRIES -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-info"><i class="fas fa-book"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Entries</span>
+          <span class="info-box-number" id="total_entries"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+    <!-- TOTAL JOURNALIZED ENTRIES -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-warning"><i class="fas fa-book"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Journalized Entries</span>
+          <span class="info-box-number" id="total_journalized"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+    <!-- TOTAL POSTED ENTRIES -->
+    <div class="col-md-4 col-sm-6 col-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-primary"><i class="fas fa-book"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Posted Entries</span>
+          <span class="info-box-number" id="total_posted"></span>
+        </div>
+        <!-- /info-box-content -->
+      </div>
+      <!-- /info-box -->
+    </div>
+
+  </div>
+  <!-- /cards -->
+
+  <!-- form_modal -->
+  <div class="modal fade" id="form_modal">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title"><i class="fas fa-book mr-3 text-secondary"></i>Journal Entry</h4>
+          <button type="button" class="btn btn-sm btn-default" data-dismiss="modal" aria-label="Close" form="form">
+            <span aria-hidden="true"><i class="fas fa-times"></i></span>
+          </button>
+        </div>
+        <div class="modal-body pb-0">
+          
+          <!-- form -->
+          <form 
+            id="form" 
+            name="form" 
+            enctype="multipart/form-data" 
+            autocomplete="off"
+          >
+
+            <div class="form-group row">
+              <!-- DATA SOURCE -->
+              <div class="col-md-2">
+                <label for="data_source" style="position:absolute;bottom:0px;margin:0;">Data Source:</label>
+              </div>
+              <div class="col-md-10">
+                <select 
+                  class="form-control" 
+                  id="data_source"  
+                  autocomplete="off" 
+                  style="width: 100%;"
+                >
+                  <option></option>
+                </select>
+              </div>
+            </div>
+
+            <input 
+              type="text" 
+              class="d-none" 
+              id="uuid" 
+            />
+            
+            <!-- SOURCE DOCUMENT -->
+            <label for="source_document" class="w-100">
+              <div class="form-group row m-0">
+                <!-- placeholder -->
+                <div class="col d-flex justify-content-center align-items-center img-thumbnail">
+                  <iframe
+                    id="iframePlaceholder"
+                    class="w-100 d-none"
+                    frameborder="0"
+                    title="Source Document"
+                    allowfullscreen="true"
+                    scrolling="auto"
+                  ></iframe>
+                  <i id="imgPlaceholder" class="fas fa-file-upload"></i>
+                </div>
+              </div>
+            </label>
+            <div class="form-group row">
+              <div class="col">
+                <!-- label -->
+                <label for="source_document">Source Document<span> *</span></label>
+                <div class="input-group">
+                  <!-- source_document_filename -->
+                  <input 
+                    type="text" 
+                    id="source_document_filename" 
+                    class="form-control border-right-0" 
+                    placeholder="Upload a file" 
+                    readonly 
+                  />
+                  <!-- source_document_file_cancel -->
+                  <div class="input-group-append">
+                    <button 
+                      type="button" 
+                      id="source_document_file_cancel" 
+                      class="input-group-text btn btn-sm d-none"
+                      onclick="removeSourceDocument();"
+                    ><i class="fas fa-times" style="color: #666;"></i>
+                    </button>
+                  </div>
+                  <!-- source_document -->
+                  <div class="input-group-append">
+                    <label for="source_document" class="input-group-text mb-0">
+                      Browse<input 
+                        type="file" 
+                        id="source_document" 
+                        name="source_document"
+                        accept=".jpg,.jpeg,.pdf" 
+                        onchange="uploadFile(this);" 
+                        hidden />
+                    </label>
+                  </div>
+                </div>
+                <div class="small text-muted mb-n1">
+                  Media types allowed are JPG & PDF and maximum file size is 5MB .
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <!-- ENTRY TYPE -->
+              <div class="col-md-6">
+                <label for="entry_type">Entry Type<span> *</span></label>
+                <select 
+                  class="form-control" 
+                  id="entry_type" 
+                  name="entry_type" 
+                  autocomplete="off" 
+                  style="width: 100%;"
+                >
+                </select>
+              </div>
+              <!-- DATE -->
+              <div class="col-md-6">
+                <label for="date">Date<span> *</span></label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  id="date" 
+                  name="date" 
+                  autocomplete="off" 
+                />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <!-- DEBIT -->
+              <div class="col-md-6">
+                <label for="debit_account">Debit Account<span> *</span></label>
+                <select 
+                  class="form-control" 
+                  id="debit_account"  
+                  autocomplete="off" 
+                  style="width: 100%;"
+                >
+                  <option></option>
+                </select>
+              </div>
+              <!-- CREDIT -->
+              <div class="col-md-6">
+                <label for="credit_account">Credit Account<span> *</span></label>
+                <select 
+                  class="form-control" 
+                  id="credit_account"  
+                  autocomplete="off" 
+                  style="width: 100%;"
+                >
+                  <option></option>
+                </select>
+              </div>
+            </div>
+
+            <!-- FORM TABLE -->
+            <div class="form-group row">
+              <div class="col">
+                <table id="form_table" class="table table-bordered nowrap" style="width: 100%;" >
+                  <thead>
+                    <tr>
+                      <th>Account Title</th>
+                      <th>P.R.</th>
+                      <th>Debit</th>
+                      <th>Credit</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="form-group row" id="adjustableRow">
+              <!-- ADJUSTABLE -->
+              <div class="col-auto align-self-end">
+                <div class="icheck-primary d-inline">
+                  <input 
+                    type="checkbox" 
+                    id="is_adjustable" 
+                    name="is_adjustable" 
+                    disabled
+                  />
+                  <label for="is_adjustable">Adjustable</label>
+                </div>
+              </div>
+              <!-- ACCOUNTS -->
+              <div class="col">
+                <select 
+                  class="form-control" 
+                  id="accounts" 
+                  name="accounts[]"
+                  autocomplete="off" 
+                  style="width: 100%;" 
+                >
+                  <option></option>
+                </select>
+              </div>
+            </div>
+
+            <!-- EXPLANATION -->
+            <div class="form-group row">
+              <div class="col">
+                <label for="explanation">Explanation</label>
+                <textarea 
+                  rows="2" 
+                  class="form-control" 
+                  id="explanation" 
+                  name="explanation" 
+                  placeholder="Enter explanation" 
+                  autocomplete="off"
+                ></textarea>
+              </div>
+            </div>
+            
+            <!-- STATUS -->
+            <div class="form-group row">
+              <div class="col">
+                <div class="icheck-primary d-inline">
+                  <input 
+                    type="checkbox" 
+                    id="status" 
+                    name="status" 
+                    checked
+                  />
+                  <label for="status">Post</label>
+                </div>
+              </div>
+            </div>
+          
+          </form>
+          <!-- /form -->
+        
+        </div>
+        <!-- /modal-body -->
+        <div class="modal-footer text-right">
+          <button type="button" class="btn btn-sm btn-default mr-2" data-dismiss="modal" form="form">Cancel</button>
+          <button type="submit" class="btn btn-sm btn-primary" id="submitButton" form="form">
+            <span>Submit</span><i class="fas fa-check ml-2"></i>
+          </button>
+        </div>
+        <!-- /modal-footer -->
+      </div>
+      <!-- /modal-content -->
+    </div>
+    <!-- /modal-dialog -->
+  </div>
+  <!-- /form_modal -->
+
+  <!-- card -->
+  <div class="card card-outline card-primary">
+    <div class="card-header">
+      <h3 class="card-title">List of Journal Entries</h3>
+      <div class="text-right">
+        <button 
+          type="button" 
+          class="btn btn-sm btn-primary" 
+          data-toggle="modal" 
+          data-target="#form_modal" 
+          data-backdrop="static"
+          onclick="loadAccountTitles();"
+        >
+          <span>Add Entry</span><i class="fa fa-plus ml-2"></i>
+        </button>
+      </div>
+      <!-- /add button -->
+    </div>
+    <!-- /card-header -->
+    <div class="card-body">
+      
+        <!-- select accounting period -->
+        <div class="row mb-3">
+          <div class="col-auto align-self-center text-right">
+            <span class="">Accounting Period: </span>
+          </div>
+          <div class="col">
+            <select 
+              class="form-control form-control-sm" 
+              id="ap_month" 
+              autocomplete="off" 
+              style="width: 100%;"
+            >
+              <!-- <option value="" selected disabled hidden>Month</option> -->
+            </select>
+          </div>
+          <div class="col">
+            <select 
+              class="form-control form-control-sm" 
+              id="ap_year" 
+              autocomplete="off" 
+              style="width: 100%;"
+            >
+              <!-- <option value="" selected disabled hidden>Year</option> -->
+            </select>
+          </div>
+        </div>
+        <!-- /select accounting period -->
+      
+      <table id="table" class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Accounts</th>
+            <th>Explanation</th>
+            <th>Entry Type</th>
+            <th>Adjustable</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <!-- /table -->
+    </div>
+    <!-- /card-body -->
+  </div>
+  <!-- /card -->    
+{% endblock main_content %}
+
+<!-- /CONTENT -->
+
+
+
+<!-- SCRIPTS -->
+
+{% block specific_scripts %}
+  <!-- general_journal -->
+  <script src="{{ url_for('assets', path='/general_ledger/js/internal/general_ledger/accountant/general_journal.js') }}"></script>
+{% endblock specific_scripts %}
+
+<!-- /SCRIPTS -->

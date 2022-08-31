@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title></title>
+		<!-- Font Awesome -->
+		<link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/fontawesome-free/css/all.min.css"
+		/>
+		<!-- Ionicons -->
+		<link
+			rel="stylesheet"
+			href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"
+		/>
+		<!-- Tempusdominus Bootstrap 4 -->
+		<!-- <link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css"
+		/> -->
+		<!-- iCheck -->
+		<!-- <link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/icheck-bootstrap/icheck-bootstrap.min.css"
+		/> -->
+		<!-- JQVMap -->
+		<!-- <link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/jqvmap/jqvmap.min.css"
+		/> -->
+		<!-- DataTables -->
+		<link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/datatables-responsive/css/responsive.bootstrap4.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/datatables-buttons/css/buttons.bootstrap4.min.css"
+		/>
+		<!-- Toastr -->
+		<link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/toastr/toastr.min.css"
+		/>
+		<!-- Select2 -->
+		<link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/select2/css/select2.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"
+		/>
+		<!-- Theme style -->
+		<link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}css/adminlte.min.css"
+		/>
+		<!-- overlayScrollbars -->
+		<link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/overlayScrollbars/css/OverlayScrollbars.min.css"
+		/>
+
+		<!-- BS Stepper -->
+		<link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/bs-stepper/css/bs-stepper.min.css"
+		/>
+		<!-- Jquery Steps -->
+		<!-- <link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/jquery-steps/css/normalize.css"
+		/> -->
+		<!-- <link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/jquery-steps/css/main.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/jquery-steps/css/jquery.steps.css"
+		/> -->
+
+		<!-- Daterange picker -->
+		<!-- <link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/daterangepicker/daterangepicker.css"
+		/> -->
+		<!-- summernote -->
+		<!-- <link
+			rel="stylesheet"
+			href="{{ url_for('assets', path='/') }}plugins/summernote/summernote-bs4.min.css"
+		/> -->
+		<style>
+			.dataTables_length {
+				padding-top: 10px;
+			}
+
+			.form-required-field:after {
+				content: " *";
+				color: red;
+			}
+			.view-info-table th {
+				width: 200px;
+			}
+		</style>
+	</head>
+
+	<body
+		class="
+			hold-transition
+			sidebar-mini
+			layout-fixed layout-navbar-fixed
+			user-select-none
+		"
+	>
+		<div class="wrapper">
+			<!-- Navbar -->
+			<nav
+				class="main-header navbar navbar-expand-md navbar-white navbar-light"
+			>
+				<!-- Left navbar links togglers (for responsive) -->
+				<ul class="navbar-nav navbar-no-expand">
+					<!-- Sidebar Toggler -->
+					<li class="nav-item">
+						<a class="nav-link" data-widget="pushmenu" href="#" role="button">
+							<i class="fas fa-bars"></i>
+						</a>
+					</li>
+
+					<!-- Tobpar toggler -->
+					<li class="nav-item">
+						<button
+							class="nav-link navbar-toggler border-0"
+							type="button"
+							data-toggle="collapse"
+							data-target="#navbarCollapse"
+						>
+							<i class="fas fa-caret-down"></i>
+						</button>
+					</li>
+				</ul>
+
+				<!-- Left navbar links -->
+				<div class="collapse navbar-collapse order-3" id="navbarCollapse">
+					<ul class="navbar-nav">
+						<!-- Home -->
+						<li class="nav-item">
+							<a class="nav-link" href="../../../main_dashboard" role="button">
+								<i class="fas fa-home"></i>
+								<span class="d-inline-block d-md-none ml-1 ml-md-0">Home</span>
+							</a>
+						</li>
+
+						<!-- Hospital Core -->
+						<li class="nav-item dropdown">
+							<a
+								href="#"
+								data-toggle="dropdown"
+								class="nav-link dropdown-toggle"
+								>Hospital Core</a
+							>
+
+							<ul class="dropdown-menu dropdown-menu-left">
+								<li>
+									<a href="./submodule.html" class="dropdown-item"
+										>Patient Management</a
+									>
+								</li>
+								<li>
+									<a href="./submodule.html" class="dropdown-item"
+										>Treatment Management</a
+									>
+								</li>
+								<li>
+									<a href="./submodule.html" class="dropdown-item">Pharmacy</a>
+								</li>
+								<li>
+									<a href="./submodule.html" class="dropdown-item"
+										>Medical Record</a
+									>
+								</li>
+								<li>
+									<a href="./submodule.html" class="dropdown-item"
+										>Doctors Management</a
+									>
+								</li>
+								<li>
+									<a href="./submodule.html" class="dropdown-item"
+										>Visitors Management</a
+									>
+								</li>
+							</ul>
+						</li>
+
+						<!-- Human Resource -->
+						<li class="nav-item dropdown">
+							<a
+								href="#"
+								data-toggle="dropdown"
+								class="nav-link dropdown-toggle"
+								>Human Resource</a
+							>
+
+							<ul class="dropdown-menu dropdown-menu-left">
+								<li>
+									<a href="./submodule.html" class="dropdown-item"
+										>Core Human Capital Management</a
+									>
+								</li>
+								<li>
+									<a href="./submodule.html" class="dropdown-item"
+										>Recruitment Management</a
+									>
+								</li>
+								<li>
+									<a href="./submodule.html" class="dropdown-item"
+										>Time & Attendance</a
+									>
+								</li>
+								<li>
+									<a href="./submodule.html" class="dropdown-item"
+										>Performance Management</a
+									>
+								</li>
+							</ul>
+						</li>
+
+						<!-- Finance -->
+						<li class="nav-item dropdown">
+							<a
+								href="#"
+								data-toggle="dropdown"
+								class="nav-link dropdown-toggle text-primary"
+								>Finance</a
+							>
+
+							<ul class="dropdown-menu dropdown-menu-left">
+								<li>
+									<a href="../../general_ledger/accountant/general_journal" class="dropdown-item"
+										>General Ledger</a
+									>
+								</li>
+								<li>
+									<a href="./submodule.html" class="dropdown-item"
+										>Accounts Payable/Receivable</a
+									>
+								</li>
+								<li>
+									<a
+										href="../user/dashboard"
+										class="dropdown-item text-primary"
+										>Collection/Disbursement</a
+									>
+								</li>
+							</ul>
+						</li>
+
+						<!-- Logistics -->
+						<li class="nav-item dropdown">
+							<a
+								href="#"
+								data-toggle="dropdown"
+								class="nav-link dropdown-toggle"
+								>Logistics</a
+							>
+
+							<ul class="dropdown-menu dropdown-menu-left">
+								<li>
+									<a href="./submodule.html" class="dropdown-item"
+										>Procurement Management</a
+									>
+								</li>
+								<li>
+									<a href="./submodule.html" class="dropdown-item"
+										>Warehousing Management</a
+									>
+								</li>
+								<li>
+									<a href="./submodule.html" class="dropdown-item"
+										>Asset Management</a
+									>
+								</li>
+								<li>
+									<a href="./submodule.html" class="dropdown-item"
+										>Project Management</a
+									>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+
+				<!-- Right navbar links -->
+				<ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+					<!-- User Menu -->
+					<li class="nav-item dropdown">
+						<a href="#" class="nav-link" data-toggle="dropdown" role="button">
+							<i class="fas fa-user-circle"></i>
+							<!-- <span class="badge badge-warning navbar-badge">15</span> -->
+						</a>
+
+						<div class="dropdown-menu dropdown-menu-right">
+							<a href="profile" class="dropdown-item d-flex align-items-center">
+								<div class="mr-3" style="width: 1.25rem">
+									<i class="fas fa-user"></i>
+								</div>
+								<span>Profile</span>
+							</a>
+							<a href="account_settings" class="dropdown-item d-flex align-items-center">
+								<div class="mr-3" style="width: 1.25rem">
+									<i class="fas fa-cog"></i>
+								</div>
+								<span>Settings</span>
+							</a>
+
+							<div class="dropdown-divider"></div>
+
+							<a
+								href="#"
+								role="button"
+								class="dropdown-item d-flex align-items-center"
+								data-toggle="modal"
+								data-target="#logoutModal"
+							>
+								<div class="mr-3" style="width: 1.25rem">
+									<i class="fas fa-sign-out-alt"></i>
+								</div>
+								<span>Log out</span>
+							</a>
+						</div>
+					</li>
+				</ul>
+			</nav>
+			<!-- /.navbar -->
+
+			<!-- Main Sidebar Container -->
+			<aside class="main-sidebar main-sidebar-custom sidebar-light-primary">
+				<!-- Brand Logo -->
+				<a href="dashboard" class="brand-link">
+					<img
+						src="{{ url_for('assets', path='/') }}img/AdminLTELogo.png"
+						alt="AdminLTE Logo"
+						class="brand-image img-circle border"
+						style="opacity: 0.8"
+					/>
+					<span class="brand-text font-weight-light">HoMIES</span>
+				</a>
+
+				<!-- Sidebar -->
+				<div class="sidebar">
+					<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+						<div class="image">
+							<img
+								src="{{ url_for('assets', path='/') }}img/user2-160x160.jpg"
+								id="user_image"
+								class="img-circle elevation-2"
+								alt="User Image"
+							/>
+						</div>
+						<div class="info">
+							<!-- User Name -->
+							<span id="user_name" class="d-block"></span>
+							<!-- User Type -->
+							<div
+								class="small text-secondary text-truncate"
+								id="user_type"
+							></div>
+							<!-- User Department -->
+							<div
+								class="small text-secondary text-truncate"
+								id="department"
+							></div>
+						</div>
+					</div>
+					<!-- Sidebar Menu -->
+					<nav class="mt-2">
+						<ul
+							class="nav nav-pills nav-sidebar flex-column"
+							data-widget="treeview"
+							role="menu"
+							data-accordion="false"
+						>
+							<!-- Add icons to the links using the .nav-icon class
+                            with font-awesome or any other icon font library -->
+							<!-- Module Name -->
+							<li class="nav-header font-weight-bold text-wrap">
+								CASHIERING MANAGEMENT SYSTEM
+							</li>
+							<li class="nav-header">CORE</li>
+							<li class="nav-item">
+								<a href="dashboard" class="nav-link">
+									<i class="nav-icon fas fa-chart-pie"></i>
+									<p>Dashboard</p>
+								</a>
+							</li>
+							<li class="nav-header">PAYMENT AGREEMENT</li>
+							<li class="nav-item">
+								<a href="payment_terms" class="nav-link">
+									<i class="nav-icon fas fa-handshake"></i>
+									<p>Payment Terms</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="payment_methods" class="nav-link">
+									<i class="nav-icon fa fa-list" aria-hidden="true"></i>
+									<p>Payment Methods</p>
+								</a>
+							</li>
+							<li class="nav-header">AP & AR</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link">
+									<i class="nav-icon fas fa-file-invoice"></i>
+									<p>
+										Patient Bills
+										<i class="right fas fa-angle-left"></i>
+									</p>
+								</a>
+								<ul class="nav nav-treeview">
+									<li class="nav-item">
+										<a href="inpatient_bills" class="nav-link">
+											<i class="nav-icon fas fa-file"></i>
+											<p>Inpatient Bills</p>
+										</a>
+									</li>
+									<li class="nav-item">
+										<a href="#" class="nav-link">
+											<i class="far fa-circle nav-icon"></i>
+											<p>
+												Inpatient Sub Bills
+												<i class="right fas fa-angle-left"></i>
+											</p>
+										</a>
+										<ul class="nav nav-treeview">
+											<li class="nav-item">
+												<a href="lab_request_bills" class="nav-link">
+													<i class="nav-icon fas fa-file"></i>
+													<p>Lab Request Bills</p>
+												</a>
+											</li>
+											<li class="nav-item">
+												<a href="prescription_bills" class="nav-link">
+													<i class="nav-icon fas fa-file"></i>
+													<p>Prescription Bills</p>
+												</a>
+											</li>
+											<li class="nav-item">
+												<a href="room_bills" class="nav-link">
+													<i class="nav-icon fas fa-file"></i>
+													<p>Room Bills</p>
+												</a>
+											</li>
+											<li class="nav-item">
+												<a href="treatment_bills" class="nav-link">
+													<i class="nav-icon fas fa-file"></i>
+													<p>Treatment Bills</p>
+												</a>
+											</li>
+											<li class="nav-item">
+												<a href="surgery_bills" class="nav-link">
+													<i class="nav-icon fas fa-file"></i>
+													<p>Surgery Bills</p>
+												</a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link">
+									<i class="nav-icon fas fa-file-invoice"></i>
+									<p>
+										Procurement Bills
+										<i class="right fas fa-angle-left"></i>
+									</p>
+								</a>
+								<ul class="nav nav-treeview">
+									<li class="nav-item">
+										<a href="purchase_order_vendor_bills" class="nav-link">
+											<i class="nav-icon fas fa-file"></i>
+											<p>Vendor Bills</p>
+										</a>
+									</li>
+									<li class="nav-item">
+										<a href="#" class="nav-link">
+											<i class="far fa-circle nav-icon"></i>
+											<p>
+												Vendor Sub Bills
+												<i class="right fas fa-angle-left"></i>
+											</p>
+										</a>
+										<ul class="nav nav-treeview">
+											<li class="nav-item">
+												<a href="purchase_order_bills" class="nav-link">
+													<i class="nav-icon fas fa-file"></i>
+													<p>Purchase Order Bills</p>
+												</a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="nav-header">COLLECTION</li>
+							<li class="nav-item">
+								<a href="fees_and_rates" class="nav-link">
+									<i class="nav-icon fas fa-tag"></i>
+									<p>Fees & Rates</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="inpatient_payments" class="nav-link">
+									<i class="nav-icon fas fa-hand-holding-usd"></i>
+									<p>Inpatient Payments</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="outpatient_payments" class="nav-link">
+									<i class="nav-icon fas fa-hand-holding-usd"></i>
+									<p>Outpatient Payments</p>
+								</a>
+							</li>
+							<!-- <li class="nav-item">
+								<a href="collection" class="nav-link">
+									<i class="nav-icon fas fa-coins"></i>
+									<p>Cash Receipt Journal</p>
+								</a>
+							</li> -->
+							<li class="nav-header">DISBURSEMENT</li>
+							<li class="nav-item">
+								<a href="hospital_payments" class="nav-link">
+									<i class="nav-icon fas fa-hand-holding-usd"></i>
+									<p>Hospital Payments</p>
+								</a>
+							</li>
+							<!-- <li class="nav-item">
+								<a href="disbursement" class="nav-link">
+									<i class="nav-icon fas fa-file-invoice-dollar"></i>
+									<p>Cash Disbursement Journal</p>
+								</a>
+							</li> -->
+							<li class="nav-header">Bank Account Management</li>
+							<li class="nav-item">
+								<a href="bank_accounts" class="nav-link">
+									<i class="nav-icon fas fa-landmark"></i>
+									<p>Bank Accounts</p>
+								</a>
+							</li>
+							<li class="nav-header">USER MANAGEMENT</li>
+							<li class="nav-item">
+								<a href="employees" class="nav-link">
+									<i class="nav-icon fas fa-user-tie"></i>
+									<p>Employees</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="users" class="nav-link">
+									<i class="nav-icon fas fa-users"></i>
+									<p>Users</p>
+								</a>
+							</li>
+							<li class="nav-header">System Settings</li>
+							<li class="nav-item">
+								<a href="settings" class="nav-link">
+									<i class="nav-icon fas fa-cog"></i>
+									<p>Settings</p>
+								</a>
+							</li>
+						</ul>
+					</nav>
+					<!-- /.sidebar-menu -->
+				</div>
+				<!-- /.sidebar -->
+
+				<!-- Sidebar Custom -->
+				<div class="sidebar-custom">
+					<a href="#" class="btn btn-sm btn-light"
+						><i class="fas fa-cogs"></i
+					></a>
+					<button
+						class="btn btn-sm btn-danger hide-on-collapse pos-right"
+						data-toggle="modal"
+						data-target="#logoutModal"
+					>
+						<span>Log out</span>
+						<i class="fas fa-sign-out-alt ml-1"></i>
+					</button>
+				</div>
+				<!-- /.sidebar-custom -->
+			</aside>
+
+			<!-- Content Wrapper. Contains page content -->
+			{% block content %} {% endblock %}
+			<!-- /.content-wrapper -->
+
+			<footer class="main-footer">
+				<strong
+					>Copyright &copy; 2021 <a href="dashboard">HoMIES.com</a>.</strong
+				>
+				All rights reserved.
+				<div class="float-right d-none d-sm-inline-block">
+					<b>Version</b> 1.0
+				</div>
+			</footer>
+
+			<div
+				class="modal"
+				id="logoutModal"
+				data-backdrop="static"
+				data-keyboard="false"
+			>
+				<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">
+								<i class="fas fa-sign-out-alt text-secondary mr-2"></i>
+								<span>Log out</span>
+							</h4>
+							<button
+								type="button"
+								class="btn btn-sm btn-default"
+								data-dismiss="modal"
+								id="closeLogoutModalBtn"
+							>
+								<span aria-hidden="true"><i class="fas fa-times"></i></span>
+							</button>
+						</div>
+
+						<div class="modal-body">
+							<p>Are you sure you want to logout?</p>
+						</div>
+
+						<div class="modal-footer">
+							<button
+								type="button"
+								class="btn btn-default"
+								data-dismiss="modal"
+								id="cancelLogoutBtn"
+							>
+								Cancel
+							</button>
+							<button type="button" class="btn btn-danger" id="logoutBtn">
+								<a href="../../login" class="text-white">Log out</a>
+								<i class="fas fa-sign-out-alt ml-1"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Control Sidebar -->
+			<aside class="control-sidebar control-sidebar-light">
+				<!-- Control sidebar content goes here -->
+			</aside>
+			<!-- /.control-sidebar -->
+		</div>
+		<!-- ./wrapper -->
+
+		<!-- jQuery -->
+		<script src="{{ url_for('assets', path='/') }}plugins/jquery/jquery.min.js"></script>
+		<!-- jquery cookie -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+		<!-- moment -->
+		<script src="{{ url_for('assets', path='/') }}plugins/moment/moment.min.js"></script>
+		<!-- Select2 -->
+		<script src="{{ url_for('assets', path='/') }}plugins/select2/js/select2.full.min.js"></script>
+		<!-- jQuery UI 1.11.4 -->
+		<script src="{{ url_for('assets', path='/') }}plugins/jquery-ui/jquery-ui.min.js"></script>
+		<!-- JQuery Print Preview -->
+		<script
+			type="text/javascript"
+			src="{{ url_for('assets', path='/') }}plugins/jquery-printPreview/js/printPreview.js"
+		></script>
+		<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+		<script>
+			$.widget.bridge("uibutton", $.ui.button);
+		</script>
+		<!-- Bootstrap 4 -->
+		<script src="{{ url_for('assets', path='/') }}plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<!--Datatable plugins-->
+		<script src="{{ url_for('assets', path='/') }}plugins/datatables/jquery.dataTables.min.js"></script>
+		<script src="{{ url_for('assets', path='/') }}plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+		<script src="{{ url_for('assets', path='/') }}plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+		<script src="{{ url_for('assets', path='/') }}plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+		<script src="{{ url_for('assets', path='/') }}plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+		<script src="{{ url_for('assets', path='/') }}plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+		<script src="{{ url_for('assets', path='/') }}plugins/jszip/jszip.min.js"></script>
+		<script src="{{ url_for('assets', path='/') }}plugins/pdfmake/pdfmake.min.js"></script>
+		<script src="{{ url_for('assets', path='/') }}plugins/pdfmake/vfs_fonts.js"></script>
+		<script src="{{ url_for('assets', path='/') }}plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+		<script src="{{ url_for('assets', path='/') }}plugins/datatables-buttons/js/buttons.print.min.js"></script>
+		<script src="{{ url_for('assets', path='/') }}plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+		<!-- jquery-validation -->
+		<script src="{{ url_for('assets', path='/') }}plugins/jquery-validation/jquery.validate.min.js"></script>
+		<script src="{{ url_for('assets', path='/') }}plugins/jquery-validation/additional-methods.min.js"></script>
+
+
+		<!-- AdminLTE App -->
+		<script src="{{ url_for('assets', path='/') }}js/adminlte.js"></script>
+		<!-- Toastr -->
+		<script src="{{ url_for('assets', path='/') }}plugins/toastr/toastr.min.js"></script>
+
+		<!--Custom JS-->
+		<!-- Common JS-->
+		<script src="{{ url_for('assets', path='/') }}cms/custom_js/common.js"></script>
+		{% block customjs %} {% endblock %}
+	</body>
+</html>
