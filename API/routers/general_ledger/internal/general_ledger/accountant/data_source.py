@@ -97,20 +97,6 @@ async def validate_input(
 
 
 
-""" GET ONE """
-
-@router.get('/data_source/{id}', status_code=200, response_model=DataSourceGetAll, response_model_exclude_none=True)
-async def get_one(
-    id: str,
-    result = Depends(security.auth)
-):
-    try:
-        return responses.RedirectResponse(result['url'], status_code=302)
-    except:
-        return data_source.get_one(id)
-
-
-
 """ GET ALL """
 
 @router.get('/data_sources', status_code=200, response_model=List[DataSourceGetForSelect])
@@ -168,31 +154,31 @@ async def get_first_endpoint_data(
         return [
             {
                 'date': '01/01/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 1000.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '01/02/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 1200.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '01/03/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 1400.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '01/04/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 1600.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '01/05/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 1800.00,
                 'description': 'Lorem ipsum'
             }
@@ -212,31 +198,31 @@ async def get_second_endpoint_data(
         return [
             {
                 'date': '02/06/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 2000.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '02/07/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 2200.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '02/08/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 2400.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '02/09/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 2600.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '02/10/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 2800.00,
                 'description': 'Lorem ipsum'
             }
@@ -256,31 +242,31 @@ async def get_third_endpoint_data(
         return [
             {
                 'date': '03/11/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 3000.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '03/12/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 3200.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '03/13/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 3400.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '03/14/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 3600.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '03/15/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 3800.00,
                 'description': 'Lorem ipsum'
             }
@@ -300,31 +286,31 @@ async def get_fourth_endpoint_data(
         return [
             {
                 'date': '04/16/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 4000.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '04/17/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 4200.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '04/18/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 4400.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '04/19/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 4600.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '04/20/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 4800.00,
                 'description': 'Lorem ipsum'
             }
@@ -344,31 +330,31 @@ async def get_fifth_endpoint_data(
         return [
             {
                 'date': '05/21/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 5000.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '05/22/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 5200.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '05/23/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 5400.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '05/24/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 5600.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '05/25/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 5800.00,
                 'description': 'Lorem ipsum'
             }
@@ -388,32 +374,46 @@ async def get_sixth_endpoint_data(
         return [
             {
                 'date': '06/26/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 6000.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '06/27/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 6200.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '06/28/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 6400.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '06/29/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 6600.00,
                 'description': 'Lorem ipsum'
             },
             {
                 'date': '06/30/2022',
-                'source_document': 'static/images/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
                 'amount': 6800.00,
                 'description': 'Lorem ipsum'
             }
         ]
+
+
+
+""" GET ONE """
+
+@router.get('/data_source/{id}', status_code=200, response_model=DataSourceGetAll, response_model_exclude_none=True)
+async def get_one(
+    id: str,
+    result = Depends(security.auth)
+):
+    try:
+        return responses.RedirectResponse(result['url'], status_code=302)
+    except:
+        return data_source.get_one(id)

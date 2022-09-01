@@ -1546,7 +1546,7 @@ CREATE TABLE `data_sources` (
 
 LOCK TABLES `data_sources` WRITE;
 /*!40000 ALTER TABLE `data_sources` DISABLE KEYS */;
-INSERT INTO `data_sources` VALUES ('00baf176-74ee-4fc5-b671-369200571f6d','Asset Management','../data_source/am','','Active','2022-08-27 06:25:07','2022-08-31 06:06:42','65501c6d-fad9-4401-9ff6-18a7b1626cea',NULL),('14dc2f3f-8ecb-40a3-9cea-f33457a22b1c','Collection/Disbursement','../data_source/cd','','Active','2022-08-27 06:34:08','2022-08-31 06:06:42','65501c6d-fad9-4401-9ff6-18a7b1626cea','c7adf398-350a-43b4-a130-502051a0c1bf'),('ad9a9d10-5460-4102-87bd-f951b4074a6d','Procurement','../data_source/procurement','','Active','2022-08-27 06:26:59','2022-08-31 06:06:42','65501c6d-fad9-4401-9ff6-18a7b1626cea',NULL),('b715d3c2-c4de-4b1a-b704-c93942d13330','Warehousing','../data_source/warehousing','','Active','2022-08-27 06:27:40','2022-08-31 06:06:42','65501c6d-fad9-4401-9ff6-18a7b1626cea',NULL),('bf9e5d45-9895-412d-956c-3aa17b591b02','Pharmacy','../data_source/pharmacy','','Active','2022-08-27 06:27:24','2022-08-31 06:06:42','65501c6d-fad9-4401-9ff6-18a7b1626cea',NULL),('dd1b4acc-42ae-4191-8bfc-88137ab93029','Accounts Payable/Accounts Receivable','../data_source/ap_ar','','Active','2022-08-27 06:33:53','2022-08-31 06:06:42','65501c6d-fad9-4401-9ff6-18a7b1626cea','c7adf398-350a-43b4-a130-502051a0c1bf');
+INSERT INTO `data_sources` VALUES ('00baf176-74ee-4fc5-b671-369200571f6d','Asset Management','../accountant/data_source/am','','Active','2022-08-27 06:25:07','2022-09-01 09:52:00','65501c6d-fad9-4401-9ff6-18a7b1626cea',NULL),('14dc2f3f-8ecb-40a3-9cea-f33457a22b1c','Collection/Disbursement','../accountant/data_source/cd','','Active','2022-08-27 06:34:08','2022-09-01 09:52:00','65501c6d-fad9-4401-9ff6-18a7b1626cea','c7adf398-350a-43b4-a130-502051a0c1bf'),('ad9a9d10-5460-4102-87bd-f951b4074a6d','Procurement','../accountant/data_source/procurement','','Active','2022-08-27 06:26:59','2022-09-01 09:52:00','65501c6d-fad9-4401-9ff6-18a7b1626cea',NULL),('b715d3c2-c4de-4b1a-b704-c93942d13330','Warehousing','../accountant/data_source/warehousing','','Active','2022-08-27 06:27:40','2022-09-01 09:52:00','65501c6d-fad9-4401-9ff6-18a7b1626cea',NULL),('bf9e5d45-9895-412d-956c-3aa17b591b02','Pharmacy','../accountant/data_source/pharmacy','','Active','2022-08-27 06:27:24','2022-09-01 09:52:00','65501c6d-fad9-4401-9ff6-18a7b1626cea',NULL),('dd1b4acc-42ae-4191-8bfc-88137ab93029','Accounts Payable/Accounts Receivable','../accountant/data_source/ap_ar','','Active','2022-08-27 06:33:53','2022-09-01 09:52:00','65501c6d-fad9-4401-9ff6-18a7b1626cea','c7adf398-350a-43b4-a130-502051a0c1bf');
 /*!40000 ALTER TABLE `data_sources` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -4321,4 +4321,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-08-31 20:34:49
+-- Dump completed on 2022-09-01  3:12:52
