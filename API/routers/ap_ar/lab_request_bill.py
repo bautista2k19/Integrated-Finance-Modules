@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from API.repository.ap_ar import lab_request_bill
 
 router = APIRouter(
-    prefix="/lab_request_bill",
+    prefix="/cms/user/lab_request_bill",
     tags=['Lab Request Bills']
 )
 

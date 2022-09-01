@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from API.repository.cms.collection import lab_test_type
 
 router = APIRouter(
-    prefix="/lab_test_type",
+    prefix="/cms/user/lab_test_type",
     tags=['Lab Test Types']
 )
 

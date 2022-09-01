@@ -1,0 +1,154 @@
+{% extends "internal/user/ar_ap/layout.html" %} {% block content %}
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 p-title">Users</h1>
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item active">Users</li>
+          </ol>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- New User Card -->
+      <div class="row collapse" id="div_form">
+        <div class="col-sm-12">
+          <div class="card card-primary card-outline">
+            <div class="card-header">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title" id="div_form_card_title">
+                  User Information
+                </h3>
+                <span type="button" aria-hidden="true" onclick="return formReset('hide','')"><i
+                    class="fas fa-times"></i></span>
+              </div>
+            </div>
+            <form id="form_id" name="form_id">
+              <div class="card-body" id="form_card_body">
+                <div class="row form_div">
+                  <div class="col-sm-12">
+                    <h5 class="text-info">User Credentials</h5>
+                  </div>
+                </div>
+                <div class="row form_div">
+                  <input type="hidden" id="uuid" name="uuid">
+                  <div class="form-group col-md-4 mb-3">
+                    <label class="form-required-field" for="employee">Employee</label>
+                    <select class="form-control select2" name="employee_id" id="employee_id" required
+                      data-msg-required="Please select employee.">
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4 mb-3">
+                    <label class="form-required-field" for="username">Username</label>
+                    <input class="form-control" type="text" name="username" id="username" 
+                    placeholder="Username"
+                    pattern="[a-zA-Z][A-Za-z0-9]{5,20}"
+								    data-msg-pattern="Username must contain letter or number and at least 6-20 characters. First character must be a letter."
+                    required data-msg-required="Please enter username." />
+                  </div>
+
+                  <div class="form-group col-md-4 mb-3">
+                    <label class="form-required-field" for="user_type">User Type</label>
+                    <select class="form-control" name="user_type" id="user_type" required
+                      data-msg-required="Please select usertype.">
+                      <option value="">Select User Type</option>
+                      <option value="Accounting Head">Accounting Head</option>
+                      <option value="Accountant">Accountant</option>
+                    </select>
+                  </div>
+
+                </div>
+              </div>
+              <div class="card-footer">
+                <button type="submit" class="btn btn-primary submit float-right ml-2" id="save_button">
+									Save <i class="fas fa-check ml-1"></i>
+								</button>
+								<button
+									type="reset"
+									class="btn btn-default float-right"
+									onclick="return formReset('hide','')"
+								>
+									Cancel
+								</button>
+              </div>
+          </div>
+          </form>
+        </div>
+      </div>
+    <!--  DataTable -->
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card card-primary card-outline">
+          <div class="card-header border-0">
+            <div class="d-flex justify-content-between">
+              <h3 class="card-title">List of User</h3>
+              <button class="btn btn-primary" id="new_record">
+                <i class="fas fa-plus" aria-hidden="true"></i> New
+              </button>
+            </div>
+          </div>
+          <div class="card-body mt-0 pt-0">
+            <table class="table table-hover table-bordered" id="user_table" style="width: 100%">
+              <thead>
+                <tr>
+                  <th>Employee</th>
+                  <th>Username</th>
+                  <th>User Type</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+        <!-- /.card -->
+      </div>
+    </div>
+  </div>
+  <!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modal_delete">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title"> <i class="fas fa-exclamation-triangle mr-1"></i> Confirmation</h4>
+				<button
+					type="button"
+					class="btn btn-default"
+					data-dismiss="modal"
+					aria-label="Close"
+				>
+					<span aria-hidden="true"><i class="fas fa-times"></i></span>
+				</button>
+			</div>
+			<form id="form_delete">
+			<div class="modal-body">
+				<p>Are you sure you want to deactivate this record?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					Close
+				</button>
+				<button type="submit" class="btn btn-danger" id="delete_button">
+					Yes, Deactive it
+				</button>
+			</div>
+		</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+{% endblock %} {% block customjs %}
+<script src="{{ url_for('assets', path='/ar_ap/') }}customjs/user.js"></script>
+{% endblock %}

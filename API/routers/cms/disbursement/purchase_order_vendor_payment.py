@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from API.repository.cms.disbursement import purchase_order_vendor_payment
 
 router = APIRouter(
-    prefix="/purchase_order_vendor_payment",
+    prefix="/cms/user/purchase_order_vendor_payment",
     tags=['Purchase Order Vendor Payments']
 )
 

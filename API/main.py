@@ -241,6 +241,137 @@ async def profile(
 
 
 
+""" AR / AP """
+
+@app.get("/AR_AP/user/dashboard", response_class=HTMLResponse)
+async def ar_ap_dashboard_page(
+    request: Request,
+    result = Depends(security.auth)
+):
+    try:
+        return responses.RedirectResponse(result['url'], status_code=302)
+    except:
+        return templates.TemplateResponse("internal/user/ar_ap/dashboard.html", {"request": request})
+
+@app.get("/AR_AP/user/employees", response_class=HTMLResponse)
+async def ar_ap_employee_page(
+    request: Request,
+    result = Depends(security.auth)
+):
+    try:
+        return responses.RedirectResponse(result['url'], status_code=302)
+    except:
+        return templates.TemplateResponse("internal/user/ar_ap/employee.html", {"request": request})
+
+@app.get("/AR_AP/user/users", response_class=HTMLResponse)
+async def ar_ap_user_page(
+    request: Request,
+    result = Depends(security.auth)
+):
+    try:
+        return responses.RedirectResponse(result['url'], status_code=302)
+    except:
+        return templates.TemplateResponse("internal/user/ar_ap/user.html", {"request": request})
+
+@app.get("/AR_AP/user/account_settings", response_class=HTMLResponse)
+async def ar_ap_account_settings(
+    request: Request,
+    result = Depends(security.auth)
+): 
+    try:
+        return responses.RedirectResponse(result['url'], status_code=302)
+    except:
+        return templates.TemplateResponse("internal/user/ar_ap/account_settings.html", {"request": request})
+
+@app.get("/AR_AP/user/profile", response_class=HTMLResponse)
+async def ar_ap_profile(
+    request: Request,
+    result = Depends(security.auth)
+):
+    try:
+        return responses.RedirectResponse(result['url'], status_code=302)
+    except:
+        return templates.TemplateResponse("internal/user/ar_ap/profile.html", {"request": request})
+
+@app.get("/AR_AP/user/inpatient_bills", response_class=HTMLResponse)
+async def ar_ap_method1(
+    request: Request,
+    result = Depends(security.auth)
+):
+    try:
+        return responses.RedirectResponse(result['url'], status_code=302)
+    except:
+        return templates.TemplateResponse("internal/user/ar_ap/inpatient_bill.html", {"request": request})
+
+@app.get("/AR_AP/user/bill", response_class=HTMLResponse)
+async def ar_ap_method2(
+    request: Request,
+    result = Depends(security.auth)
+):
+    try:
+        return responses.RedirectResponse(result['url'], status_code=302)
+    except:
+        return templates.TemplateResponse("internal/user/ar_ap/bill.html", {"request": request})
+
+@app.get("/AR_AP/user/fees&rates", response_class=HTMLResponse)
+async def ar_ap_fee(
+    request: Request,
+    result = Depends(security.auth)
+):
+    try:
+        return responses.RedirectResponse(result['url'], status_code=302)
+    except:
+        return templates.TemplateResponse("internal/user/ar_ap/fee.html", {"request": request})
+
+@app.get("/AR_AP/user/purchase_order", response_class=HTMLResponse)
+async def ar_ap_purchase_order(
+    request: Request,
+    result = Depends(security.auth)
+):
+    try:
+        return responses.RedirectResponse(result['url'], status_code=302)
+    except:
+        return templates.TemplateResponse("internal/user/ar_ap/purchase_order.html", {"request": request})
+
+@app.get("/AR_AP/user/utilities", response_class=HTMLResponse)
+async def ar_ap_utilities(
+    request: Request,
+    result = Depends(security.auth)
+):
+    try:
+        return responses.RedirectResponse(result['url'], status_code=302)
+    except:
+        return templates.TemplateResponse("internal/user/ar_ap/utilities.html", {"request": request})
+
+@app.get("/AR_AP/user/voucher_PO", response_class=HTMLResponse)
+async def ar_ap_voucher_PO(
+    request: Request,
+    result = Depends(security.auth)
+):
+    try:
+        return responses.RedirectResponse(result['url'], status_code=302)
+    except:
+        return templates.TemplateResponse("internal/user/ar_ap/voucher_PO.html", {"request": request})
+
+@app.get("/AR_AP/user/voucher_U", response_class=HTMLResponse)
+async def ar_ap_voucher_U(
+    request: Request,
+    result = Depends(security.auth)
+):
+    try:
+        return responses.RedirectResponse(result['url'], status_code=302)
+    except:
+        return templates.TemplateResponse("internal/user/ar_ap/voucher_U.html", {"request": request})
+
+# # bank accounts
+# @app.get("/AR_AP/user/payment_terms", response_class=HTMLResponse, tags=['CMS Bank Management'])
+# async def ar_ap_bank_accounts(request: Request):
+#     return templates.TemplateResponse("payment_term.html", {"request": request})
+
+""" /AR / AP """
+
+
+
 # origins
 origins = [
     "http://127.0.0.1:8000/",

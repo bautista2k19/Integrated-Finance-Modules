@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from API.repository.cms.payment_agreement import payment_method
 
 router = APIRouter(
-    prefix="/payment_method",
+    prefix="/cms/user/payment_method",
     tags=['Payment Methods']
 )
 

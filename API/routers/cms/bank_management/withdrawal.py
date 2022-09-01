@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from API.repository.cms.bank_management import withdrawal
 
 router = APIRouter(
-    prefix="/withdrawal",
+    prefix="/cms/user/withdrawal",
     tags=['Withdrawal']
 )
 

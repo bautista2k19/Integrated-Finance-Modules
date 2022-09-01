@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from ...repository.employee import job
 
 router = APIRouter(
-    prefix="/job",
+    prefix="/cms/user/job",
     tags=['Jobs']
 )
 

@@ -1,0 +1,475 @@
+{% extends "internal/user/ar_ap/layout.html" %} {% block content %}
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<div class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1 class="m-0 p-title">Employees</h1>
+				</div>
+				<!-- /.col -->
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">Employees</li>
+					</ol>
+				</div>
+				<!-- /.col -->
+			</div>
+			<!-- New Employee Card -->
+			<div class="row collapse" id="div_form">
+				<div class="col-sm-12">
+					<div class="card card-primary card-outline">
+						<div class="card-header">
+							<div class="d-flex justify-content-between">
+								<h3 class="card-title" id="div_form_card_title">
+									Employee Information
+								</h3>
+								<span
+									type="button"
+									aria-hidden="true"
+									onclick="return formReset('hide','')"
+									><i class="fas fa-times"></i
+								></span>
+							</div>
+						</div>
+						<form id="form_id" name="form_id" enctype="multipart/form-data">
+							<div class="card-body" id="form_card_body">
+								<div class="row form_div">
+									<div class="col-sm-12">
+										<h5 class="text-info">Personal Information</h5>
+									</div>
+								</div>
+								<div class="row form_div">
+									<input type="hidden" id="uuid" name="uuid" />
+									<div class="col-md-6 mb-2">
+										<img
+											src="{{ url_for('assets', path='/ar_ap/') }}img/avatar5.png"
+											class="rounded img-thumbnail"
+											style="object-fit: cover"
+											id="photo_path_placeholder"
+											name="photo_path_placeholder"
+											alt=""
+										/>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-6">
+										<label class="form-required-field" for="photo">Photo</label>
+										<!-- <input
+											type="file"
+											class="form-control"
+											name="photo"
+											id="photo"
+											accept="image/*"
+										/> -->
+										<div class="custom-file">
+											<input
+												type="file"
+												class="custom-file-input"
+												id="photo"
+												name="photo"
+												accept="image/*"
+												required
+												data-msg-required="Please select a photo."
+												data-msg-accept="Please select a valid image."
+												onchange="$(this).next().after().text($(this).val().split('\\').slice(-1)[0])"
+											/>
+											<label class="custom-file-label" id="photo_label"
+												>Choose image</label
+											>
+										</div>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="first_name"
+											>First Name</label
+										>
+										<input
+											class="form-control"
+											type="text"
+											name="first_name"
+											id="first_name"
+											placeholder="First Name"
+											required
+											data-msg-required="Please enter first name."
+										/>
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label for="middle_name">Middle Name</label>
+										<input
+											class="form-control"
+											type="text"
+											name="middle_name"
+											id="middle_name"
+											placeholder="Middle Name"
+										/>
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="last_name"
+											>Last Name</label
+										>
+										<input
+											class="form-control"
+											type="text"
+											name="last_name"
+											id="last_name"
+											placeholder="Last Name"
+											required
+											data-msg-required="Please enter last name."
+										/>
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label for="extension_name">Extension Name</label>
+										<input
+											class="form-control"
+											type="text"
+											name="extension_name"
+											id="extension_name"
+											placeholder="Extension Name"
+										/>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="birthdate"
+											>Birthdate</label
+										>
+										<input
+											class="form-control"
+											type="date"
+											name="birthdate"
+											id="birthdate"
+											required
+											data-msg-required="Please enter birthdate."
+										/>
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="birthplace"
+											>Birthplace</label
+										>
+										<input
+											class="form-control"
+											type="text"
+											name="birthplace"
+											id="birthplace"
+											placeholder="Birthplace"
+											required
+											data-msg-required="Please enter birthplace."
+										/>
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="gender"
+											>Gender</label
+										>
+										<select
+											class="form-control"
+											name="gender"
+											id="gender"
+											required
+											data-msg-required="Please select gender."
+										>
+											<option value="">Select Gender</option>
+											<option value="Male">Male</option>
+											<option value="Female">Female</option>
+										</select>
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="civil_status"
+											>Civil Status</label
+										>
+										<select
+											class="form-control"
+											name="civil_status"
+											id="civil_status"
+											required
+											data-msg-required="Please select civil status."
+										>
+											<option value="">Select Civil Status</option>
+											<option value="Single">Single</option>
+											<option value="Married">Married</option>
+											<option value="Separated">Separated</option>
+											<option value="Widowed">Widowed</option>
+										</select>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="col-sm-12">
+										<h5 class="text-info">Address</h5>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-4 mb-3">
+										<label for="house_number">House No.</label>
+										<input
+											class="form-control"
+											type="text"
+											name="house_number"
+											id="house_number"
+											placeholder="House No."
+										/>
+									</div>
+									<div class="form-group col-md-4 mb-3">
+										<label for="street">Street</label>
+										<input
+											class="form-control"
+											type="text"
+											name="street"
+											id="street"
+											placeholder="Street"
+										/>
+									</div>
+									<div class="form-group col-md-4 mb-3">
+										<label class="form-required-field" for="barangay"
+											>Barangay</label
+										>
+										<input
+											class="form-control"
+											type="text"
+											name="barangay"
+											id="barangay"
+											placeholder="Barangay"
+											required
+											data-msg-required="Please enter barangay."
+										/>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-4 mb-3">
+										<label class="form-required-field" for="city">City</label>
+										<input
+											class="form-control"
+											type="text"
+											name="city"
+											id="city"
+											placeholder="City"
+											required
+											data-msg-required="Please enter city."
+										/>
+									</div>
+									<div class="form-group col-md-4 mb-3">
+										<label class="form-required-field" for="province"
+											>Province</label
+										>
+										<input
+											class="form-control"
+											type="text"
+											name="province"
+											id="province"
+											placeholder="Province"
+											required
+											data-msg-required="Please enter province."
+										/>
+									</div>
+									<div class="form-group col-md-4 mb-3">
+										<label class="form-required-field" for="country"
+											>Country</label
+										>
+										<input
+											class="form-control"
+											type="text"
+											name="country"
+											id="country"
+											placeholder="Country"
+											required
+											data-msg-required="Please enter country."
+										/>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="col-sm-12">
+										<h5 class="text-info">Contact Information</h5>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="contact_number"
+											>Phone No. <span class="small">(09/639)</span></label
+										>
+										<input
+											class="form-control"
+											type="number"
+											name="contact_number"
+											id="contact_number"
+											placeholder="Phone No."
+											pattern="(09|\639)\d{9}$"
+											data-msg-pattern="Please enter a valid phone number."
+											required
+											data-msg-required="Please enter phone number."
+										/>
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="email"
+											>Email Address</label
+										>
+										<input
+											class="form-control"
+											type="email"
+											name="email"
+											id="email"
+											placeholder="Email Address"
+											required
+											data-msg-required="Please enter email address."
+										/>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="col-sm-12">
+										<h5 class="text-info">Job Information</h5>
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="department"
+											>Department</label
+										>
+										<input
+											class="form-control"
+											type="text"
+											name="department"
+											id="department"
+											placeholder="Department"
+											required
+											data-msg-required="Please enter department."
+										/>
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="job">Job</label>
+										<input
+											class="form-control"
+											type="text"
+											name="job"
+											id="job"
+											placeholder="Job"
+											required
+											data-msg-required="Please enter job."
+										/>
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="manager"
+											>Manager</label
+										>
+										<input
+											class="form-control"
+											type="text"
+											name="manager"
+											id="manager"
+											placeholder="Manager"
+											required
+											data-msg-required="Please enter manager."
+										/>
+									</div>
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="hire_date"
+											>Hired Date</label
+										>
+										<input
+											class="form-control"
+											type="date"
+											name="hire_date"
+											id="hire_date"
+											required
+											data-msg-required="Please enter hired date."
+										/>
+									</div>
+								</div>
+							</div>
+							<div class="card-footer">
+								<button
+									type="submit"
+									class="btn btn-primary submit float-right ml-2"
+									id="save_button"
+								>
+									Save <i class="fas fa-check ml-1"></i>
+								</button>
+								<button
+									type="reset"
+									class="btn btn-default float-right"
+									onclick="return formReset('hide','')"
+								>
+									Cancel
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<!-- Employee DataTable -->
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="card card-primary card-outline">
+						<div class="card-header border-0">
+							<div class="d-flex justify-content-between">
+								<h3 class="card-title">List of Employee</h3>
+								<button class="btn btn-primary" id="new_record">
+									<i class="fas fa-plus" aria-hidden="true"></i> New
+								</button>
+							</div>
+						</div>
+						<div class="card-body mt-0 pt-0">
+							<table
+								class="table table-hover table-bordered"
+								id="employee_table"
+								style="width: 100%"
+							>
+								<thead>
+									<tr>
+										<th>Photo</th>
+										<th>Employee</th>
+										<th>Gender</th>
+										<th>Contact</th>
+										<th>Job</th>
+										<th>Status</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+					<!-- /.card -->
+				</div>
+			</div>
+		</div>
+		<!-- /.container-fluid -->
+	</div>
+	<!-- /.content-header -->
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal_delete">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title"><i class="fas fa-exclamation-triangle mr-1"></i> Confirmation</h4>
+				<button
+					type="button"
+					class="btn btn-default"
+					data-dismiss="modal"
+					aria-label="Close"
+				>
+					<span aria-hidden="true"><i class="fas fa-times"></i></span>
+				</button>
+			</div>
+			<form id="form_delete">
+			<div class="modal-body">
+				<p>Are you sure you want to deactivate this record?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					Close
+				</button>
+				<button type="submit" class="btn btn-danger" id="delete_button">
+					Yes, Deactive it
+				</button>
+			</div>
+		</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+{% endblock %} {% block customjs %}
+<script src="{{ url_for('assets', path='/ar_ap/') }}customjs/employee.js"></script>
+{% endblock %}

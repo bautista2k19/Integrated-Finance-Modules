@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from API.repository.cms.collection import room_type
 
 router = APIRouter(
-    prefix="/room_type",
+    prefix="/cms/user/room_type",
     tags=['Room Types']
 )
 

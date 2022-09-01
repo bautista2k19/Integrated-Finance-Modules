@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from API.repository.cms.bank_management import bank_account
 
 router = APIRouter(
-    prefix="/bank_account",
+    prefix="/cms/user/bank_account",
     tags=['Bank Accounts']
 )
 

@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from API.repository.ap_ar import purchase_order_vendor_bill
 
 router = APIRouter(
-    prefix="/purchase_order_vendor_bill",
+    prefix="/cms/user/purchase_order_vendor_bill",
     tags=['Purchase Order Vendor Bills']
 )
 

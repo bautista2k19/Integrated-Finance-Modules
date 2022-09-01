@@ -1,0 +1,270 @@
+{% extends "internal/user/ar_ap/layout.html" %} {% block content %}
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<div class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1 class="m-0 p-title">Purchase Orders</h1>
+					<p>Manage Payables Orders</p>
+				</div>
+				<!-- /.col
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">Employees</li>
+					</ol>
+				</div>
+				/.col -->
+			</div>
+			<!-- New Employee Card -->
+			<div class="row collapse" id="div_form">
+				<div class="col-sm-12">
+					<div class="card card-primary card-outline">
+						<div class="card-header">
+							<div class="d-flex justify-content-between">
+								<h3 class="card-title" id="div_form_card_title">
+									Purchase Order Information
+								</h3>
+								<span
+									type="button"
+									aria-hidden="true"
+									onclick="return formReset('hide','')"
+									><i class="fas fa-times"></i
+								></span>
+							</div>
+						</div>
+						<form id="form_id" name="form_id" enctype="multipart/form-data">
+							<div class="card-body" id="form_card_body">
+								<div class="row form_div">
+									<div class="col-sm-12">
+										<h5 class="text-info">Purchase Order Information</h5>
+									</div>
+								</div>
+								
+								<div class="row form_div">
+									<input type="hidden" id="uuid" name="uuid" />
+									<div class="form-group col-md-6">
+										<label class="form-required-field" for="purchase_order_number">Purchase Order Number</label>
+                                        <input
+											class="form-control"
+											type="text"
+											name="purchase_order_number"
+											id="purchase_order_number"
+											placeholder="Purchase Order Number"
+											required
+											data-msg-required="Please enter Purchase Order Number."/> 
+									</div>
+                                    <div class="form-group col-md-4">
+										<label class="form-required-field" for="total_bill">Total Bill</label>
+                                        <input
+											class="form-control"
+											type="number"
+											name="total_bill"
+											id="total_bill"
+											placeholder="Total Bill"
+											required
+											data-msg-required="Please enter total bill."/> 
+									</div>
+								</div>
+								<div class="row form_div">
+									<div class="form-group col-md-4 mb-4">
+										<label class="form-required-field" for="order_date"
+											>Order Date</label
+										>
+										<input
+											class="form-control"
+											type="date"
+											name="order_date"
+											id="order_date"
+											placeholder="Order Date"
+											required
+											data-msg-required="Please enter order date."
+										/>
+									</div>
+									<div class="form-group col-md-4 mb-4">
+										<label for="expected_delivery_date">Expected Delivery Date</label>
+										<input
+											class="form-control"
+											type="date"
+											name="expected_delivery_date"
+											id="expected_delivery_date"
+											placeholder="Expected Delivery Date"
+										/>
+									</div> 
+                                    <div class="form-group col-md-4 mb-4">
+										<label class="form-required-field" for="payment_method"
+											>Payment Method</label
+										>
+										<select
+											class="form-control select2"
+											name="payment_method"
+											id="payment_method"
+											required
+											data-msg-required="Please select payment method.">
+
+											<option value="">-- Select --</option>
+											<option value="Cash">Cash</option>
+											<option value="Cheque">Cheque</option>
+											
+										</select>
+									</div>
+								</div>
+								<div class="row form_div">
+									
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="notes"
+											>Notes</label
+										>
+										<textarea 
+											class="form-control"
+											name="notes"
+											id="notes"
+											placeholder="Please enter your notes"
+                                            rows="5" cols="50"
+											required
+											data-msg-required="Please enter your notes."
+										></textarea >
+									</div>
+									 
+								</div>
+							</div>
+							<div class="card-footer">
+								<button
+									type="submit"
+									class="btn btn-primary submit float-right ml-2"
+									id="save_button"
+								>
+									Save <i class="fas fa-check ml-1"></i>
+								</button>
+								<button
+									type="reset"
+									class="btn btn-default float-right"
+									onclick="return formReset('hide','')"
+								>
+									Cancel
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<!-- Employee DataTable -->
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="card card-primary card-outline">
+						<div class="card-header border-0">
+							<div class="d-flex justify-content-between">
+								<h3 class="card-title">List of Purchase Orders</h3>
+								<button class="btn btn-primary btn-sm" id="new_record">
+									<i class="fas fa-plus" aria-hidden="true"></i> New
+								</button>
+							</div>
+						</div>
+						<div class="card-body mt-0 pt-0">
+							<table
+								class="table table-hover table-bordered table-responsive"
+								id="purchase_order_table"
+								style="width: 100%"
+							>
+								<thead>
+									<tr>
+										<th style="width: 200px;">Purchase Order No.</th>
+										<th style="width: 100px;">Total Bill</th>
+										<th style="width: 200px;">Order Date</th>
+										<th style="width: 200px;">Expected Delivery Date</th>
+										<th style="width: 100px;">Payment Method</th>
+										<th style="width: 200px;">Notes</th>
+										<th style="width: 100px;">Status</th>
+                    <th style="width: 100px;">Action</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+					<!-- /.card -->
+				</div>
+			</div>
+		</div>
+		<!-- /.container-fluid -->
+	</div>
+	<!-- /.content-header -->
+</div>
+
+
+<div class="modal fade" id="modal_approved">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title"><i class="fas fa-exclamation-triangle mr-1"></i> Confirmation</h4>
+				<button
+					type="button"
+					class="btn btn-default"
+					data-dismiss="modal"
+					aria-label="Close"
+				>
+					<span aria-hidden="true"><i class="fas fa-times"></i></span>
+				</button>
+			</div>
+			<form id="form_approved">
+			<div class="modal-body">
+				<p>Are you sure you want to approved this Purchased orders?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					Close
+				</button>
+				<button type="submit" class="btn btn-primary" id="delete_button">
+					Yes, approved it
+				</button>
+			</div>
+		</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal_delete">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title"><i class="fas fa-exclamation-triangle mr-1"></i> Confirmation</h4>
+				<button
+					type="button"
+					class="btn btn-default"
+					data-dismiss="modal"
+					aria-label="Close"
+				>
+					<span aria-hidden="true"><i class="fas fa-times"></i></span>
+				</button>
+			</div>
+			<form id="form_delete">
+			<div class="modal-body">
+				<p>Are you sure you want to deactivate this Purchased orders?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					Close
+				</button>
+				<button type="submit" class="btn btn-danger" id="delete_button">
+					Yes, Deactive it
+				</button>
+			</div>
+		</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+
+
+
+
+{% endblock %} {% block customjs %}
+<script src="{{ url_for('assets', path='/ar_ap/') }}customjs/purchase_order.js"></script>
+{% endblock %}

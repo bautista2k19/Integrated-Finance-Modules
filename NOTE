@@ -1,4 +1,5 @@
 #accountId
+from cmath import log
 from lib2to3.pgen2 import token
 
 
@@ -226,13 +227,12 @@ na.credit
    
     
     
-    $.cookie("TOKEN", data.access_token);
-					sessionStorage.setItem("USERNAME", data.data[0].username);
-					sessionStorage.setItem("USER_ID", data.data[0].id);
-					sessionStorage.setItem("USER_TYPE", data.data[0].user_type);
-					sessionStorage.setItem("EMPLOYEE_ID", data.data[0].employee_id);
+    
+					
+					
+					
 
-					window.location.replace("/AR_AP/admin/dashboard");
+				
    
     
 
@@ -387,8 +387,53 @@ utilities
 
 
 
+// AP / AR
+
+
+#sa AP / AR
+// create token: 
+
+ data={"sub": user.username} 
+
+ return {"data":{user},"access_token": access_token, "token_type": "bearer"}
 
 
 
 
+
+// verify token
+
+  username: str = payload.get("sub")
+  id: str =payload.get("id")
+  return id
+
+
+  
+  
+  
+
+  
+
+
+  window.location.replace("/AR_AP/admin/dashboard");
+
+  /AR_AP/user
+
+
+
+
+
+
+
+
+
+  static
+  log
+  script
+  gen
+  cash collec
+
+
+  http://localhost:8000/cms/user/dashboard
+  http://localhost:8000/cms/user/dasboard
 

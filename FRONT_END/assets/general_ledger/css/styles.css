@@ -12,7 +12,7 @@
 }
 .user-image-placeholder-content {
   height: 2.1rem !important;
-  content: url("http://127.0.0.1:8000/static/svg/user-tie-solid.svg");
+  content: url("http://localhost:8000/assets/svg/user-tie-solid.svg");
 }
 
 .table th, .table td {

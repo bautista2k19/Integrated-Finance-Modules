@@ -1,11 +1,11 @@
 
 
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, CHAR, DateTime
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, CHAR, DateTime, text
 
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.functions import func
 from sqlalchemy.sql.schema import UniqueConstraint
-from sqlalchemy.sql.sqltypes import DECIMAL, TEXT, Date, Float, SmallInteger, Text, Time
+from sqlalchemy.sql.sqltypes import DECIMAL, TEXT, Date, Float, SmallInteger, Text, Time, CHAR, DateTime,Integer, Numeric
 
 # homies 
 from API.database import Base
@@ -1645,3 +1645,1101 @@ class JournalEntry(Base):
     mysql_engine = 'InnoDB'
     mysql_charset = 'utf8mb4'
     #mysql_key_block_size = "1024"
+
+
+
+
+
+""" AP / AR """
+
+# 
+class AR_Employee(Base):
+    __tablename__ = "ar_employees"
+
+    id = Column(CHAR(36), primary_key=True, index=True)
+    photo = Column(String(255), nullable=False)
+    first_name = Column(String(255), nullable=False)
+    middle_name = Column(String(255), nullable=True)
+    last_name = Column(String(255), nullable=False)
+    extension_name = Column(String(255), nullable=True)
+    birthdate = Column(Date, nullable=False)
+    birthplace = Column(String(255), nullable=False)
+    gender = Column(String(255), nullable=False)
+    civil_status = Column(String(255), nullable=False)
+    house_number = Column(String(255), nullable=True)
+    street = Column(String(255), nullable=True)
+    barangay = Column(String(255), nullable=True)
+    city = Column(String(255), nullable=False)
+    province = Column(String(255), nullable=False)
+    country = Column(String(255), nullable=False)
+    contact_number = Column(String(255), nullable=False,
+                            unique=True, index=True)
+    email = Column(String(255), nullable=False,
+                            unique=True, index=True)
+    department = Column(String(255), nullable=False)
+    job = Column(String(255), nullable=False)
+    hire_date = Column(Date, nullable=False)
+    manager = Column(String(255), nullable=False)
+    status = Column(String(255), nullable=False, server_default="Active")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=True)
+    created_at = Column(DateTime, nullable=False)
+    updated_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=True)
+    updated_at = Column(DateTime, nullable=True)
+
+    UniqueConstraint(first_name, middle_name, last_name, extension_name)
+
+    user_credentials = relationship("AR_User", primaryjoin="and_(AR_Employee.id==AR_User.employee_id)",back_populates="employee_information")
+
+class AR_User(Base):
+    __tablename__ = "ar_users"
+    id = Column(CHAR(36), primary_key=True, index=True)
+    employee_id = Column(CHAR(36), ForeignKey("ar_employees.id"), nullable=False)
+    username = Column(String(255), nullable=False, unique=True, index=True)
+    password = Column(String(255), nullable=False)
+    user_type = Column(String(255), nullable=False)
+    status = Column(String(255), nullable=False, server_default="Active")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=True)
+    created_at = Column(DateTime, nullable=False)
+    updated_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=True)
+    updated_at = Column(DateTime, nullable=True)
+
+    employee_information = relationship("AR_Employee", primaryjoin="and_(AR_User.employee_id==AR_Employee.id)", back_populates="user_credentials")
+
+    
+
+#===================================================================================================================#
+#PATIENT MANAGEMENT
+class AR_PatientRegistration(Base):
+    __tablename__ = 'ar_patient_registration'
+
+    patient_id = Column(String(36), primary_key=True, default=text('UUID()'))
+    first_name = Column(String(255), nullable=False)
+    middle_name = Column(String(255), nullable=False)      #NEW1 NULLABLE DAPAT TO
+    last_name = Column(String(255), nullable=False)
+    sex = Column(String(255), nullable=False)
+    birthday = Column(Date, nullable=False)
+    weight = Column(String(255), nullable=False)
+    height = Column(String(255), nullable=False)
+    blood_type = Column(String(255), nullable=False)
+    guardian = Column(String(255), nullable=False)
+    address = Column(String(255), nullable=False)
+    contact_number = Column(String(255), nullable=False)
+    medical_history_number = Column(String(36),  nullable=True)  # ForeignKey('medical_history.medical_history_number'),
+    dp_id = Column(String(36), ForeignKey('ar_discount_privillages.dp_id'), nullable=True)
+    insurance_id = Column(String(36), ForeignKey("ar_insurances.insurance_id"), nullable=True)  ####### NEW COLUMN #########
+    patient_type = Column(String(255), nullable=True)
+    created_at = Column(DateTime, default=text('NOW()'))
+    updated_at = Column(DateTime, onupdate=text('NOW()'))
+
+    #medical_history = relationship('MedicalHistory')     ### COMMENT KO MUNA ITO
+
+    discount_privillages = relationship(
+         "AR_Discount", primaryjoin="and_(AR_PatientRegistration.dp_id==AR_Discount.dp_id)") #CHANGE TO DISCOUNT /dp_id/ PatientRegistration
+
+
+    treatments = relationship("AR_Treatment",back_populates="patient")  #NEW1
+    surgeries = relationship("AR_Surgery",back_populates="patient")  #NEW1
+
+
+
+    #===========================================================================================================#
+    # insurance_id_info = relationship(
+    #         "Insurance", primaryjoin="and_(Patient_registration.insurance_id==Insurance.insurance_id)")
+
+    # patient_admission = relationship(
+    #     "Inpatient_management", primaryjoin="and_(Patient_registration.patient_id==Inpatient_management.patient_id)", back_populates="patient_info")
+   
+    # inpatient_credentials = relationship(
+    #     "Inpatient_management", primaryjoin="and_(Patient_registration.patient_id == Inpatient_management.patient_id)",back_populates="patient_info")
+    
+    # inpatient_discharged = relationship(
+    #     "Discharge_management", primaryjoin="and_(Patient_registration.patient_id == Discharge_management.patient_id)",back_populates="inpatient_credentials")
+
+    # inpatient_surgeries = relationship(
+    #     "Surgery", primaryjoin="and_(Patient_registration.patient_id == Surgery.patient_id)",back_populates="patient_info")
+
+    # inpatient_treatments = relationship(
+    #     "Treatment", primaryjoin="and_(Patient_registration.patient_id == Treatment.patient_id)",back_populates="patient_info")
+
+    # inpatient_hospital_charges = relationship(
+    #     "HospitalCharges", primaryjoin="and_(Patient_registration.patient_id == HospitalCharges.patient_id)",back_populates="patient_info")
+#PATIENT MANAGEMENT  
+class AR_Insurance(Base):   # wala dati (Base)
+    __tablename__ = 'ar_insurances'
+    insurance_id = Column(String(36), primary_key=True) #, default=mydefault
+    # patient_id = Column(String(255), ForeignKey('patient_registration.patient_id'), nullable=True)
+    policy_holder = Column(String(255), nullable=True)
+    policy_number = Column(String(255), nullable=True)
+    company_phone = Column(String(255), nullable=True)
+    company_address = Column(String(255), nullable=True)
+    remarks = Column(String(255), nullable=True)
+    created_at = Column(DateTime, default=text('NOW()'))
+    updated_at = Column(DateTime, onupdate=text('NOW()'))
+    #====================================================================================================
+
+#PATIENT MANAGEMENT
+class AR_Discount(Base):
+    __tablename__ = 'ar_discount_privillages'
+
+    dp_id = Column(String(36), primary_key=True, default=text('UUID()'))
+    ph_id = Column(String(255), nullable=True)                                  ###  PHILHEALTH PO BA ITO?
+    end_of_validity = Column(String(255), nullable=True)   #NEW1 BAKIT HINDI DATE?
+    sc_id = Column(String(255), nullable=True)                                  ###  SENIOR CITIZEN ID?
+    municipality = Column(String(255), nullable=True)
+    pwd_id = Column(String(255), nullable=True)
+    type_of_disability = Column(String(255), nullable=True)
+    created_at = Column(DateTime, default=text('NOW()'))
+    updated_at = Column(DateTime, onupdate=text('NOW()'))
+    #====================================================================================================
+
+#CMS
+class AR_Room_type(Base):
+    __tablename__ = "ar_room_types"    
+    id = Column(CHAR(36), primary_key=True,index=True)
+    room_type_name = Column(String(255),nullable=False,unique=True, index=True)
+    description = Column(Text,nullable=False)
+    amount = Column(Float,nullable=False)
+    status = Column(String(255), nullable=False, server_default="Active")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=False)
+    created_at = Column(DateTime,default=text('NOW()'),nullable=False) #NEW1 default=text('NOW()')
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime,nullable=True)
+    #====================================================================================================
+
+
+#PATIENT MANAGEMENT
+class AR_Room(Base):
+    __tablename__ = 'ar_rooms' 
+    room_id = Column(String(36), primary_key=True, default=text('UUID()'))
+    room_number = Column(String(255), nullable=False)
+    date_admitted = Column(DateTime, default=text('NOW()'))
+    admission_id =  Column(String(255), ForeignKey('ar_inpatients.admission_id'), nullable=False)
+    room_type_id= Column(String(36), ForeignKey("ar_room_types.id"), nullable=False)  ###     room_type = Column(String(36),  ForeignKey("room_types.id"), nullable=False)
+    location = Column(String(36), nullable=True)
+    room_count = Column(Integer, nullable=True)
+    room_status = Column(String(36), nullable=False)
+    active_status = Column(String(36), nullable=False)
+    created_at = Column(DateTime, default=text('NOW()'))
+    updated_at = Column(DateTime, onupdate=text('NOW()'))
+
+    room_type_info = relationship(
+        "AR_Room_type", primaryjoin="and_(AR_Room.room_type_id==AR_Room_type.id)") #NEW1
+    # rooms_inpatientFk = relationship('Inpatient')
+    room_inpatientFk = relationship('AR_Inpatient', foreign_keys=[admission_id])
+
+    #====================================================================================================
+
+#PATIENT MANAGEMENT
+class AR_Inpatient(Base):
+    __tablename__ = 'ar_inpatients'
+
+    admission_id = Column(String(255), primary_key=True, default=text('UUID()'))
+    inpatient_no = Column(String(255), nullable=False)                                        ### NEW COLUMN DINAGDAG TUDEY ####
+    patient_id = Column(String(36), ForeignKey('ar_patient_registration.patient_id'), nullable=True)
+    # room_number = Column(String(36), ForeignKey('patient_rooms.id'), nullable=False)
+   
+    date_admitted = Column(DateTime, default=text('NOW()'),nullable=False)  #nullable=False
+    reason_of_admittance = Column(String(255), nullable=True)
+    department = Column(String(255), nullable=True)
+    diagnosis = Column(String(255), nullable=True)
+    tests = Column(String(255), nullable=True)
+    treatments = Column(String(255), nullable=True)
+    surgery = Column(String(255), nullable=True)
+
+    status = Column(String(255),nullable=True, default="Active")#NEW 2 NEW COLUMN
+    is_accepting_visits = Column(String(255), nullable=True)#NEW 2 NEW COLUMN
+ 
+    patient_status = Column(String(255), nullable=True)  #Discharged
+    created_at = Column(DateTime, default=text('NOW()'))
+    updated_at = Column(DateTime, onupdate=text('NOW()'))
+
+    admission_info = relationship(
+        "AR_Room", primaryjoin="and_(AR_Inpatient.admission_id==AR_Room.admission_id)")
+
+    # room = relationship('Room', foreign_keys=[room_number])#NEW1 COMMENT KO MUNA
+
+    inpatientsFk = relationship('AR_PatientRegistration', foreign_keys=[patient_id])
+
+    my_prescriptions = relationship("AR_Prescription", primaryjoin="and_(AR_Inpatient.admission_id==AR_Prescription.admission_id)",back_populates="inpatient_info")           #NEW1 GALING SA PHARMACY
+
+    patient_info = relationship(
+        "AR_PatientRegistration", primaryjoin="and_(AR_Inpatient.patient_id==AR_PatientRegistration.patient_id)")  #NEW1 PatientRegistration
+
+    inpatient_bill_info = relationship(
+        "AR_InpatientBill", primaryjoin="and_(AR_Inpatient.admission_id ==AR_InpatientBill.admission_id)")
+
+    discharge_management_info = relationship('AR_DischargeManagement', back_populates='inpatient_info')  #NEW1
+
+    admission_info = relationship(
+        "AR_Room", primaryjoin="and_(AR_Inpatient.admission_id==AR_Room.admission_id)")
+
+    
+    #====================================================================================================
+
+
+# NEW TABLE FOR PATIENT MANAGEMENT //WALA NA
+# class   PatientRoom(Base):
+#     __tablename__ = "patient_rooms"
+
+#     id = Column(String(36), primary_key=True,index=True)
+#     room_number = Column(String(36), ForeignKey("rooms.room_id"),nullable=False) #NEW1 ,ForeignKey("rooms.id")
+#     admission_id =  Column(String(255), ForeignKey('inpatients.admission_id'), nullable=False)
+#     datetime_admitted =  Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+#     status = Column(String(255), nullable=False, server_default="Occupied")
+#     created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=True)
+#     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+#     updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+#     updated_at = Column(DateTime (timezone=True), nullable=True, onupdate=func.now())
+#     room_number_info = relationship(
+#         "Room", primaryjoin="and_(PatientRoom.room_number==Room.room_id)") 
+
+    #====================================================================================================
+
+#PATIENT MANAGEMENT                                              
+class AR_DischargeManagement(Base):
+    __tablename__ = 'ar_discharge_management'                                                         
+
+    discharge_id = Column(String(255), primary_key=True, default=text('UUID()'))                   ## NEED PO NAMIN
+    discharge_no = Column(String(255), nullable=False)                                             ### NEW COLUMN DINAGDAG TUDEY ####
+    patient_id = Column(String(255), nullable=True) ##NEW1 , ForeignKey('patient_registration.patient_id') DELETED
+    admission_id = Column(String(255), ForeignKey('ar_inpatients.admission_id'), nullable=True)       ## NEED PO NAMIN
+    reason_of_admittance = Column(String(255), nullable=False)
+    diagnosis_at_admittance = Column(String(255), nullable=False)
+    date_admitted = Column(DateTime, default=text('NOW()'))              #pwede po ito makuha sa admission_id po ata
+    treatment_summary = Column(String(255), nullable=False)
+    discharge_date = Column(DateTime, nullable=True)     #NEW1 CHANGE TO DateTime                                      ## NEED PO NAMIN
+    physician_approved = Column(String(255), nullable=False)
+    discharge_diagnosis = Column(String(255), nullable=False)
+    further_treatment_plan = Column(String(255), nullable=False)
+    next_check_up_date = Column(Date, nullable=True)
+    client_consent_approval = Column(String(255), nullable=False)
+    # medication = Column(String(255), nullable=True)
+    # dosage = Column(String(255), nullable=True)
+    # frequency = Column(String(255), nullable=True)
+    # ending_date = Column(Date, nullable=True)
+    active_status = Column(String(255), nullable=True)
+    created_at = Column(DateTime, default=text('NOW()'))
+    updated_at = Column(DateTime, onupdate=text('NOW()'))
+
+    # discharge_managementFk = relationship('PatientRegistration', foreign_keys=[patient_id])
+    discharge_inpatientFk = relationship('AR_Inpatient', foreign_keys=[admission_id])
+    inpatient_info = relationship('AR_Inpatient', back_populates='discharge_management_info')  #NEW1
+    #====================================================================================================
+
+
+
+################################################################################ TREATMENT MANAGEMENT
+
+#GALING DOCTORS MANAGEMENT
+class AR_Specialization(Base):
+    __tablename__= "ar_specialization"
+    specialization_id = Column(CHAR(36), primary_key=True) #, default= uuid4
+    specialization_name = Column(String(255), nullable= False)
+    status =  Column(String(255), default="Active")
+    created_by= Column(CHAR(36), ForeignKey('ar_users.id'), nullable= True)
+    created_at =  Column(DateTime(timezone=True), server_default=func.now())
+    updated_by = Column(CHAR(36), ForeignKey('ar_users.id'), nullable= True)
+    updated_at =  Column(DateTime(timezone=True), server_default=func.now())
+
+#GALING DOCTORS MANAGEMENT
+class AR_Doctor_profile(Base):
+    __tablename__ = "ar_doctor_profile"
+    doctor_id = Column(CHAR(36),  primary_key=True) #, default= uuid4
+    photo = Column(String(255), nullable=True)
+    label = Column(String(5), nullable= False, default="Dr.")
+    doctor_first_name  = Column(String(255), nullable= False) #NEW1 NULLABLE FALSE
+    doctor_middle_name  = Column(String(255), nullable= True)
+    doctor_last_name = Column(String(255), nullable= False) #NEW1 NULLABLE FALSE
+    doctor_home_address = Column(String(255), nullable= True)
+    doctor_location = Column(String(255), nullable= True)
+    doctor_mobile = Column(String(255), nullable= True)
+    doctor_schedule =  Column(String(255), nullable=True)
+    specialization_id  = Column(CHAR(36), ForeignKey('ar_specialization.specialization_id'))
+    status =  Column(String(255), default="Active")
+    created_by= Column(CHAR(36), ForeignKey('ar_users.id'), nullable= True)           ##User
+    created_at =  Column(DateTime(timezone=True), server_default=func.now())
+    updated_by = Column(CHAR(36), ForeignKey('ar_users.id'), nullable= True)          ##User
+    updated_at =  Column(DateTime(timezone=True), server_default=func.now())
+    
+    # treatments = relationship("Treatment",back_populates="patient")  #NEW1
+    treatments = relationship('AR_Treatment', back_populates='physician')  #NEW1
+    handled_surgeries = relationship('AR_SurgeryInCharge', back_populates="in_charge")
+    #doctor_specialization = relationship("Specialization", backref="backref"("doctor_profile", uselist=False)) ###"backref" ###
+
+
+#  GALING CMS ITU
+class AR_Treatment_type(Base):
+    __tablename__ = "ar_treatment_types"
+    id = Column(CHAR(36), primary_key=True,index=True)
+    treatment_type_name = Column(String(255),nullable=False,unique=True, index=True)
+    description = Column(Text,nullable=False)
+
+    status = Column(String(255), nullable=False, server_default="Active")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=False)
+    created_at = Column(DateTime,server_default=func.now(), nullable=False) #NEW1 server_default=func.now()
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime,server_default=func.now(), nullable=True)  #NEW1 server_default=func.now()
+
+
+## NEW TABLE FOR TREATMENT
+class AR_TreatmentServiceName(Base):
+    __tablename__ = "ar_treatment_service_name"
+    id = Column(String(36), primary_key=True,index=True)
+    treatment_service_name = Column(String(255),nullable=False,unique=True)
+    treatment_types_id = Column(String(36), ForeignKey("ar_treatment_types.id"),nullable=False)
+    unit_price = Column(Float, nullable=False)
+  
+    status = Column(String(100), default='Pending' ,nullable=False)        #nullable=False                         
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=False)
+    created_at = Column(DateTime, nullable=False, server_default=func.now()) #NEW1 server_default=func.now()
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime, nullable=True,server_default=func.now()) #NEW1 server_default=func.now()
+
+    treatments = relationship("AR_Treatment",back_populates="treatment_name")  #NEW1 ALL
+    
+    treatment_type_info =relationship(
+        "AR_Treatment_type", primaryjoin="and_(AR_TreatmentServiceName.treatment_types_id==AR_Treatment_type.id)")
+
+
+# TREATMENT MANAGEMENT
+class AR_Treatment(Base):
+    __tablename__ = "ar_treatments"
+    id = Column(String(36), primary_key=True, default=text('UUID()'))
+    treatment_no = Column(String(100),nullable=False) #nullable=False
+    patient_id = Column(String(36), ForeignKey("ar_patient_registration.patient_id"), nullable=False)  #nullable=False #patient_registration.patient_id
+    treatment_service_name_id = Column(String(36), ForeignKey("ar_treatment_service_name.id"),nullable=False) #nullable=False
+    doctor_profile_id= Column(String(36), ForeignKey("ar_doctor_profile.doctor_id"),nullable=False) #nullable=False # DOCTOR IN CHARGE ### CHANGE COLUMN NAME TO Doctor_profile_id then FK sa HR Dr profile ####
+    description = Column(Text)
+    quantity= Column(Float,nullable=False)                                                    ### NEW COLUMN ####
+    cancellation_return= Column(Float,nullable=False , default='0')  #NEW1 NEW COLUMN 
+    room = Column(String(100))                                                                ### NEW COLUMN, YUNG GALING SA TYPES NIYO PO DATI NILIPAT NA PO DITO ####
+    session_no = Column(Text)
+    session_datetime = Column((DateTime),nullable=False)  #nullable=False                     ### NEED PO NAMIN ITONG DATE (ACTUALLY LAHAT PO) ### 
+    drug = Column(Text)
+    dose = Column(Text)
+    next_schedule = Column(DateTime)
+    comments = Column(Text)
+    
+    status = Column(String(100), default='PENDING', nullable=False) #nullable=False
+    is_active = Column(String(100), default='ACTIVE' ,nullable=False) #nullable=False
+    created_at = Column(DateTime, default=text('NOW()'))
+    updated_at = Column(DateTime, onupdate=text('NOW()'))
+
+    patient = relationship('AR_PatientRegistration', back_populates='treatments')
+    physician = relationship('AR_Doctor_profile', back_populates='treatments')  ##NEW1 Doctor_profile
+    treatment_name = relationship('AR_TreatmentServiceName', back_populates='treatments') #NEW1 TreatmentServiceName /treatment_name
+
+#GALING SA CMS ITU
+class AR_Lab_test_type(Base):
+    __tablename__ = "ar_lab_test_types"    
+    id = Column(CHAR(36), primary_key=True,index=True)
+    lab_test_type_name = Column(String(255),nullable=False,unique=True, index=True)
+    description = Column(Text,nullable=False)
+  
+    status = Column(String(255), nullable=False, server_default="Active")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=False)
+    created_at = Column(DateTime,nullable=False)
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime,nullable=True)
+
+    #lab_requests = relationship('LabRequest', back_populates='lab_test')   #NEW1 WALA NA DAPAT ITO  #GALING LABREQUEST (DI KO NA TINANGGAL)
+
+
+## NEW TABLE FOR LAB
+class AR_LabServiceName(Base):
+    __tablename__ = "ar_lab_service_name"
+    id = Column(String(36), primary_key=True,index=True)
+    lab_service_name = Column(String(255),nullable=False,unique=True)
+    lab_test_types_id = Column(String(36), ForeignKey("ar_lab_test_types.id"),nullable=False)
+    unit_price = Column(Float, nullable=False)
+  
+    status = Column(String(100), default='Active')  #CHANGE TO ACTIVE
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=False)
+    created_at = Column(DateTime,nullable=False)
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime,nullable=True)
+
+    lab_test_types_id_info = relationship(
+        "AR_Lab_test_type", primaryjoin="and_(AR_LabServiceName.lab_test_types_id==AR_Lab_test_type.id)" ) #NEW1
+   
+
+#LAB REQUEST
+class AR_LabRequest(Base):
+    __tablename__ = "ar_lab_requests"
+
+    id = Column(String(36), primary_key=True, default=text('UUID()'))
+    lab_test_id = Column(String(36), ForeignKey("ar_lab_service_name.id"), nullable=False) #nullable=False                      ### CHANGE FK ###  
+    patient_id = Column(String(36), ForeignKey("ar_patient_registration.patient_id"), nullable=False) #nullable=False           ### patient_registration.patient_id
+    lab_request_no = Column(String(100), nullable=False)
+    quantity= Column(Float,nullable=False , default='1')  #NEW1 NEW COLUMN 
+    cancellation_return= Column(Float,nullable=False , default='0')  #NEW1 NEW COLUMN 
+    is_active = Column(String(100), default='ACTIVE', nullable=False) #nullable=False                                         
+    status = Column(String(100), default='PENDING' ,nullable=False) #nullable=False           ### CHANGE STATUS TO "FOR BILLING" PAG INEDIT NIYO NA YUNG STATUS NA FOR BILLING IBIG SABIHIN PINASA NIYO NA SA AMIN TAPOS HINDI NIYO NA SIYA MAUUPDATE/EDIT/DELETE OKI? ### 
+    created_at = Column(DateTime, default=text('NOW()'))                                      ### NEED PO NAMIN ITONG DATE ###
+    updated_at = Column(DateTime, onupdate=text('NOW()'))
+
+    # lab_result = relationship('LabResult', back_populates='lab_request') #NEW1 COMMENT KO MUNA
+    # lab_test = relationship('LabTest', back_populates='lab_requests')  #NEW1 COMMENT KO MUNA
+    # patient = relationship('Patient', back_populates='lab_requests') #NEW1 COMMENT KO MUNA
+    
+    lab_test_id_info = relationship('AR_LabServiceName', back_populates='')
+
+
+#GALING CMS /////////////////////////////////////////////////////////////////////// SA TREATMENT NA ITU
+class AR_Surgery_type(Base):
+    __tablename__ = "ar_surgery_types"    
+    id = Column(CHAR(36), primary_key=True,index=True)
+    surgery_type_name = Column(String(255),nullable=False,unique=True, index=True)
+    description = Column(Text,nullable=False)
+                                              
+    status = Column(String(255), nullable=False, server_default="Active")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=False)
+    created_at = Column(DateTime,nullable=False)
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime,nullable=True)
+
+    surgeries = relationship("AR_Surgery",back_populates="surgery_type") #NEW1
+
+# SURGERY
+class AR_Surgery(Base):
+    __tablename__ = "ar_surgeries"
+
+    id = Column(String(36), primary_key=True, default=text('UUID()'))
+    surgery_no = Column(String(100),nullable=False) #nullable=False
+    patient_id = Column(String(36), ForeignKey("ar_patient_registration.patient_id"),nullable=False)#nullable=False  ### patient_registration.patient_id
+    room = Column(String(100))
+    surgery_type_id = Column(String(36), ForeignKey("ar_surgery_types.id"),nullable=False)#nullable=False
+    start_time = Column((DateTime),nullable=False)#nullable=False
+    end_time = Column((DateTime),nullable=False) #nullable=False
+   # head_surgeon_id = Column(String(36), ForeignKey("ar_users.id"))       ### NILIPAT NA SA SURGERY_IN_CHARGE
+    description = Column(String(255))
+    is_active = Column(String(100), default='ACTIVE')
+    status = Column(String(100), default='PENDING' ,nullable=False) #nullable=False                    ### CHANGE STATUS TO "FOR BILLING" PAG INEDIT NIYO NA YUNG STATUS NA FOR BILLING IBIG SABIHIN PINASA NA NIYO SA AMIN TAPOS HINDI NIYO NA SIYA MAUUPDATE/EDIT/DELETE OKI? ### 
+    created_at = Column(DateTime, default=text('NOW()'))
+    updated_at = Column(DateTime, onupdate=text('NOW()'))
+
+
+    patient = relationship('AR_PatientRegistration', back_populates='surgeries')
+    surgery_type = relationship("AR_Surgery_type", back_populates="surgeries") #NEW1 Surgery_type
+
+    in_charge = relationship('AR_SurgeryInCharge', back_populates="surgery")
+
+
+class AR_SurgeryInCharge(Base):
+    __tablename__ = "ar_surgery_in_charge"
+    id = Column(CHAR(36), primary_key=True)                                         ### NEW COLUMN 
+    dr_in_charge_id = Column(ForeignKey('ar_doctor_profile.doctor_id'),nullable=False) #nullable=False                ### NEW COLUMN FOR DOCTORS PROFILE/ FK ONLY ### 
+    head_surgeon_id = Column(String(36),  server_default="No")                      ### NEW COLUMN IF HEAD SURGEON OR NOT ###  
+    nurse_charge_id = Column(ForeignKey('ar_users.id'))                                ### GINAWANG FK ONLI :>### 
+    surgery_id = Column(ForeignKey('ar_surgeries.id'),nullable=False)#nullable=False  
+
+    status = Column(String(100), default='PENDING' ,nullable=False) #NEW1 NEW COLUMN
+    updated_at = Column(DateTime, onupdate=text('NOW()'))
+
+    #  status : str                   #NEW1 BAKIT WALANG GANITO PO
+    # created_by : str                #NEW1
+    # created_at : datetime           #NEW1
+    # updated_by : Optional[str]      #NEW1
+    # updated_at : Optional[datetime] #NEW1
+                  
+
+    in_charge = relationship('AR_Doctor_profile', back_populates="handled_surgeries")   #NEW1 Doctor_profile
+    surgery = relationship("AR_Surgery", back_populates="in_charge")
+
+    #####ADD RELATIONSHIP FOR DOCTORS PROFILE#########
+    dr_profile =relationship(
+        "AR_Doctor_profile", primaryjoin="and_(AR_SurgeryInCharge.dr_in_charge_id==AR_Doctor_profile.doctor_id)")
+
+
+
+
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+#MEDICINE PRESCRIPTION
+class AR_Medicine_PR(Base):
+    __tablename__= 'ar_medicine_pr'
+
+    medpr_id= Column(CHAR(36), primary_key=True, index=True)
+    medicine_no = Column(Integer, nullable=False,unique=True, index=True)
+    medicine_id = Column(CHAR(36), ForeignKey("ar_medicines.id"),nullable=True)  #rename
+    quantity = Column(Integer,nullable=False)
+    cancellation_return= Column(Float,nullable=False , default='0') #NEW2
+    # new
+    
+    intake = Column(String(255),nullable=False)
+    frequency = Column(String(255),nullable=False)
+    dosage = Column(String(255),nullable=False)
+    doctor_prescribed = Column(String(255),nullable=False)
+   
+    prescription_id = Column(CHAR(36), ForeignKey("ar_prescriptions.prescription_id"),nullable=True)
+    med_pres_status = Column(String(255),nullable=False, default="Unpaid")  #NEW rename med_pres_status
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=True)
+    created_at = Column(DateTime,nullable=False)
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime,nullable=True)
+
+    prescription_info = relationship("AR_Prescription", primaryjoin="and_(AR_Medicine_PR.prescription_id==AR_Prescription.prescription_id)", back_populates="medicines_prescription")
+    medicine_info = relationship("AR_Medicine", primaryjoin="and_(AR_Medicine_PR.medicine_id==AR_Medicine.id)", back_populates="med_pr")
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+#MEDICINE TABLE 
+class AR_Medicine(Base):
+     __tablename__= 'ar_medicines'
+     id= Column(CHAR(36), primary_key=True, index=True)
+     med_product_name = Column (String(255), unique=True,nullable=False)
+     med_quantity = Column(Integer,nullable=False)
+     med_manufacturer = Column (CHAR(36), nullable=True) #NEW1 ForeignKey("manufacturers.id") comment
+     med_manufactured_date = Column (Date,nullable=False)
+     med_import_date = Column(Date,nullable=False)
+     med_expiration_date = Column (Date,nullable=False)
+     med_batch_number = Column (Integer,nullable=False)
+     med_unit_price = Column (Float,nullable=False)
+     med_tax = Column (Integer,nullable=True)
+     med_purpose = Column (String(255),nullable=False)
+     condition = Column(String(255),nullable=False, default="no issue")
+     status = Column(String(255),nullable=False, default="High")
+     dosage = Column (Integer,nullable=False)
+     created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=True)
+     created_at = Column(DateTime,nullable=False)
+     updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+     updated_at = Column(DateTime,nullable=True)
+
+    #  manufacturer_information = relationship("Manufacturer", primaryjoin="and_(Medicine.med_manufacturer==Manufacturer.id)", back_populates="medicine_info")    #NEW1 COMMENT MUNA 
+ 
+
+     #PRESCRIPTION MEDICINE
+     med_pr = relationship("AR_Medicine_PR", primaryjoin="and_(AR_Medicine.id==AR_Medicine_PR.medicine_id)",back_populates="medicine_info")
+     #POS MEDICINE
+    #  medicine_item = relationship("Medicine_item", primaryjoin="and_(Medicine.id==Medicine_item.medicine_id)", back_populates="medicine_info")                                          #NEW1 COMMENT MUNA
+
+
+#MEDICAL PRESCRIPTION
+class AR_MedicalSupplies_PR(Base):
+    __tablename__= 'ar_medicalsupplies_pr'
+
+    medicsupp_prid= Column(CHAR(36), primary_key=True, index=True)
+    ms_no = Column(Integer, nullable=False,unique=True, index=True)
+    medical_id = Column(CHAR(36), ForeignKey("ar_medicalsupplies.id"),nullable=True)
+    quantity = Column(Integer,nullable=False)
+    # cancellation_return= Column(Float,nullable=False , default='0') #NEW2
+    prescription_id = Column(CHAR(36), ForeignKey("ar_prescriptions.prescription_id"),nullable=True)
+    status = Column(String(255),nullable=False, default="Unpaid")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=True)
+    created_at = Column(DateTime,nullable=False)
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime,nullable=True)
+    prescription_info = relationship("AR_Prescription", primaryjoin="and_(AR_MedicalSupplies_PR.prescription_id==AR_Prescription.prescription_id)", back_populates="medical_prescription")
+    medical_info = relationship("AR_MedicalSupplies", primaryjoin="and_(AR_MedicalSupplies_PR.medical_id==AR_MedicalSupplies.id)", back_populates="medical_pr")
+
+
+#PRESCRIPTION
+class AR_Prescription(Base):
+    __tablename__= 'ar_prescriptions'
+
+    prescription_id= Column(CHAR(36), primary_key=True, index=True)
+    prescription_no = Column(String(255), nullable=False,unique=True, index=True)
+    admission_id = Column(CHAR(36),ForeignKey("ar_inpatients.admission_id"),nullable=True)
+    outpatient_id = Column(String(255), nullable=True) #NEW
+    date_prescribed = Column(Date,nullable=False)
+    patient_status = Column(String(255), nullable=True)  #nEW
+    status = Column(String(255),nullable=False, default="Unpaid")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=True)
+    created_at = Column(DateTime,nullable=False)
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime,nullable=True)
+
+
+    inpatient_info = relationship("AR_Inpatient", primaryjoin="and_(AR_Prescription.admission_id==AR_Inpatient.admission_id)", back_populates="my_prescriptions")
+    medicines_prescription = relationship("AR_Medicine_PR", primaryjoin="and_(AR_Prescription.prescription_id==AR_Medicine_PR.prescription_id)",back_populates="prescription_info")
+    medical_prescription = relationship("AR_MedicalSupplies_PR", primaryjoin="and_(AR_Prescription.prescription_id==AR_MedicalSupplies_PR.prescription_id)",back_populates="prescription_info")
+   
+
+     
+# MEDICAL SUPPLIES TABLE
+class AR_MedicalSupplies(Base):
+    __tablename__= 'ar_medicalsupplies'
+    id= Column(CHAR(36), primary_key=True, index=True)
+    ms_product_name = Column (String(255), unique=True,nullable=False)
+    ms_quantity = Column(Integer,nullable=False)
+    ms_manufacturer = Column (CHAR(36), nullable=True)  #NEW1 ,ForeignKey("manufacturers.id")
+    ms_manufactured_date = Column (Date,nullable=False)
+    ms_import_date = Column(Date,nullable=False)
+    ms_expiration_date = Column (Date,nullable=False)
+    ms_batch_number = Column (Integer,nullable=False)
+    ms_unit_price = Column (Float,nullable=False)
+    ms_tax = Column (Integer,nullable=True)
+    ms_purpose = Column (String(255),nullable=False)
+    condition = Column(String(255),nullable=False, default="no issue")
+    status = Column(String(255),nullable=False, default="High")
+    #dosage = Column (Integer,nullable=False)
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=True)
+    created_at = Column(DateTime,nullable=False)
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime,nullable=True)
+
+    # manufacturer_information = relationship("Manufacturer", primaryjoin="and_(MedicalSupplies.    ms_manufacturer==Manufacturer.id)", back_populates="medicalsupplies_info")                      #NEW1 COMMENT MUNA
+
+   
+    # PRESCRIPTION FOR MEDICAL SUPPPLIES
+    medical_pr = relationship("AR_MedicalSupplies_PR", primaryjoin="and_(AR_MedicalSupplies.id==AR_MedicalSupplies_PR.medical_id)",back_populates="medical_info")
+    #POS Medical
+    # medical_item = relationship("Medical_item", primaryjoin="and_(MedicalSupplies.id==Medical_item.medical_id)", back_populates="medical_info")                                                               #NEW1 COMMENT MUNA
+
+
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+
+#GALING PHARMACY  #HINDI NAGAMIT
+# class PharmacyInvoice(Base):
+#     __tablename__= 'pharmacy_invoice'
+
+#     id= Column(CHAR(36), primary_key=True, index=True)
+#     invoice_no = Column(String(255), nullable=False,unique=True, index=True)
+#     admission_id = Column(CHAR(36), ForeignKey("inpatients.admission_id"),nullable=True)  ## inpatients with s po
+#     invoice_date = Column(Date,nullable=True)
+#     medicine_pr_id= Column(CHAR(36),ForeignKey("medicine_pr.medpr_id"),nullable=True)  #medicalsupplies_pr
+#     total_amount= Column(Float, nullable=False)
+
+#     status = Column(String(255),nullable=False, default="Unpaid")
+#     created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=True)
+#     created_at = Column(DateTime,nullable=False)
+#     updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+#     updated_at = Column(DateTime,nullable=True)
+
+
+#     inpatient_info = relationship("Inpatient", primaryjoin="and_(PharmacyInvoice.admission_id==Inpatient.admission_id)")    ###NEW1 PharmacyInvoice  //Deleted , back_populates="invoice_info"
+#     #sales_invoice = relationship("Sales", primaryjoin="and_(Inpatient_invoice.id==Sales.invoice_id)", back_populates="invoice_info")   ### DI NAMIN NEED ITO ##
+
+
+
+
+################################################################################ BILLING
+class AR_HospitalServiceName(Base):
+    __tablename__ = "ar_hospital_service_name"
+    id = Column(String(36), primary_key=True,index=True)
+    description_name = Column(String(255),nullable=False,unique=True, index=True)
+    unit_price = Column(Float, nullable=False)
+    status = Column(String(100), default='Active')
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=False)
+    created_at = Column(DateTime,nullable=False)
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime,nullable=True)
+
+class AR_HospitalServices(Base):
+    __tablename__ = "ar_hospital_services"
+    id = Column(String(36), primary_key=True,index=True)
+    admission_id = Column(String(36), ForeignKey("ar_inpatients.admission_id"),nullable=False)
+    hospital_service_name_id = Column(String(36), ForeignKey("ar_hospital_service_name.id"),nullable=False)
+    quantity= Column(Float,nullable=False)
+    date= Column(Date, nullable=False)
+    total_amount= Column(Float,nullable=False)
+ 
+    status = Column(String(100), default='Pending',nullable=False) #nullable=False             ### STATUS TO FOR BILLING ###
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=False)
+    created_at = Column(DateTime,nullable=False)
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime,nullable=True)
+
+    hc_treatment_services = relationship(
+         "AR_HospitalServiceName", primaryjoin="and_(AR_HospitalServices.hospital_service_name_id==AR_HospitalServiceName.id)")
+
+    admission_info = relationship(
+        "AR_Inpatient", primaryjoin="and_(AR_HospitalServices.admission_id==AR_Inpatient.admission_id)")  #NEW1 PatientRegistration
+
+# /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class AR_HospitalChargesBill(Base):
+    __tablename__ = "ar_hospital_charges_bill"
+    id = Column(CHAR(36), primary_key=True,index=True)
+    invoice_no= Column(String(100) ,unique=True)
+    invoice_date = Column(DateTime, nullable=False)
+    inpatient_bill_id = Column(String(36), ForeignKey("ar_inpatient_bills.id"),nullable=True)
+    hospital_services_id = Column(String(36), ForeignKey("ar_hospital_services.id"),nullable=False,unique=True)
+    total_amount= Column(Float,nullable=False)
+    cancellation_return = Column(Float, nullable=True)
+
+    status = Column(String(100), default='Active')
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=False)
+    created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+    updated_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=True)
+    updated_at = Column(DateTime (timezone=True), nullable=True, onupdate=func.now())   
+    
+    hospital_charges_id_info = relationship(
+         "AR_HospitalServices", primaryjoin="and_(AR_HospitalChargesBill.hospital_services_id==AR_HospitalServices.id)")  #NEW1 HospitalServices hospital_services_id
+
+
+class AR_TreatmentBill(Base):
+    __tablename__ = "ar_treatment_bill"
+    id = Column(CHAR(36), primary_key=True,index=True)
+    invoice_no= Column(String(100) ,unique=True)
+    invoice_date = Column(DateTime, nullable=False)
+    inpatient_bill_id = Column(String(36), ForeignKey("ar_inpatient_bills.id"),nullable=True)
+
+    treatment_id = Column(String(36), ForeignKey("ar_treatments.id"),nullable=False)
+    total_amount= Column(Float,nullable=False)
+    cancellation_return = Column(Float, nullable=True)
+
+    status = Column(String(255), nullable=False, server_default="Pending")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=False)
+    created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+    updated_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=True)
+    updated_at = Column(DateTime (timezone=True), nullable=True, onupdate=func.now())   
+
+    treatment_id_info = relationship(
+         "AR_Treatment", primaryjoin="and_(AR_TreatmentBill.treatment_id==AR_Treatment.id)")
+
+
+class AR_LabRequestBill(Base):
+    __tablename__ = "ar_lab_requests_bill"
+    id = Column(CHAR(36), primary_key=True,index=True)
+    invoice_no= Column(String(100) ,unique=True)
+    invoice_date = Column(DateTime, nullable=False)
+
+    inpatient_bill_id = Column(String(36), ForeignKey("ar_inpatient_bills.id"),nullable=True)
+    lab_requests_id = Column(String(36), ForeignKey("ar_lab_requests.id"),nullable=False)
+    total_amount= Column(Float,nullable=False)
+    cancellation_return = Column(Float, nullable=True)
+
+    status = Column(String(255), nullable=False, server_default="Pending")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=False)
+    created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+    updated_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=True)
+    updated_at = Column(DateTime (timezone=True), nullable=True, onupdate=func.now())   
+
+    lab_requests_id_info = relationship(
+         "AR_LabRequest", primaryjoin="and_(AR_LabRequestBill.lab_requests_id==AR_LabRequest.id)")
+
+class AR_PharmacyBill(Base):
+    __tablename__ = "ar_pharmacy_bill"
+    id = Column(CHAR(36), primary_key=True,index=True)
+    invoice_no= Column(String(100) ,unique=True)
+    invoice_date = Column(DateTime, nullable=False)
+
+    inpatient_bill_id = Column(String(36), ForeignKey("ar_inpatient_bills.id"),nullable=True)
+    # pharmacy_invoice_id = Column(String(36), ForeignKey("pharmacy_invoice.id"),nullable=False) #NEW1 REMOVED COLUMN
+    medpr_id= Column(CHAR(36),ForeignKey("ar_medicine_pr.medpr_id"),nullable=False)  #NEW2 NEW COLUMN
+    total_amount= Column(Float,nullable=False)
+    cancellation_return = Column(Float, nullable=True  , default=00)
+
+    status = Column(String(255), nullable=False, server_default="Pending")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=False)
+    created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+    updated_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=True)
+    updated_at = Column(DateTime (timezone=True), nullable=True, onupdate=func.now())   
+    
+    # pharmacy_invoice_id_info = relationship(
+    #      "PharmacyInvoice", primaryjoin="and_(PharmacyBill.pharmacy_invoice_id==PharmacyInvoice.id)")
+
+    # inpatient_bill_id_info = relationship(
+    #     "InpatientBill", primaryjoin="and_(PharmacyBill.inpatient_bill_id==InpatientBill.id)")
+
+
+
+class AR_RoomBill(Base):
+    __tablename__ = "ar_room_bill"    
+    id = Column(CHAR(36), primary_key=True)
+    invoice_no = Column(String(100), nullable=False, unique=True)
+    invoice_date = Column(DateTime, nullable=False)
+    admission_id = Column(String(36), ForeignKey("ar_inpatients.admission_id"), nullable=False) #NEW1 Deleted management
+    inpatient_bill_id = Column(String(36), ForeignKey("ar_inpatient_bills.id"), nullable=True)
+    total_amount = Column(Float, nullable=False)
+
+    status = Column(String(255), nullable=False, server_default="Pending")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=False)
+    created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+    updated_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=True)
+    updated_at = Column(DateTime (timezone=True), nullable=True, onupdate=func.now())   
+    
+    inpatient_management_id_info = relationship(
+         "AR_Inpatient", primaryjoin="and_(AR_RoomBill.admission_id==AR_Inpatient.admission_id)") #NEW1 Management deleted
+
+    # inpatient_bill_id_info = relationship(
+    #     "InpatientBill",primaryjoin="and_(RoomBill.inpatient_bill_id==InpatientBill.id)")
+
+class AR_DoctorFeeBill(Base):
+    __tablename__ = "ar_doctor_fee_bill"
+    id = Column(CHAR(36), primary_key=True,index=True)
+    invoice_no= Column(String(100) ,unique=True)
+    invoice_date = Column(DateTime, nullable=False)
+
+    inpatient_bill_id = Column(String(36), ForeignKey("ar_inpatient_bills.id"),nullable=True)
+    doctor_id = Column(String(36), ForeignKey("ar_doctor_profile.doctor_id"),nullable=False)
+    
+    actual_pf = Column(Float,nullable=False)
+    sc_pwd_discount = Column(Float, nullable=True)
+    philhealth = Column(Float, nullable=True)
+    discount = Column(Float, nullable=True)
+    hmo = Column(Float, nullable=True)
+    patient_due = Column(Float, nullable=False)
+
+    status = Column(String(100), default='Active')
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=False)
+    created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+    updated_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=True)
+    updated_at = Column(DateTime (timezone=True), nullable=True, onupdate=func.now())   
+    
+    # doctor_fee_id_info = relationship(
+    #      "Doctor_fee", primaryjoin="and_(DoctorFeeBill.doctor_fee_id==Doctor_fee.doctor_fee_id)")
+
+
+class AR_InpatientBill(Base):
+    __tablename__ = "ar_inpatient_bills"    
+    id = Column(CHAR(36), primary_key=True)
+    inpatient_bill_no = Column(String(255), nullable=False, unique=True)
+    admission_id = Column(String(36), ForeignKey("ar_inpatients.admission_id"),nullable=False)
+    inpatient_payment_id = Column(String(36), ForeignKey("ar_inpatient_payments.id"),nullable=True)
+
+    date_of_billing = Column(Date,nullable=False)
+    due_date = Column(Date,nullable=False)
+    balance_due = Column(Float, nullable=False, server_default="0")
+    status = Column(String(255), nullable=False, server_default="Pending")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=True)
+    created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime (timezone=True), nullable=True, onupdate=func.now())
+
+    inpatient_info = relationship(
+        "AR_Inpatient", primaryjoin="and_(AR_InpatientBill.admission_id==AR_Inpatient.admission_id)")
+    bill_treatments = relationship(
+        "AR_TreatmentBill", primaryjoin="and_(AR_InpatientBill.id ==AR_TreatmentBill.inpatient_bill_id)")
+    bill_lab_requests = relationship(
+        "AR_LabRequestBill", primaryjoin="and_(AR_InpatientBill.id ==AR_LabRequestBill.inpatient_bill_id)")
+    bill_pharmacy = relationship(
+        "AR_PharmacyBill", primaryjoin="and_(AR_InpatientBill.id ==AR_PharmacyBill.inpatient_bill_id)")
+    bill_hospital_charges = relationship(
+        "AR_HospitalChargesBill", primaryjoin="and_(AR_InpatientBill.id ==AR_HospitalChargesBill.inpatient_bill_id)")
+    bill_room = relationship(
+        "AR_RoomBill", primaryjoin="and_(AR_InpatientBill.id ==AR_RoomBill.inpatient_bill_id)")
+    # bill_doctor_fee = relationship("DoctorFeeBill")
+    bill_doctor_fee = relationship(
+        "AR_DoctorFeeBill", primaryjoin="and_(AR_InpatientBill.id ==AR_DoctorFeeBill.inpatient_bill_id)")
+
+    # bill_doctor_fee = relationship("DoctorFeeBill", primaryjoin="and_(InpatientBill.id ==DoctorFeeBill.inpatient_bill_id)")
+
+
+# FROM CMS
+class AR_Inpatient_payment(Base):
+    __tablename__ = "ar_inpatient_payments"    
+    id = Column(CHAR(36), primary_key=True)
+    or_no = Column(String(255),nullable=False,unique=True)
+    inpatient_bill_id = Column(CHAR(36), ForeignKey("ar_inpatient_bills.id"), nullable=False)
+    total_amount_paid = Column(Float,nullable=False)
+    payment_term_id = Column(CHAR(36),  nullable=False)                 #COMMENT KO MUNA ForeignKey("payment_terms.id"),
+    date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())      
+    patient_cash_payment_id = Column(CHAR(36),nullable=True)            #COMMENT KO MUNA , ForeignKey("patient_cash_payments.id")
+    patient_check_payment_id = Column(CHAR(36),nullable=True)           #COMMENT KO MUNA , ForeignKey("patient_check_payments.id")
+    payment_method_id = Column(CHAR(36),nullable=False)                 #COMMENT KO MUNA , ForeignKey("payment_methods.id")
+     
+    status = Column(String(255), nullable=False, server_default="Active")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=False)
+    created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+    updated_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=True)
+    updated_at = Column(DateTime (timezone=True), nullable=True, onupdate=func.now())
+#/////////////////////////////////////////////////////////////////////////////////////////////////////////////////#
+
+# //NEW
+class AR_Payment_term(Base):
+    __tablename__ = "ar_payment_terms"    
+    id = Column(CHAR(36), primary_key=True)
+    term_name = Column(String(255),nullable=False,unique=True)
+    description = Column(Text,nullable=False)
+    status = Column(String(255), nullable=False, server_default="Active")
+    
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=False)
+    created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+    updated_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=True)
+    updated_at = Column(DateTime (timezone=True), nullable=True, onupdate=func.now())
+
+
+class AR_AccountsReceivableLedger(Base):
+    __tablename__ = "ar_accounts_receivable_ledgers"    
+    id = Column(CHAR(36), primary_key=True)
+    inpatient_bill_id = Column(CHAR(36), ForeignKey("ar_inpatient_bills.id"), nullable=False)
+    inpatient_payment_id = Column(String(36), ForeignKey("ar_inpatient_payments.id"),nullable=False)
+    amount_outstanding = Column(Float, nullable=False, server_default="0")
+    days_overdue = Column(Numeric,nullable=False) 
+    status = Column(String(255), nullable=False, server_default="Pending")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=False)
+    created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime (timezone=True), nullable=True, onupdate=func.now())
+
+
+
+
+
+
+
+
+
+########################################### ACCOUNTS PAYABLE
+# class Maintenance_provider(Base):
+#     __tablename__ = 'maintenance_providers'
+
+#     maintenance_provider_id = Column(String(36), primary_key=True, default=text('UUID()'))
+#     maintenance_provider_name = Column(String(255), nullable=True)
+#     maintenance_provider_contact = Column(String(255), nullable=True)
+#     maintenance_provider_email = Column(String(255), nullable=True) 
+#     active_status = Column(String(255), nullable=True, default=('Active'))
+#     created_at = Column(DateTime, default=text('NOW()'))
+#     updated_at = Column(DateTime, onupdate=text('NOW()'))
+
+#     maintenance = relationship('Maintenance')
+
+
+# class Maintenance(Base):
+#     __tablename__ = 'maintenances'
+
+#     maintenance_id = Column(String(36), primary_key=True, default=text('UUID()'))
+#     maintenance_provider_id = Column(String(36), ForeignKey('maintenance_providers.maintenance_provider_id'), nullable=False)
+#     asset_id = Column(String(36), nullable=False) #COMMENT MUNA  ForeignKey('assets.asset_id')
+#     maintenance_name = Column(String(255), nullable=True)
+#     maintenance_details = Column(String(255), nullable=True)
+#     maintenance_cost = Column(Numeric, nullable=True)
+#     maintenance_day = Column(Integer, nullable=True)
+#     maintenance_due = Column(DateTime, nullable=True)
+#     maintenance_completed = Column(DateTime, nullable=True)
+#     maintenance_repeatable = Column(String(255), nullable=True)
+#     maintenance_status = Column(String(255), nullable=True)
+#     remarks = Column(String(255), nullable=True)
+#     active_status = Column(String(255), nullable=True, default=('Active'))
+#     created_at = Column(DateTime, default=text('NOW()'))
+#     updated_at = Column(DateTime, onupdate=text('NOW()'))
+
+#     Maintenance_provider = relationship('Maintenance_provider', back_populates='maintenance', lazy='joined')
+
+
+
+# class Maintenance_Report(Base):
+#     __tablename__ = 'maintenance_reports'
+
+#     maintenance_report_id = Column(String(36), primary_key=True, default=text('UUID()'))
+#     maintenance_id = Column(String(36), ForeignKey('maintenances.maintenance_id'), nullable=False)
+#     maintenance_cost = Column(Numeric, nullable=True)
+#     completed_date = Column(DateTime, nullable=True)
+#     remarks = Column(Text, nullable=True)
+#     created_at = Column(DateTime, default=text('NOW()'))
+#     updated_at = Column(DateTime, onupdate=text('NOW()'))
+#     maintenance_details = relationship('Maintenance', foreign_keys=[maintenance_id], lazy='joined')
+
+
+    
+# class AP_MaintenanceReport(Base):
+#     __tablename__ = 'accounts_payable_maintenance_reports'
+#     accounts_payable_id = Column(String(36), ForeignKey("accounts_payable_ledgers.id"), nullable=True)
+#     maintenance_id = Column(String(36), ForeignKey('maintenance_reports.maintenance_report_id'), nullable=False)
+
+# class AP_PurchaseInvoice(Base):
+#     __tablename__ = 'ap_purchase_invoice'
+#     accounts_payable_id = Column(String(36), ForeignKey("accounts_payable_ledgers.id"), nullable=True)
+#     purchare_order_invoice_id = Column(String(36), ForeignKey('invoice.id'), nullable=False)
+    
+
+
+
+# class PurchaseOrder(Base):
+#     __tablename__ = "purchase_order"
+
+#     id = Column(String(255), primary_key=True)   #default=uuid.uuid4    
+#     purchase_order_number = Column(Integer, unique=True, index=True)
+
+#     order_date = Column(Date, nullable=True, index=True)
+#     expected_delivery_date = Column(Date, nullable=True, index=True)
+    
+#     notes = Column(String(255), nullable=True, index=True)
+#     status = Column(String(255), nullable=True, index=True,default="active")
+
+
+#     subtotal = Column(Float, nullable=False, index=True)
+#     discount = Column(Float, nullable=False, index=True)
+#     tax = Column(Float, nullable=False, index=True)
+#     total_amount = Column(Float, nullable=False, index=True)
+
+
+# class Invoice(Base):
+#     __tablename__ = "invoice"
+#     id = Column(String(255), primary_key=True)
+#     prepared_by = Column(String(255), nullable=True, index=True)
+#     message = Column(TEXT, nullable=True, index=True)
+    
+#     status = Column(String(255), nullable=True, index=True,default="Pending")
+#     invoice_date = Column(Date, nullable=False, index=True)
+#     due_date = Column(Date, nullable=False, index=True)
+#     billing_address = Column(String(255), nullable=False, index=True)
+#     amount_paid = Column(String(255), nullable=True, index=True,default=0)
+    
+
+#     # relation with vendor
+#     purchase_order_id = Column(String(255), 
+#         ForeignKey("purchase_order.id", onupdate='CASCADE'),unique=True, nullable=False)
+
+#     purchase_order = relationship("PurchaseOrder")
+
+    # relation with vendor
+    # created_by = Column(String(255), ForeignKey("vendor.id", onupdate='CASCADE'), nullable=True)
+    # updated_by = Column(String(255), ForeignKey("vendor.id", onupdate='CASCADE'), nullable=True)
+    # creator = relationship("Vendor",foreign_keys=[created_by])
+    # updater = relationship("Vendor",foreign_keys=[updated_by])
+     
+    # created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=False)
+    # created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+    # updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    # updated_at = Column(DateTime (timezone=True), nullable=True, onupdate=func.now())
+
+
+# class Purchase_order_vendor_payment(Base):
+#     __tablename__ = "purchase_order_vendor_payments"    
+#     id = Column(CHAR(36), primary_key=True)
+#     or_no = Column(String(255),nullable=False,unique=True)
+#     purchase_order_vendor_bill_id = Column(CHAR(36),  ForeignKey("invoice.id"), nullable=False)
+#     total_amount_paid = Column(Float,nullable=False)
+#     payment_term_id = Column(CHAR(36), nullable=False)  #COMMENT ForeignKey("payment_terms.id")
+#     date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+#     hospital_cash_payment_id = Column(CHAR(36),nullable=True) #COMMENT , ForeignKey("hospital_cash_payments.id")
+#     hospital_check_payment_id = Column(CHAR(36),nullable=True) #COMMENT , ForeignKey("hospital_check_payments.id")
+#     payment_method_id = Column(CHAR(36),nullable=False) #COMMENT , ForeignKey("payment_methods.id")
+
+#     status = Column(String(255), nullable=False, server_default="Active")
+        
+#     created_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=False)
+#     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+#     updated_by = Column(CHAR(36), ForeignKey("ar_users.id"), nullable=True)
+#     updated_at = Column(DateTime (timezone=True), nullable=True, onupdate=func.now())
+
+       
+
+class AR_Purchase_order(Base):
+    __tablename__ = "ar_purchase_order" 
+    id = Column(CHAR(36), primary_key=True,index=True)
+    purchase_order_number= Column(String(255),nullable=False,unique=True, index=True)
+    total_bill= Column(Float, nullable=False)			
+    order_date= Column(Date, nullable=False)				
+    expected_delivery_date= Column(Date, nullable=False)				
+    payment_method = Column(String(255), nullable=False)
+    notes = Column(String(255), nullable=False)
+
+    status = Column(String(255), nullable=False, server_default="Active")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=False)
+    created_at = Column(DateTime,nullable=False)
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime,nullable=True)
+
+    updated_by_info = relationship("AR_User", primaryjoin="and_(AR_Purchase_order.updated_by==AR_User.id)")
+
+    
+
+class AR_Utilities(Base):
+    __tablename__ = "ar_utilities" 
+    id = Column(CHAR(36), primary_key=True,index=True)
+    utility_type= Column(String(255),nullable=False)
+    utility_name= Column(String(255),nullable=False, index=True)
+    utility_bill= Column(Float, nullable=False)	 				
+    due_date= Column(Date, nullable=False)				
+    payment_method = Column(String(255), nullable=False)
+    notes = Column(String(255), nullable=False)
+
+    status = Column(String(255), nullable=False, server_default="Active")
+    created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=False)
+    created_at = Column(DateTime,nullable=False)
+    updated_by = Column(CHAR(36),ForeignKey("ar_users.id"),nullable=True)
+    updated_at = Column(DateTime,nullable=True)

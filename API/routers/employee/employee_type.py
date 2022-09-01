@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from ...repository.employee import employee_type
 
 router = APIRouter(
-    prefix="/employee_type",
+    prefix="/cms/user/employee_type",
     tags=['Employee Types']
 )
 

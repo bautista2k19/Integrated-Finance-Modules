@@ -76,7 +76,7 @@
             <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle {{ is_finance_active|default('') }}">Finance</a>
             <ul class="dropdown-menu dropdown-menu-left">
               <li><a href="{{ gl_url|default('#') }}" class="dropdown-item {{ is_gl_active|default('') }}">General Ledger</a></li>
-              <li><a href="{{ ap_ar_url|default('#') }}" class="dropdown-item {{ is_ap_ar_active|default('') }}">Accounts Payable/Receivable</a></li>
+              <li><a href="../../AR_AP/user/dashboard" class="dropdown-item {{ is_ar_ap_active|default('') }}">Accounts Payable/Receivable</a></li>
               <li><a href="{{ cd_url|default('#') }}" class="dropdown-item {{ is_cd_active|default('') }}">Collection/Disbursement</a></li>
             </ul>
           </li>

@@ -1,0 +1,169 @@
+{% extends "internal/user/ar_ap/layout.html" %} {% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 p-title">Account Settings</h1>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Account Settings</li>
+                    </ol>
+                </div>
+                <!-- /.col -->
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <div class="d-flex align-items-center">
+                                <h4 class="card-title">Login</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-5 col-sm-3">
+                                <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist"
+                                    aria-orientation="vertical">
+                                    <a class="nav-link active" id="change-username-tab" data-toggle="pill"
+                                        href="#change-username" role="tab" aria-controls="change-username"
+                                        aria-selected="true">Change Username</a>
+                                    <a class="nav-link" id="change-password-tab" data-toggle="pill"
+                                        href="#change-password" role="tab" aria-controls="change-password"
+                                        aria-selected="false">Change Password</a>
+                                </div>
+                            </div>
+                            <div class="col-7 col-sm-9">
+                                <div class="tab-content" id="vert-tabs-tabContent">
+                                    <div class="tab-pane text-left fade show active" id="change-username"
+                                        role="tabpanel" aria-labelledby="change-username-tab">
+                                        <form id="change_user_form" name="change_user_form">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="form-group col-md-6">
+                                                        <h5><b>Change Username</b></h5>
+                                                        <p>After a successful username update, you will be redirected to
+                                                            the
+                                                            login page where you can log in with your new username.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="form-group col-md-6 mx-auto">
+                                                        <label for="password" class="form-required-field">
+                                                            Password</label>
+                                                        <input type="password" class="form-control" id="password"
+                                                            name="password" 
+                                                            placeholder="Password"
+                                                            required
+                                                            data-msg-required="For your security, you must re-enter your password to continue.">
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="form-group col-md-6 mx-auto">
+                                                        <label for="username" class="form-required-field">New
+                                                            Username</label>
+                                                        <input type="text" class="form-control" id="username"
+                                                            name="username" 
+                                                            placeholder="New Username"
+                                                            pattern="[a-zA-Z][A-Za-z0-9]{5,20}"
+                                                            data-msg-pattern="Username must contain letter or number and at least 6-20 characters. First character must be a letter."
+                                                            required data-msg-required="Please enter your new username.">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer bg-white">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <button type="submit"
+                                                            class="btn btn-success float-right submit">Save
+                                                            Changes <i class="fas fa-check ml-1"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="tab-pane fade" id="change-password" role="tabpanel"
+                                        aria-labelledby="change-password-tab">
+                                        <form action="#" id="change_pass_form" name="change_pass_form">
+                                            <div class="card-body">
+                                                <input type="hidden" id="uuid" name="uuid" value="">
+                                                <input type="hidden" id="email" name="email" value="">
+                                                <div class="row">
+                                                    <div class="form-group col-md-6">
+                                                        <h5><b>Change Password</b></h5>
+                                                        <p>After a successful password update, you will be redirected to
+                                                            the
+                                                            login page where you can log in with your new password.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="form-group col-md-6 mx-auto">
+                                                        <label for="current_password" class="form-required-field">
+                                                            Current Password</label>
+                                                        <input type="password" class="form-control" id="current_password"
+                                                            name="current_password"
+                                                            data-msg-required="For your security, you must re-enter your password to continue."
+                                                            required>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="form-group col-md-6 mx-auto">
+                                                        <label for="new_password" class="form-required-field">New
+                                                            Password</label>
+                                                        <input type="password" class="form-control" id="new_password"
+                                                            name="new_password"
+                                                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                                            data-msg-pattern="Must contain at least one  number and one uppercase and lowercase letter, and at least 8 or more characters"
+                                                            data-msg-required="Please enter your new password."
+                                                            required>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="form-group col-md-6 mx-auto">
+                                                        <label for="confirm_password" class="form-required-field">Confirm
+                                                            New
+                                                            Password</label>
+                                                        <input type="password" class="form-control" id="confirm_password"
+                                                            name="confirm_password" data-rule-equalTo="#new_password"
+                                                            data-msg-equalTo="Password didn't match."
+                                                            required
+                                                            data-msg-required="Please confirm your new password."
+                                                            >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer bg-white">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <button type="submit" id="saveBtn" name="saveBtn"
+                                                            class="btn btn-success float-right submit">Save
+                                                            Changes <i class="fas fa-check ml-1"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+</div>
+
+<!-- /.modal -->
+{% endblock %}
+{% block customjs %}
+<script src="{{ url_for('assets', path='/ar_ap/') }}customjs/account_settings.js"></script>
+{% endblock %}

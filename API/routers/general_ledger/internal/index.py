@@ -42,6 +42,7 @@ async def redirect_to_main_dashboard(
                 'system_admin_url': '../system_admin' if user_type == 'System Administrator' else '#',
                 'gl_url': dotenv.get_key(dotenv_file, "GENERAL_LEDGER_ACCOUNTANT_URL") if user_type == 'Accountant' else dotenv.get_key(dotenv_file, "GENERAL_LEDGER_INTERNAL_USER_URL"),
                 'cd_url': dotenv.get_key(dotenv_file, "CD_ACCOUNTANT_URL") if user_type == 'Accountant' else '#',
+                #'ar_ap_url': dotenv.get_key(dotenv_file, "AR_AP_ACCOUNTANT_URL") if user_type == 'Accountant' else '#',
                 'sidebar': 'internal/index_sidebar',
                 'main_dashboard_menu_item': 'active',
             }

@@ -12,7 +12,7 @@ document.title =
 $('.p-title').text() + " | Hospital Management System"
 
 
-const apiURL = "http://localhost:8000/";
+const apiURL = "http://localhost:8000/cms/user/";
 const baseURL = "http://localhost:8000/assets/";
 
 $.ajaxSetup({
@@ -36,7 +36,7 @@ $("#user_type").text(localStorage.USER_TYPE);
 
 //FIXME:error when new tab
 // $.ajax({
-//   url: apiURL + "employee/" + sessionStorage.getItem("EMPLOYEE_ID"),
+//   url: apiURL + "employee/" + localStorage.EMP_ID,
 //   type: "GET", // post, put, delete, get
 //   dataType: "json",
 //   success: function (data) {
@@ -52,7 +52,7 @@ $("#user_type").text(localStorage.USER_TYPE);
 // });
 
 // $.ajax({
-//   url: apiURL + "user/" + sessionStorage.getItem("USER_ID"),
+//   url: apiURL + "user/" + localStorage.USER_ID,
 //   type: "GET", // post, put, delete, get
 //   dataType: "json",
 //   success: function (data) {

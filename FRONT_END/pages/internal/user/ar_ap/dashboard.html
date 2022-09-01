@@ -1,0 +1,194 @@
+{% extends "internal/user/ar_ap/layout.html" %} 
+{% block content %}
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0 p-title">Dashboard</h1>
+        </div>
+        <!-- /.col -->
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+          </ol>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      
+      <div class="row">
+        <!-- Bill Chart --->
+        <div class="col-lg-8 col-6">
+          <div class="small-box total-border-four bg-white" style="padding: 20px;">
+            <div class="chart">
+              <h4>Inpatient Billing</h4>
+              <canvas id="bill_chart" 
+              style="min-height: 200px;
+                height: 300px;
+                max-height: 300px;
+                max-width: 100%;
+                ">
+              </canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-6">
+          <h3>Bill Status</h3><br>
+          <!-- Paid Bills -->
+          <div class="col-lg-12 col-6">
+            <div class="small-box total-border-one bg-white">
+              <div class="inner">
+                <h3 id="paid_balance">0</h3>
+                <p>Paid Balance</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-money-bill text-success"></i>
+              </div>
+              <a href="bill" class="small-box-footer">More info <i class="fas fa-money-bill"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+
+          <!-- Unpaid Bills -->
+          <div class="col-lg-12 col-6">
+            <div class="small-box total-border-one bg-white">
+              <div class="inner">
+                <h3 id="unpaid_balance">0</h3>
+                <p>Unpaid Balance</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-credit-card text-danger"></i>
+              </div>
+              <a href="bill" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+        </div>
+      </div>
+
+
+      <!-- Small boxes (Stat box) -->
+      <div class="row">
+
+        <!-- All PO -->
+        <div class="col-lg-3 col-6">
+          <div class="small-box total-border-one bg-white">
+            <div class="inner">
+              <h3 id="all_po">0</h3>
+              <p>All Purchase Orders</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-layer-group text-info"></i>
+            </div>
+            <a href="purchase_order" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+
+        <!-- small box -->
+        <div class="col-lg-3 col-6">
+          <div class="small-box total-border-two bg-white">
+            <div class="inner">
+              <h3 id="approve_po">0</h3>
+              <p>Approved Purchase Orders</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-check-circle text-success"></i>
+            </div>
+            <a href="voucher_PO" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+
+        <!-- small box -->
+        <div class="col-lg-3 col-6">
+          <div class="small-box total-border-three bg-white">
+            <div class="inner">
+              <h3 id="active_po">0</h3>
+              <p>Active Purchase Orders</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-clock text-yellow"></i>
+            </div>
+            <a href="purchase_order" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+
+        <!-- small box -->
+        <div class="col-lg-3 col-6">
+          <div class="small-box total-border-four bg-white">
+            <div class="inner">
+              <h3 id="inactive_po">0</h3>
+              <p>Inactive Purchase Orders</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-ban text-danger"></i>
+            </div>
+            <a href="purchase_order" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+        <!-- ./col -->
+
+      </div>
+      <!-- /.row -->
+
+      <!-- Doughnot Charts -->
+      <div class="row">
+
+        <!-- PO Chart --->
+        <div class="col-lg-6 col-6">
+          <div class="small-box total-border-four bg-white" style="padding: 20px;">
+            <div class="chart">
+              <h4>Purchase Orders</h4>
+              <canvas id="po_chart" 
+              style="min-height: 200px;
+                height: 300px;
+                max-height: 300px;
+                max-width: 100%;
+                ">
+              </canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- U Chart --->
+        <div class="col-lg-6 col-6">
+          <div class="small-box total-border-four bg-white" style="padding: 20px;">
+            <div class="chart">
+              <h4>Utilities</h4>
+              <canvas id="u_chart" 
+              style="min-height: 200px;
+                height: 300px;
+                max-height: 300px;
+                max-width: 100%;
+                ">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      
+      </div>
+
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+  <!-- /.content -->
+</div>
+
+{% endblock %} {% block customjs %}
+<script src="{{ url_for('assets', path='/ar_ap/') }}customjs/dashboard.js"></script>
+<!-- ChartJS -->
+<script src="{{ url_for('assets', path='/ar_ap/') }}plugins/chart.js/Chart.min.js"></script>
+{% endblock %}

@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from API.repository.cms.payment_agreement import payment_term
 
 router = APIRouter(
-    prefix="/payment_term",
+    prefix="/cms/user/payment_term",
     tags=['Payment Terms']
 )
 

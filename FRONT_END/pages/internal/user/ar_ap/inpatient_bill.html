@@ -1,0 +1,304 @@
+{% extends "internal/user/ar_ap/layout.html" %} {% block content %}
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<div class="content-header">
+		<div class="container-fluid">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1 class="m-0 p-title">Inpatient Bill</h1>
+					<p>Manage Inpatient Bills</p>
+				</div>
+				<!-- /.col -->
+				<div class="col-sm-6">
+					<ol class="breadcrumb float-sm-right">
+						<li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+						<li class="breadcrumb-item active">Inpatient Bill</li>
+					</ol>
+				</div>
+				<!-- /.col -->
+			</div>
+			<!-- New Employee Card -->
+			<div class="row collapse" id="div_form">
+				<div class="col-sm-12">
+					<div class="card card-primary card-outline">
+						<div class="card-header">
+							<div class="d-flex justify-content-between">
+								<h3 class="card-title" id="div_form_card_title">
+									Employee Information
+								</h3>
+								<span
+									type="button"
+									aria-hidden="true"
+									onclick="return formReset('hide','')"
+									><i class="fas fa-times"></i
+								></span>
+							</div>
+						</div>
+						
+
+					<!--/////////////////////////////////////////////////////////////// -->
+						<form class="cancel_return_table_form"id="form_id" name="form_id" >
+							<div class="card-body" id="form_card_body">
+								<div class="row form_div">
+									<div class="col-sm-12">
+										<h5 class="text-info">Admission Info</h5>
+									</div>
+								</div>
+								<div class="row form_div">
+									<input type="hidden" id="uuid" name="uuid" />
+								</div>
+								<ul class="exercise-list"></ul>
+								<div class="row form_div">
+									<div class="form-group col-md-6 mb-6">
+										<label class="form-required-field" for="patient_name">Patient Name</label>
+										<select class="form-control select2" name="patient_full_name" id="patient_full_name" required
+										  data-msg-required="Please select Inpatient.">
+										</select>
+									</div>
+									
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="date_admitted"
+											>Date Admitted</label
+										>
+										<select class="form-control select2" name="date_admitted" id="date_admitted" required
+										data-msg-required="Please select date admitted.">
+									  	</select>
+									</div>
+
+									<div class="form-group col-md-3 mb-3">
+										<label for="date_discharged"
+											>Date Discharged</label
+										>
+										<select class="form-control select2" name="date_discharged" id="date_discharged">
+									  	</select>
+									</div>
+								</div>
+
+								<div class="row form_div">
+									<div class="form-group col-md-6 mb-6">
+										<label class="form-required-field" for="birthdate"
+											>Birthdate</label
+										>
+										<label style="font-weight: normal;" 
+											class="form-control"
+											type="date"
+											name="birthdate"
+											id="birthdate"
+											required
+											data-msg-required="Please enter birthdate."
+										>Birthdate</label>
+									</div>
+
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="room_number"
+											>Room Number</label
+										>
+										<label style="font-weight: normal;" 
+										class="form-control"
+										type="text"
+										name="room_number"
+										id="room_number"
+										>Room Number</label>
+									</div>
+
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="room_rate"
+											>Room Rate</label
+										>
+										<label style="font-weight: normal;" 
+										class="form-control"
+										type="text"
+										name="room_rate"
+										id="room_rate"
+										>Room Rate</label>
+									</div>
+								</div>
+
+								<div class="row form_div">
+									<!-- dating birthplace -->
+									<div class="form-group col-md-6 mb-6">
+										<label class="form-required-field" for="address"
+											>Address</label
+										>
+										<label style="font-weight: normal;" 
+											class="form-control"
+											type="text"
+											name="address"
+											id="address"
+											placeholder="Adress"
+										> Address</label>
+									</div>
+								</div>
+
+								<div class="row form_div">
+									<div class="col-sm-12">
+										<h5 class="text-info">Particulars</h5>
+									</div>
+								</div>
+
+								<div class="row form_div">
+									<!-- <div class="form-group col-md-6 mb-6">
+										<label class="form-required-field" for="surgery">Surgery</label>
+										<select class="form-control select2" name="surgery" id="surgery" required
+										  data-msg-required="Please select Inpatient.">
+										</select>
+									</div> -->
+									
+									<!-- <div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="date_admitted"
+											>Date Admitted</label
+										>
+										<select class="form-control select2" name="date_admitted" id="date_admitted" required
+										data-msg-required="Please select date admitted.">
+									  	</select>
+									</div>
+
+									<div class="form-group col-md-3 mb-3">
+										<label class="form-required-field" for="date_discharged"
+											>Date Discharged</label
+										>
+										<select class="form-control select2" name="date_discharged" id="date_discharged" required
+										data-msg-required="Please select date discharge.">
+									  	</select>
+									</div> -->
+								</div>
+								
+								
+								<div class="row form_div asdadsa" id="tableID" name="tableID">
+									<div class="form-group col-md-12 mb-12 float-right sadasdasdasdas">
+										<input type="button" class="btn btn-secondary submit float-right ml-2" name="add-row" id="add-row"  value="Add Row">
+										<button type="button" class="btn btn-secondary submit float-right ml-2" id="delete-row" name="delete-row">Delete Row</button>
+									</div>
+								</div>
+
+								<div class="row form_div">	
+									
+									<table class="table table-bordered" >
+										<thead>
+											<tr>
+												<th > </th>
+												<th class="col-md-4 mb-4">Particulars</th>
+												<th class="col-md-2 mb-2">Charges</th>
+												<th class="col-md-2 mb-2">Cancellation|Return</th>
+												<th class="col-md-2 mb-2">Net Charges</th>
+											</tr>
+										</thead>
+										<tbody class="tbodyclass">
+										<tr>
+											<th></th>
+											<th class="col-md-6 mb-6">
+												<select class="form-control select2" name="particulars" id="particulars" required
+												data-msg-required="Please select Inpatient.">
+												</select>
+											</th>
+											<th class="col-md-2 mb-2"><input class="form-control" type="text" id="charges" placeholder="charges"></th>
+											<th class="col-md-2 mb-2"><input class="form-control" type="text" id="cancel_return" placeholder="00.00"></th>
+											<th class="col-md-2 mb-2"><input class="form-control" type="text" id="net_charges" placeholder="00.00"></th>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+
+							</div>
+							<div class="card-footer">
+								<button
+									type="submit"
+									class="btn btn-primary submit float-right ml-2"
+									id="save_button"
+								>
+									Save <i class="fas fa-check ml-1"></i>
+								</button>
+								<button
+									type="reset"
+									class="btn btn-default float-right"
+									onclick="return formReset('hide','')"
+								>
+									Cancel
+								</button>
+							</div>
+						</form>
+					<!--/////////////////////////////////////////////////////////////// -->
+					
+					</div>
+				</div>
+			</div>
+
+			<!-- Employee DataTable -->
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="card card-primary card-outline">
+						<div class="card-header border-0">
+							<div class="d-flex justify-content-between">
+								<h3 class="card-title">Inpatient Bill </h3>
+								<button class="btn btn-primary" id="new_record">
+									<i class="fas fa-plus" aria-hidden="true"></i> New
+								</button>
+							</div>
+						</div>
+						<div class="card-body mt-0 pt-0">
+							<table
+								class="table table-hover table-bordered"
+								id="employee_table"
+								style="width: 100%"
+							>
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Gender</th>
+										<th>Date Admitted</th>
+										<th>Room Type</th>
+										<th>Balance</th>
+										<th>Status</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+					<!-- /.card -->
+				</div>
+			</div>
+		</div>
+		<!-- /.container-fluid -->
+	</div>
+	<!-- /.content-header -->
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal_delete">
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title"><i class="fas fa-exclamation-triangle mr-1"></i> Confirmation</h4>
+				<button
+					type="button"
+					class="btn btn-default"
+					data-dismiss="modal"
+					aria-label="Close"
+				>
+					<span aria-hidden="true"><i class="fas fa-times"></i></span>
+				</button>
+			</div>
+			<form id="form_delete">
+			<div class="modal-body">
+				<p>Are you sure you want to deactivate this record?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					Close
+				</button>
+				<button type="submit" class="btn btn-danger" id="delete_button">
+					Yes, Deactive it
+				</button>
+			</div>
+		</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+
+
+{% endblock %} {% block customjs %}
+<script src="{{ url_for('assets', path='/ar_ap/') }}customjs/inpatient_bill.js"></script>
+{% endblock %}

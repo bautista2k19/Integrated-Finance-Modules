@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from API.repository.cms.dashboard import dashboard
 
 router = APIRouter(
-    prefix="/dashboard",
+    prefix="/cms/user/dashboard",
     tags=['Dashboard']
 )
 
