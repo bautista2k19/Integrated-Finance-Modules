@@ -1,6 +1,6 @@
 # 1: open myphpadmin
 # 2: create database "homies"
-# 3: import the "homies.sql"
+# 3: import the "with_journal.sql" or "empty_journal.sql"
 # 4: go to vs code terminal in bash environment
 # 5: type the command 'pip3 install virtualenv'
 # 6: type the command 'virtualenv venv'

@@ -568,6 +568,8 @@ class Prescription_bill(Base):
     total_amount = Column(Float,nullable=False)
     status = Column(String(255), nullable=False, server_default="Pending")
 
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
+
     created_by = Column(CHAR(36), ForeignKey("users.id"),nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
     updated_by = Column(CHAR(36),ForeignKey("users.id"),nullable=True)
@@ -585,6 +587,8 @@ class Sales(Base):
     gross_margin = Column(Float, nullable=False)
     total_amount = Column(Float, nullable=False)
     status = Column(String(255), nullable=False, server_default="Active")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
 
     created_by = Column(CHAR(36), ForeignKey("users.id"),nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -819,6 +823,8 @@ class Lab_request_bill(Base):
     inpatient_bill_id = Column(CHAR(36), ForeignKey("inpatient_bills.id"), nullable=False)
     total_amount = Column(Float, nullable=False)
     status = Column(String(255), nullable=False, server_default="Pending")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"),nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -837,6 +843,8 @@ class Treatment_bill(Base):
     inpatient_bill_id = Column(CHAR(36), ForeignKey("inpatient_bills.id"), nullable=False)
     total_amount = Column(Float, nullable=False)
     status = Column(String(255), nullable=False, server_default="Pending")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"),nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -855,6 +863,8 @@ class Surgery_bill(Base):
     inpatient_bill_id = Column(CHAR(36), ForeignKey("inpatient_bills.id"), nullable=False)
     total_amount = Column(Float, nullable=False)
     status = Column(String(255), nullable=False, server_default="Pending")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"),nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -874,6 +884,8 @@ class Room_bill(Base):
     no_of_days = Column(Integer, nullable=False)
     total_amount = Column(Float, nullable=False)
     status = Column(String(255), nullable=False, server_default="Pending")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"),nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -894,6 +906,8 @@ class  Purchase_order_vendor_bill(Base):
     due_date = Column(Date, nullable=False)
     remaining_balance = Column(Float, nullable=False)
     status = Column(String(255), nullable=False, server_default="Pending")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"),nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -912,6 +926,8 @@ class  Purchase_order_bill(Base):
     purchase_order_id = Column(CHAR(36), ForeignKey("purchase_orders.id"), nullable=False)
     total_bill = Column(Float, nullable=False)
     status = Column(String(255), nullable=False, server_default="Pending")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"),nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -1093,6 +1109,8 @@ class Inpatient_lab_request_payment(Base):
     amount_paid = Column(Float,nullable=False)
     date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
     status = Column(String(255), nullable=False, server_default="Active")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -1118,6 +1136,8 @@ class Inpatient_prescription_payment(Base):
     amount_paid = Column(Float,nullable=False)
     date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
     status = Column(String(255), nullable=False, server_default="Active")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -1142,6 +1162,8 @@ class Inpatient_treatment_payment(Base):
     amount_paid = Column(Float,nullable=False)
     date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
     status = Column(String(255), nullable=False, server_default="Active")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -1166,6 +1188,8 @@ class Inpatient_surgery_payment(Base):
     amount_paid = Column(Float,nullable=False)
     date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
     status = Column(String(255), nullable=False, server_default="Active")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -1190,6 +1214,8 @@ class Inpatient_room_payment(Base):
     amount_paid = Column(Float,nullable=False)
     date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
     status = Column(String(255), nullable=False, server_default="Active")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -1214,6 +1240,8 @@ class Outpatient_lab_request_payment(Base):
     amount_paid = Column(Float,nullable=False)
     date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
     status = Column(String(255), nullable=False, server_default="Active")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -1238,6 +1266,8 @@ class Outpatient_treatment_payment(Base):
     amount_paid = Column(Float,nullable=False)
     date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
     status = Column(String(255), nullable=False, server_default="Active")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -1285,6 +1315,8 @@ class Purchase_order_vendor_payment(Base):
     payment_method_id = Column(CHAR(36), ForeignKey("payment_methods.id"),nullable=False)
 
     status = Column(String(255), nullable=False, server_default="Active")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -1310,6 +1342,8 @@ class Purchase_order_payment(Base):
     amount_paid = Column(Float,nullable=False)
     date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
     status = Column(String(255), nullable=False, server_default="Active")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -1351,6 +1385,8 @@ class Bank_account(Base):
     initial_amount = Column(Float,nullable=False)
     status = Column(String(255), nullable=False, server_default="Active")
 
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
+
     created_by = Column(CHAR(36), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
     updated_by = Column(CHAR(36), ForeignKey("users.id"), nullable=True)
@@ -1368,6 +1404,8 @@ class Deposit(Base):
     description = Column(Text,nullable=False)
     date_of_deposit = Column(Date,nullable=False)
     status = Column(String(255), nullable=False, server_default="Active")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -1385,6 +1423,8 @@ class Withdrawal(Base):
     description = Column(Text,nullable=False)
     date_of_withdrawal = Column(Date,nullable=False)
     status = Column(String(255), nullable=False, server_default="Active")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
     
     created_by = Column(CHAR(36), ForeignKey("users.id"), nullable=False)
     created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
@@ -1641,6 +1681,9 @@ class JournalEntry(Base):
     je_journalized_by = relationship("User", foreign_keys=[journalized_by])
     je_posted_by = relationship("User", foreign_keys=[posted_by])
     je_updated_by = relationship("User", foreign_keys=[updated_by])
+
+    data_source = Column(VARCHAR(255))
+    data_source_date = Column(DateTime)
     
     mysql_engine = 'InnoDB'
     mysql_charset = 'utf8mb4'
@@ -2737,6 +2780,8 @@ class AR_Utilities(Base):
     due_date= Column(Date, nullable=False)				
     payment_method = Column(String(255), nullable=False)
     notes = Column(String(255), nullable=False)
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
 
     status = Column(String(255), nullable=False, server_default="Active")
     created_by = Column(CHAR(36), ForeignKey("ar_users.id"),nullable=False)

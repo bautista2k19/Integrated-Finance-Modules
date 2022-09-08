@@ -394,7 +394,7 @@ $(function () {
         '.col'
       );
     //Display error if invalid
-    } else if (/[^a-z\d_\-]/gi.test(this.value) ) {
+    } else if (/[^a-z\d_\-\/]/gi.test(this.value) ) {
       this.previousElementSibling.classList.add('text-danger');
       displayError(
         this, 

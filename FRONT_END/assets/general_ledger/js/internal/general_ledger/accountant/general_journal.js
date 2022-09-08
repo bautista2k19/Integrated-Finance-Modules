@@ -1822,8 +1822,19 @@ const viewSourceData = (data=JSON.parse(data), isAdded=false) => {
                 //description
                 data.description
               }</dd>
+              <dt class="col-sm-2">Status:</dt>
+              <dd class="col-sm-10">${
+                //status
+                data.status
+              }</dd>
             </dl>
-            
+            <input id="data_source_id" type="hidden" value="${data.id}" />
+            <input id="data_source_date" type="hidden" value="${data.updated_at}" />
+            <input id="data_source_status" type="hidden" value="${data.status}" />
+            <input id="data_source_status2" type="hidden" value="${data.status2}" />
+            <input id="data_source_table_name" type="hidden" value="${data.table_name}" />
+            <input id="data_source_entry_type" type="hidden" value="${data.entry_type}" />
+            <input id="data_source_is_adjustable" type="hidden" value="${data.is_adjustable}" />
           </div>
           <!-- /card-body -->
             <div class="text-right" style="background-color:rgba(0,0,0,.03);border-top:0 solid rgba(0,0,0,.125);padding:0.5rem 0.75rem;">
@@ -1832,9 +1843,11 @@ const viewSourceData = (data=JSON.parse(data), isAdded=false) => {
                 class="btn btn-sm btn-default" 
                 onclick="(() => {
                   if ( document.querySelectorAll('#source-data button').length == 1 ) {
-                    $('#data_source').val(null).trigger('change');
+                    //$('#data_source').val(null).trigger('change');
                     removeSourceDocument();
                     elements.date.value = currentDate;
+                    if ( formTable ) formTable.clear().draw();
+                    loadFormTable();
                     elements.explanation.value = '';
                   }
                   document.getElementById('source-data')?.remove();
@@ -1880,6 +1893,34 @@ const addSourceData = (data, isViewed=true) => {
   }
   //date
   elements.date.value = `${data.date.slice(6)}-${data.date.slice(0,2)}-${data.date.slice(3,5)}`;
+
+  //Reset form table
+  if ( formTable ) formTable.clear().draw();
+  loadFormTable();
+
+  //debit
+  console.log(data.debit_account_title)
+  const debitAccount = $(`#debit_account option:contains(${data.debit_account_title})`).val();
+  console.log(debitAccount)
+  addAccount(
+    debitAccount,
+    data.debit_account_title,
+    debitAccount.split('&')[1],
+    true,
+    data.amount
+  );
+
+  //credit
+  const creditAccount = $(`#credit_account option:contains(${data.credit_account_title})`).val();
+  console.log(creditAccount)
+  addAccount(
+    creditAccount,
+    data.credit_account_title,
+    creditAccount.split('&')[1],
+    false,
+    data.amount
+  );
+  
   //explanation
   elements.explanation.value = data.description;
 };
@@ -2007,11 +2048,15 @@ $(function () {
         makeFetch(
           this.value,
           options,
-          ((responseData) => {
+          ((responseData) => {console.log(responseData)
             document.getElementById('source-data-table')?.closest('div.row')?.remove();
             document.getElementById('errorMessage')?.remove();
             document.getElementById('source-data')?.remove();
-            if ( responseData.length ) {
+            if ( responseData != null && responseData.length ) {
+              //Reset form table
+              if ( formTable ) formTable.clear().draw();
+              loadFormTable();
+              
               let sourceDataTable = 
                 `<div class="row">
                   <div class="col-auto table-responsive">
@@ -2022,17 +2067,260 @@ $(function () {
                           <th>Source Document</th>
                           <th>Amount</th>
                           <th>Description</th>
+                          <th>Status</th>
                           <th></th>
                         </tr>
                       </thead>
                       <tbody>`;
+              const tableName = this.value.substring(this.value.lastIndexOf('\/')+1).toLowerCase();
               responseData.forEach((data) => {
+                let date, amount, description = '';
+
+                //For bills
+                if ( /bill/gi.test(tableName) ) {
+                  date = (
+                    tableName == "purchase_order_vendor_bill"
+                    ? data.date_of_billing
+                    : (
+                        tableName == "prescription_bill"
+                        ? data.billing_date
+                        : data.created_at
+                    )
+                  );
+                  amount = (
+                    tableName == "purchase_order_vendor_bill"
+                    ? data.total_vendor_bill
+                    : (
+                        tableName == "purchase_order_bill"
+                        ? data.total_bill
+                        : data.total_amount
+                      )
+                  );
+                  if ( tableName == "purchase_order_vendor_bill" ) {
+                    description = `Due date is ${data.due_date}`;
+                  }
+                }
+
+                //For payments
+                else if ( /payment/gi.test(tableName) ) {
+                  date = data.date_of_payment;
+                  amount = (
+                    tableName == "purchase_order_vendor_payment"
+                    ? data.total_amount_paid
+                    : data.amount_paid
+                  );
+                }
+
+                //For other transactions
+                else {
+                  date = (
+                    tableName == "sales"
+                    ? data.date
+                    : tableName == "deposit"
+                      ? data.date_of_deposit
+                      : tableName == "withdrawal"
+                        ? data.date_of_withdrawal
+                        : data.created_at
+                  ); 
+                  amount = (
+                    tableName == "sales"
+                    ? data.total_amount
+                    : tableName == "ar_utilities"
+                      ? data.utility_bill
+                      : data.amount
+                  );
+                  if ( tableName == "ar_utilities" ) {
+                    description = data.notes;
+                  } else if ( /(deposit|withdrawal)/gi.test(tableName) ) {
+                    description = data.description;
+                  }
+                }
+
+                if ( date.lastIndexOf('T') > -1 ) {
+                  date = date.substring(0, date.lastIndexOf('T'));
+                }
+
+                const [date_year, date_month, date_day] = date.split('-');
+              
+                data = {
+                  id: data.id,
+                  //date: `${date_month}/${date_day}/${date_year}`,
+                  date: `09/${date_day}/${date_year}`,
+                  source_document: data.source_document,
+                  amount: amount,
+                  status: data.status,
+                  status2: data.status2,
+                  description: description,
+                  updated_at: data.updated_at
+                };
+
+                //purchase_order_bill
+                if ( /(purchase_order_vendor_bill|purchase_order_bill)/gi.test(tableName) ) {
+                  if ( /(pending|active|approved|incomplete|incompleted|not complete|not completed)/gi.test(data.status) ) {
+                    data.credit_account_title = 'Purchase Orders Payable';
+                    data.debit_account_title = 'Purchase Order Expense';
+                    data.entry_type = 'Initial';
+                    data.is_adjustable = true;
+                  } else {
+                    data.credit_account_title = 'Cash';
+                    data.debit_account_title = 'Purchase Orders Payable';
+                    data.entry_type = 'Adjusting';
+                    data.is_adjustable = false;
+                  }
+                  if ( tableName == "purchase_order_vendor_bill" ) data.table_name = 'purchase_order_vendor_bills';
+                  else data.table_name = 'purchase_order_bills';
+                //purchase_order_payment
+                } else if ( /(purchase_order_vendor_payment|purchase_order_payment)/gi.test(tableName) ) {
+                  data.credit_account_title = 'Cash';
+                  data.debit_account_title = 'Purchase Orders Payable';
+                  data.entry_type = 'Adjusting';
+                  data.is_adjustable = false;
+                  if ( tableName == "purchase_order_vendor_payment" ) data.table_name = 'purchase_order_vendor_payments';
+                  else data.table_name = 'purchase_order_payments';
+                //treatment_bill
+                } else if ( tableName == "treatment_bill" ) {
+                  if ( /(pending|active|approved|incomplete|incompleted|not complete|not completed)/gi.test(data.status) ) {
+                    data.debit_account_title = 'Accounts Receivable';
+                    data.credit_account_title = 'Treatment Fee';
+                    data.entry_type = 'Initial';
+                    data.is_adjustable = true;
+                  } else {
+                    data.debit_account_title = 'Cash';
+                    data.credit_account_title = 'Accounts Receivable';
+                    data.entry_type = 'Adjusting';
+                    data.is_adjustable = false;
+                  }
+                  data.table_name = 'treatment_bills';
+                //surgery_bill
+                } else if ( tableName == 'surgery_bill' ) {
+                  if ( /(pending|active|approved|incomplete|incompleted|not complete|not completed)/gi.test(data.status) ) {
+                    data.debit_account_title = 'Accounts Receivable';
+                    data.credit_account_title = 'Surgery Fee';
+                    data.entry_type = 'Initial';
+                    data.is_adjustable = true;
+                  } else {
+                    data.debit_account_title = 'Cash';
+                    data.credit_account_title = 'Accounts Receivable';
+                    data.entry_type = 'Adjusting';
+                    data.is_adjustable = false;
+                  }
+                  data.table_name = 'surgery_bills';
+                //room_bill
+                } else if ( tableName == 'room_bill' ) {
+                  if ( /(pending|active|approved|incomplete|incompleted|not complete|not completed)/gi.test(data.status) ) {
+                    data.debit_account_title = 'Accounts Receivable';
+                    data.credit_account_title = 'Room Fee';
+                    data.entry_type = 'Initial';
+                    data.is_adjustable = true;
+                  } else {
+                    data.debit_account_title = 'Cash';
+                    data.credit_account_title = 'Accounts Receivable';
+                    data.entry_type = 'Adjusting';
+                    data.is_adjustable = false;
+                  }
+                  data.table_name = 'room_bills';
+                //lab_request_bill
+                } else if ( tableName == 'lab_request_bill' ) {
+                  if ( /(pending|active|approved|incomplete|incompleted|not complete|not completed)/gi.test(data.status) ) {
+                    data.debit_account_title = 'Accounts Receivable';
+                    data.credit_account_title = 'Laboratory Fee';
+                    data.entry_type = 'Initial';
+                    data.is_adjustable = true;
+                  } else {
+                    data.debit_account_title = 'Cash';
+                    data.credit_account_title = 'Accounts Receivable';
+                    data.entry_type = 'Adjusting';
+                    data.is_adjustable = false;
+                  }
+                  data.table_name = 'lab_request_bills';
+                //prescription_bill
+                } else if ( tableName == 'prescription_bill' ) {
+                  if ( /(pending|active|approved|incomplete|incompleted|not complete|not completed)/gi.test(data.status) ) {
+                    data.debit_account_title = 'Accounts Receivable';
+                    data.credit_account_title = 'Prescription Fee';
+                    data.entry_type = 'Initial';
+                    data.is_adjustable = true;
+                  } else {
+                    data.debit_account_title = 'Cash';
+                    data.credit_account_title = 'Accounts Receivable';
+                    data.entry_type = 'Adjusting';
+                    data.is_adjustable = false;
+                  }
+                  data.table_name = 'prescription_bills';
+                //inpatient_prescription_payment
+                } else if ( tableName == "inpatient_prescription_payment" ) {
+                  data.credit_account_title = 'Prescription Fee';
+                  data.debit_account_title = 'Cash';
+                  data.entry_type = 'Adjusting';
+                  data.is_adjustable = false;
+                  data.table_name = 'inpatient_prescription_payments';
+                //inpatient_surgery_payment
+                } else if ( tableName == "inpatient_surgery_payment" ) {
+                  data.credit_account_title = 'Surgery Fee';
+                  data.debit_account_title = 'Cash';
+                  data.entry_type = 'Adjusting';
+                  data.is_adjustable = false;
+                  data.table_name = 'inpatient_surgery_payments';
+                //inpatient_room_payment
+                } else if ( tableName == "inpatient_room_payment" ) {
+                  data.credit_account_title = 'Room Fee';
+                  data.debit_account_title = 'Cash';
+                  data.entry_type = 'Adjusting';
+                  data.is_adjustable = false;
+                  data.table_name = 'inpatient_room_payments';
+                //lab_request_payment
+                } else if ( /(inpatient_lab_request_payment|outpatient_lab_request_payment)/gi.test(tableName) ) {
+                  data.credit_account_title = 'Laboratory Fee';
+                  data.debit_account_title = 'Cash';
+                  data.entry_type = 'Adjusting';
+                  data.is_adjustable = false;
+                  if ( tableName == "inpatient_lab_request_payment" ) data.table_name = 'inpatient_lab_request_payments';
+                  else data.table_name = 'outpatient_lab_request_payments';
+                //treatment_payment
+                } else if ( /(inpatient_treatment_payment|outpatient_treatment_payment)/gi.test(tableName) ) {
+                  data.credit_account_title = 'Treatment Fee';
+                  data.debit_account_title = 'Cash';
+                  data.entry_type = 'Adjusting';
+                  data.is_adjustable = false;
+                  if ( tableName == "inpatient_treatment_payment" ) data.table_name = 'inpatient_treatment_payments';
+                  else data.table_name = 'outpatient_treatment_payments';
+                //deposit
+                } else if ( tableName == "deposit" ) {
+                  data.credit_account_title = 'Homies, Capital';
+                  data.debit_account_title = 'Cash';
+                  data.entry_type = 'Initial';
+                  data.is_adjustable = false;
+                  data.table_name = 'deposits';
+                //withdrawal
+                } else if ( tableName == "withdrawal" ) {
+                  data.credit_account_title = 'Cash';
+                  data.debit_account_title = 'Homies, Withdrawal';
+                  data.entry_type = 'Initial';
+                  data.is_adjustable = false;
+                  data.table_name = 'withdrawals';
+                //ar_utilities
+                } else if ( tableName == "ar_utilities" ) {
+                  if ( /(pending|active|approved|incomplete|incompleted|not complete|not completed)/gi.test(data.status) ) {
+                    data.credit_account_title = 'Utilities Payable';
+                    data.debit_account_title = 'Utilities Expense';
+                    data.entry_type = 'Initial';
+                    data.is_adjustable = true;
+                  } else {
+                    data.credit_account_title = 'Cash';
+                    data.debit_account_title = 'Utilities Payable';
+                    data.entry_type = 'Adjusting';
+                    data.is_adjustable = false;
+                  }
+                  data.table_name = 'ar_utilities';
+                }
+              
                 sourceDataTable += 
                   `<tr>
                     <td>${data.date}</td>
                     <td>${(data.source_document!=undefined?'<i class="fas fa-file"></i>':'')}</td>
                     <td>${formatAmount(data.amount)}</td>
                     <td>${data.description}</td>
+                    <td>${data.status}</td>
                     <td class="text-center">
                       <div class="dropdown">
                         <a class="btn btn-sm btn-default" role="button" id="dropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -2063,6 +2351,13 @@ $(function () {
               document.getElementById('data_source').closest('div.form-group').insertAdjacentElement('afterend', errorMessage);
               formModalBody.animate({scrollTop: document.getElementById('errorMessage').offsetTop-10}, 'slow');
             }
+          }),
+          (() => {
+            if ( document.querySelector('.toast.toast-error') != null ) {
+              document.getElementById('source-data-table')?.closest('div.row')?.remove();
+              document.getElementById('errorMessage')?.remove();
+              document.getElementById('source-data')?.remove();
+            }
           })
         );
       }
@@ -2076,6 +2371,7 @@ $(function () {
       if ( noUploadedFile 
         && elements.source_document_filename.value == ""
         && !elements.source_document_filename.classList.contains('is-invalid')
+        && $('#data_source').val() == ""
       ) {
         noUploadedFile = undefined;
         addSourceDocumentError('Source document is required.');
@@ -2091,7 +2387,7 @@ $(function () {
   });
   document.getElementById('source_document_file_cancel').addEventListener('click', function () {
     removeSourceDocument();
-    addSourceDocumentError('Source document is required.');
+    if ( $('#data_source').val() == "" ) addSourceDocumentError('Source document is required.');
   });
   
   
@@ -2383,7 +2679,9 @@ const validateFormElements = (formData) => {
   }
 
   //source_document
-  if ( !/^(Depreciation|P \* R \* T)$/i.test(document.getElementById('method')?.value) ) {console.log('here')
+  if ( !/^(Depreciation|P \* R \* T)$/i.test(document.getElementById('method')?.value) 
+    && $('#data_source').val() == ""
+  ) {console.log('here')
     if ( elements.source_document_filename.classList.contains('is-invalid') ) {
       validationResult['hasError'] = true;
       validationResult['scrollTop'] = elements.source_document_filename.offsetTop-10;
@@ -2640,6 +2938,17 @@ const prepareAndSendData = (formData) => {
     if ( document.getElementById('posted_at') ) formData.set('posted_at', document.getElementById('posted_at').value);
     if ( document.getElementById('posted_by') ) formData.set('posted_by', document.getElementById('posted_by').value);
     if ( saved_filename != undefined ) formData.set('saved_filename', saved_filename);
+  }
+
+  //For data source
+  if ( document.querySelectorAll('#source-data button').length == 1 ) {
+    formData.set('data_source', document.getElementById('data_source_id').value);
+    formData.set('data_source_date',  document.getElementById('data_source_date').value);
+    formData.set('data_source_status', document.getElementById('data_source_status').value);
+    formData.set('data_source_status2', document.getElementById('data_source_status2').value);
+    formData.set('data_source_table_name', document.getElementById('data_source_table_name').value);
+    formData.set('entry_type', document.getElementById('data_source_entry_type').value);
+    formData.set('is_adjustable', document.getElementById('data_source_is_adjustable').value);
   }
 
   for(const data of formData.entries()) {

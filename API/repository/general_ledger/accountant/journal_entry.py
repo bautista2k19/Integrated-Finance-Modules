@@ -1,4 +1,5 @@
 #Module
+from audioop import add
 from fastapi import HTTPException
 from sqlalchemy import and_
 from uuid import uuid4
@@ -90,6 +91,117 @@ def get_table_data(request: dict):
 
 
 
+def add_entry(data, user, session, id, originating_entry=None):
+    #Manipulate originating entry
+    if data['originating_entry'] != None:
+        amount_column, adjustable_column = list(data['originating_entry']['account'].keys())
+        #Update adjusted account
+        sql = f"""
+            UPDATE journal_accounts
+              SET {amount_column} = :{amount_column},
+                {adjustable_column} = :{adjustable_column}
+              WHERE id = :id"""
+        session.execute(sql, {
+            amount_column: data['originating_entry']['account'][amount_column],
+            adjustable_column: data['originating_entry']['account'][adjustable_column],
+            'id': data['adjusted_account']
+        })
+        #Update originating entry
+        sql = """
+            UPDATE journal_entries
+              SET is_adjustable = (
+                CASE
+                  WHEN EXISTS (
+                    SELECT 1 FROM journal_accounts
+                      WHERE (is_adjustable = 1
+                        OR is_interest_adjustable = 1)
+                        AND journal_entry = :id
+                  )
+                    THEN 1
+                  ELSE 0
+                END
+              )
+              WHERE id = :id"""
+        session.execute(sql, {'id': data['originating_entry']['id']})
+        if originating_entry == None:
+          data['originating_entry'] = data['originating_entry']['id']
+    #Create journal_entries
+    sql = """
+        INSERT INTO journal_entries(
+          id,
+          source_document_path,
+          entry_type,
+          date,
+          is_adjustable,
+          explanation,
+          status,
+          originating_entry,
+          adjusted_account,
+          adjusted_balance,
+          journalized_by,
+          posted_at,
+          posted_by,
+          data_source,
+          data_source_date
+        ) VALUES(
+          :id,
+          :source_document_path,
+          :entry_type,
+          :date,
+          :is_adjustable,
+          :explanation,
+          :status,
+          :originating_entry,
+          :adjusted_account,
+          :adjusted_balance,
+          :journalized_by,
+          :posted_at,
+          :posted_by,
+          :data_source,
+          :data_source_date)"""
+    data['id'] = id
+    data['journalized_by'] = user
+    data['posted_at'] = (datetime.now() if data['status'] == 'Posted' else None)
+    data['posted_by'] = (user if data['status'] == 'Posted' else None)
+    data['data_source_date'] = None if data['data_source_date'] == 'null' else data['data_source_date']
+    data['data_source'] = None if data['data_source'] == 'null' else data['data_source']
+    session.execute(sql, data)
+    #Create journal_accounts
+    for account in data['new_accounts']:
+        account['id'] = uuid4()
+        account['journal_entry'] = data['id']
+        sql = """
+            INSERT INTO journal_accounts(
+              id,
+              account_title,
+              pr,
+              debit,
+              credit,
+              is_adjustable,
+              salvage_value,
+              useful_life,
+              rate,
+              month_no,
+              balance,
+              interest,
+              is_interest_adjustable,
+              journal_entry
+            ) VALUES(
+              :id,
+              :account_title,
+              :pr,
+              :debit,
+              :credit,
+              :is_adjustable,
+              :salvage_value,
+              :useful_life,
+              :rate,
+              :month_no,
+              :balance,
+              :interest,
+              :is_interest_adjustable,
+              :journal_entry)"""
+        session.execute(sql, account)
 
 
 """ CREATE """
@@ -98,109 +210,63 @@ def create(data: dict, user: str):
     with db.session() as session:
         session.begin()
         try:
-            #Manipulate originating entry
-            if data['originating_entry'] != None:
-                amount_column, adjustable_column = list(data['originating_entry']['account'].keys())
-                #Update adjusted account
-                sql = f"""
-                    UPDATE journal_accounts
-                      SET {amount_column} = :{amount_column},
-                        {adjustable_column} = :{adjustable_column}
-                      WHERE id = :id"""
-                session.execute(sql, {
-                    amount_column: data['originating_entry']['account'][amount_column],
-                    adjustable_column: data['originating_entry']['account'][adjustable_column],
-                    'id': data['adjusted_account']
-                })
-                #Update originating entry
-                sql = """
-                    UPDATE journal_entries
-                      SET is_adjustable = (
-                        CASE
-                          WHEN EXISTS (
-                            SELECT 1 FROM journal_accounts
-                              WHERE (is_adjustable = 1
-                                OR is_interest_adjustable = 1)
-                                AND journal_entry = :id
-                          )
-                            THEN 1
-                          ELSE 0
-                        END
-                      )
-                      WHERE id = :id"""
-                session.execute(sql, {'id': data['originating_entry']['id']})
-                data['originating_entry'] = data['originating_entry']['id']
-            #Create journal_entries
-            sql = """
-                INSERT INTO journal_entries(
-                  id,
-                  source_document_path,
-                  entry_type,
-                  date,
-                  is_adjustable,
-                  explanation,
-                  status,
-                  originating_entry,
-                  adjusted_account,
-                  adjusted_balance,
-                  journalized_by,
-                  posted_at,
-                  posted_by
-                ) VALUES(
-                  :id,
-                  :source_document_path,
-                  :entry_type,
-                  :date,
-                  :is_adjustable,
-                  :explanation,
-                  :status,
-                  :originating_entry,
-                  :adjusted_account,
-                  :adjusted_balance,
-                  :journalized_by,
-                  :posted_at,
-                  :posted_by)"""
-            data['id'] = uuid4()
-            data['journalized_by'] = user
-            data['posted_at'] = (datetime.now() if data['status'] == 'Posted' else None)
-            data['posted_by'] = (user if data['status'] == 'Posted' else None)
-            session.execute(sql, data)
-            #Create journal_accounts
-            for account in data['new_accounts']:
-                account['id'] = uuid4()
-                account['journal_entry'] = data['id']
-                sql = """
-                    INSERT INTO journal_accounts(
-                      id,
-                      account_title,
-                      pr,
-                      debit,
-                      credit,
-                      is_adjustable,
-                      salvage_value,
-                      useful_life,
-                      rate,
-                      month_no,
-                      balance,
-                      interest,
-                      is_interest_adjustable,
-                      journal_entry
-                    ) VALUES(
-                      :id,
-                      :account_title,
-                      :pr,
-                      :debit,
-                      :credit,
-                      :is_adjustable,
-                      :salvage_value,
-                      :useful_life,
-                      :rate,
-                      :month_no,
-                      :balance,
-                      :interest,
-                      :is_interest_adjustable,
-                      :journal_entry)"""
-                session.execute(sql, account)
+            
+                if data['data_source_status2'].lower() == 'not journalized':
+                    
+                    session.execute(f""" UPDATE {data['data_source_table_name']} 
+                        SET status2 = 'Journalized' 
+                        WHERE id = '{data['data_source']}' """)
+
+                    if data['data_source_table_name'] == 'ar_utilities':
+                        #'pending','active','approved'
+                        if data['data_source_status'].lower() in ['pending','active','approved']:
+                            add_entry(data, user, session, uuid4())
+                            
+                        #'paid','incomplete','incompleted','complete','completed','not complete','not completed'
+                        elif data['data_source_status'].lower() in ['paid','incomplete','incompleted','complete','completed','not complete','not completed']:
+                            
+                            id = uuid4()
+                            
+                            #From incomplete
+                            # from_incomplete_data['originating_entry']['account'] = {
+                            #   'balance': amount,
+                            #   'is_adjustable': False if data['data_source_status'].lower() in ['paid','complete','completed'] else True
+                            # }
+                            data['entry_type'] = 'Initial'
+                            data['is_adjustable'] = True
+                            from_incomplete_data = data.copy()
+                            add_entry(from_incomplete_data, user, session, uuid4(), id)
+                            
+                            data['entry_type'] = 'Adjusting'
+                            data['is_adjustable'] = False
+                            
+                            amount = data['new_accounts'][0]['debit'] if float(data['new_accounts'][0]['debit']) > 0 else data['new_accounts'][0]['credit']
+                            
+                            account = session.execute(f""" SELECT id, account_number FROM chart_accounts WHERE account_title = 'Utilities Expense' """).first()
+                            data['new_accounts'][0]['account_title'] = account[0]
+                            data['new_accounts'][0]['pr'] = account[1]
+                            data['new_accounts'][0]['debit'] = amount
+                            data['new_accounts'][0]['credit'] = 0
+                            data['new_accounts'][0]['balance'] = amount
+                            data['new_accounts'][0]['is_adjustable'] = False
+                            
+                            account = session.execute(f""" SELECT id, account_number FROM chart_accounts WHERE account_title = 'Utilities Payable' """).first()
+                            data['new_accounts'][1]['account_title'] = account[0]
+                            data['new_accounts'][1]['pr'] = account[1]
+                            data['new_accounts'][1]['debit'] = 0
+                            data['new_accounts'][1]['credit'] = amount
+                            data['new_accounts'][1]['balance'] = amount
+                            data['new_accounts'][1]['is_adjustable'] = False if data['data_source_status'].lower() in ['paid','complete','completed'] else True
+        
+                            #Something pending
+                            add_entry(data, user, session, id)
+                    else:
+                        add_entry(data, user, session, uuid4())
+                #'incomplete','incompleted','not complete','not completed'
+                elif data['data_source_table_name'] == 'ar_utilities' and data['data_source_status'].lower() in ['incomplete','incompleted','not complete','not completed']:
+                    add_entry(data, user, session, uuid4())
+                elif data['data_source_status2'] is None:
+                    add_entry(data, user, session, uuid4())
         except:
             session.rollback()
             raise HTTPException(status_code=500, detail='Internal Server Error.')
@@ -354,7 +420,9 @@ def overwrite(old_id: str, data: dict, user: str):
                   posted_by,
                   updated_at,
                   updated_by,
-                  replaced_record
+                  replaced_record,
+                  data_source,
+                  data_source_date
                 ) VALUES(
                     :id,
                     :source_document_path,
@@ -372,7 +440,9 @@ def overwrite(old_id: str, data: dict, user: str):
                     :posted_by,
                     :updated_at,
                     :updated_by,
-                    :replaced_record)""" 
+                    :replaced_record,
+                    :data_source,
+                    :data_source_date)""" 
             data['id'] = uuid4()
             data['journalized_at'] = datetime.strptime(data['journalized_at'], '%Y-%m-%dT%H:%M:%S')
             data['posted_at'] = (
@@ -396,6 +466,7 @@ def overwrite(old_id: str, data: dict, user: str):
             data['updated_at'] = datetime.now()
             data['updated_by'] = user
             data['replaced_record'] = old_id
+            data['data_source_date'] = None if data['data_source_date'] == 'null' else data['data_source_date']
             session.execute(sql, data)
             
             #Overwrite journal_accounts
@@ -460,6 +531,12 @@ def overwrite(old_id: str, data: dict, user: str):
                     DELETE FROM journal_entries
                       WHERE originating_entry = :originating_entry"""
                 session.execute(sql, {'originating_entry': old_id})
+
+            sql = """ UPDATE 
+                SET status2 = 'Journalized'
+                WHERE id = :data_source """
+            session.execute(sql, {'data_source': data['data_source']})
+            
         except:
             session.rollback()
             session.close()

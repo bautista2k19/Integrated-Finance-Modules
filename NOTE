@@ -1,16 +1,13 @@
-#accountId
-from cmath import log
-from lib2to3.pgen2 import token
 
-
-id
-pr
-debitOrCredit
-[type]
 
 
 
 #remove the selected account
+
+from binascii import Incomplete
+from cgitb import reset
+from http.client import OK
+
 
 //agents: 
     1. entry_type, 
@@ -191,20 +188,6 @@ na.credit
 
 
 
-    id
-    username
-    user_type
-
-
-
-    id
-    username
-    user_type
-   
-    password
-    employee_id
-    employee_information = relationship("Employee", primaryjoin="and_(User.employee_id==Employee.id)", back_populates="user_credentials")
-
 
 
 
@@ -217,15 +200,6 @@ na.credit
 
 
 
-  access_token = token.create_access_token(
-        data={"sub": user.username} #, expires_delta=access_token_expires
-    )
-    return {"data":{user},"access_token": access_token, "token_type": "bearer"}
-
-      
-                 
-   
-    
     
     
 					
@@ -236,46 +210,6 @@ na.credit
    
     
 
-
- id            = Column(CHAR(36),     primary_key=True)
-    profile_pic_url    = Column(VARCHAR(255))   
-    username              = Column(VARCHAR(255), nullable=False, unique=True, index=True)
-    password           = Column(VARCHAR(255), nullable=False)
-    mobile             = Column(VARCHAR(50),  nullable=False, unique=True)
-    landline           = Column(VARCHAR(50))
-    first_name         = Column(VARCHAR(50),  nullable=False)
-    last_name          = Column(VARCHAR(50),  nullable=False)
-    middle_name        = Column(VARCHAR(50))
-    user_type          = Column(VARCHAR(50),  nullable=False, server_default="Admin")
-   
-    status             = Column(VARCHAR(50),  nullable=False, server_default="Active")
-    created_at         = Column(TIMESTAMP(2), nullable=False, server_default=func.current_timestamp())
-    updated_at         = Column(TIMESTAMP(2),                       onupdate=func.current_timestamp())
-    created_by         = Column(CHAR(36),     ForeignKey("users.id"))
-    updated_by         = Column(CHAR(36),     ForeignKey("users.id"))
-
-    u_created_by        = relationship("User", remote_side=id, foreign_keys=[created_by])
-    u_updated_by        = relationship("User", remote_side=id, foreign_keys=[updated_by])
-    
-
-
-
-
-   accountant@email.com
-admin123
-
-
-
- id =                        
- email = accountant@email.com      
- password = $2b$12$IDNn2QNLC654dhEBo8XZWOutKe9rPHvYbtEocJHgWPrGWpsRFlAGe
- user_type_id = USERTYPE-001 
- employee_id = EMP-001 
- status = Active 
- created_by = NULL 
- created_at = 2021-11-18 22:21:02
- updated_by = NULL
- updated_at = NULL
 
 
 
@@ -434,6 +368,1320 @@ utilities
   cash collec
 
 
-  http://localhost:8000/cms/user/dashboard
-  http://localhost:8000/cms/user/dasboard
 
+
+
+medical supplies
+surgery supplies
+laboratory supplies
+IT supplies
+construction supplies
+Office supplies
+electrical supplies
+transport supplies
+
+utilities
+
+bry ito yung mga product category na galing procurement. possible na gamitin for accounts sa vendor bills
+Enter
+Angeline
+Angeline Balbarino
+ayan yung mga possible na bayaran ni homies for cash then yung utilities expense
+
+
+
+
+
+
+inpatient_payment -> jan inistore lahat ng payment ni inpatient regardless kung cash or check. cash in to 
+
+outpatient _payment -> ito naman bayad ni outpatient, walang bill dito kasi walang bill pag outpatient. cash in din
+
+
+
+
+
+COLLECTION (CASH IN)
+
+patient_cash_payments, patient_check_payments
+
+
+inpatient_payments
+
+inpatient_lab_request_payments
+inpatient_prescription_payments
+inpatient_treatment_payments
+inpatient_surgery_payments
+inpatient_room_payments
+outpatient_lab_request_payments
+outpatient_treatment_payments
+deposits
+
+
+
+
+DISBURSEMENT (CASH OUT)
+
+// hospital expense
+hospital_cash_payments
+hospital_check_payments
+
+// 
+purchase_order_vendor_payments
+
+//
+purchase_order_payments
+withdrawals
+
+
+
+
+
+mga transaction na narerecord namin so far, sa room bills, treatment bill (mga treatment na inooffer), pharmacy (mga medicines)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+// CANDIDATES
+    
+#Pharmacy
+class Medicine(Base): 1017
+class Medical_supply(Base): 1007
+class Prescription_bill(Base): 4014
+class Sales(Base): 4001
+    
+#AP & AR
+class Inpatient_bill(Base):
+class Lab_request_bill(Base):
+class Treatment_bill(Base):
+class Surgery_bill(Base):
+class Room_bill(Base):
+class  Purchase_order_vendor_bill(Base):
+class  Purchase_order_bill(Base):
+    
+#CMS
+class Patient_cash_payment(Base):
+class Patient_check_payment(Base):
+class Hospital_cash_payment(Base):
+class Hospital_check_payment(Base):
+class Inpatient_payment(Base):
+class Inpatient_lab_request_payment(Base):
+class Inpatient_prescription_payment(Base):
+class Inpatient_treatment_payment(Base):
+class Inpatient_surgery_payment(Base):
+class Inpatient_room_payment(Base):
+class Outpatient_lab_request_payment(Base):
+class Outpatient_treatment_payment(Base):
+class Purchase_order_vendor_payment(Base):
+class Purchase_order_payment(Base):
+class Bank_account(Base):   
+class Deposit(Base):     
+class Withdrawal(Base):   
+    
+
+
+// UNSURE
+
+#Procurement
+class Vendor_proposal(Base): // unsure
+class Vendor_bidding_item(Base): // unsure
+class Purchase_order_detail(Base): // unsure
+
+
+ Inpatient_payment
+ Inpatient_bill
+
+
+
+
+// BILLS => PAYMENTS
+
+class Prescription_bill(Base): 4014 => Inpatient_prescription_payment
+class Inpatient_bill(Base): => class Inpatient_payment(Base):
+
+class Lab_request_bill(Base): => Inpatient_lab_request_payment
+class Treatment_bill(Base): => Inpatient_treatment_payment
+class Surgery_bill(Base): => Inpatient_surgery_payment
+class Room_bill(Base): => Inpatient_room_payment
+class  Purchase_order_vendor_bill(Base): => Purchase_order_vendor_payment
+class  Purchase_order_bill(Base): => Purchase_order_payment
+
+
+
+
+
+// CASH-IN
+
+class Sales(Base): 4001
+
+// CASH-OUT
+
+
+
+
+
+Yung prescription bill, 
+  bill sya for medicine and medical supply na ginamit nya. 
+  Medicines na priniscribed sa kanya ng doctor, 
+  then medical supplies na ginamit sa kanya like siguro mga gloves ganon, syringe kasama rin kasi yun sa babayaran.
+
+Yung inpatient bill naman, 
+  over all bill na yan ng inpatient meaning sama sama na jan yung sa 
+  lab request, treatment, surgery and room bill. 
+
+magkaiba yung inpatient sa outpatient, inpatient naconfine sa hospital where as outpatient hindi. 
+
+yung lab_request bill, 
+  bill naman sya for laboratory na mangagaling sana sa core-treatment management. 
+  lahat ng laboratory na ginawa sa kanya like blood test ganern. then fees.
+
+tapos yung treatment bill naman, 
+  bill sya sa mga treatment ganern haha like pagtahi sa sugat basta treatment. 
+  may professional fee itong kasama kasi need naman talaga bayad sa doctor non.
+
+tapos yung surgery bill 
+  basically bill sya sa surgeries. sa mga inpatient lang 'to inooffer kasi syempre need maconfine di naman pwede outpatient.
+
+tapos room bill, 
+  yung bill sa room. multiply fee sa number of days na naconfine sa hospital.
+
+sa procurement naman 
+itong purchase vendor order bill 
+  lahat yan ng approved order bill per vendor bali nakagroup sya per vendor.
+
+itong purchase order bill, 
+  overall bill na yan.
+
+yung mga payment 
+  naexplain ko naman kagabi diba? 
+  yung mga inpatient room payment ganern meaning bayad yun sa bill for room. 
+  pwede kasi yung mga patient magbayad partial 
+  if di nila kaya magbayad ng full doon sa over all bill, 
+  if partial sila magbayad nagdecide na kami ng protocol na per sub bill pwede nyang ibayad. 
+  if kaya nya lang bayaran room bill, go. or if treatment bill gora basta per sub bill. 
+
+tapos yung purchase order vendor payment,  
+  bayad yan ni homies don sa particular vendor na yun. then same goes with sa purchase order payment.
+
+tapos yung bank accounts, 
+  bank account yan ni homies bali jan ipapasok lahat ng pera na nacollect ni homies don sa collection or don sa mga patient.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // BILLS => PAYMENTS
+
+Prescription_bill  => Inpatient_prescription_payment => 4014: prescription fee
+Lab_request_bill => Inpatient_lab_request_payment => laboratory fee
+Treatment_bill => Inpatient_treatment_payment => treatment fee
+Surgery_bill => Inpatient_surgery_payment => surgery fee
+Room_bill => Inpatient_room_payment = room fee
+Purchase_order_vendor_bill => Purchase_order_vendor_payment => purchase order expense
+Purchase_order_bill => Purchase_order_payment => purchase order expense
+
+Outpatient_lab_request_payment => laboratory fee
+Outpatient_treatment_payment => treatment fee
+
+
+
+//account titles
+    prescription fee
+    laboratory fee
+    treatment fee
+    surgery fee
+    room fee
+    purchase order expense
+
+
+
+//CATEGORICAL TABLES
+    //CASH-IN
+        Patient_cash_payment
+        Patient_check_payment
+    //CASH-OUT
+        Hospital_cash_payment
+        Hospital_check_payment
+
+
+
+//CASH-IN
+    Sales 4001
+    Deposit  
+
+//CASH-OUT
+    Withdrawal 
+
+//ASSETS
+    Medicine 1017
+    Medical_supply 1007
+
+//CAPITAL
+    Bank_account   
+   
+ 
+//NOT INCLUDED
+    Inpatient_bill => Inpatient_payment => 
+
+
+
+   /
+
+    Medicine 1017
+    Medical_supply 1007
+
+   
+
+
+
+
+//FINAL
+    
+    //ASSETS
+    Bank_account: 1016
+    prescriptions receivable: 1032
+    laboratories receivable: 1033
+    treatments receivable: 1034
+    surgeries receivable: 1035
+    rooms receivable: 1036
+
+    //LIABILITIES
+    purchase orders payable: 2017
+    utilities payable: 2004
+
+    //EQUITY
+    Deposit: 3001
+    Withdrawal: 3002
+
+    //INCOME
+    prescription fee: 4014
+    laboratory fee: 4015
+    treatment fee: 4016
+    surgery fee: 4017
+    room fee: 4018
+    Sales: 4001
+
+    //EXPENSE
+    purchase order expense: 5043
+    utilities expense: 5009
+
+   
+
+    
+    
+//TABLES INVOLVED
+
+Bank_account
+
+Prescription_bill => Inpatient_prescription_payment
+
+Lab_request_bill => Inpatient_lab_request_payment
+            Outpatient_lab_request_payment
+
+Treatment_bill > Inpatient_treatment_payment
+        Outpatient_treatment_payment
+
+Surgery_bill > Inpatient_surgery_payment
+
+Room_bill > Inpatient_room_payment
+
+Purchase_order_vendor_bill > Purchase_order_vendor_payment
+
+Purchase_order_bill > Purchase_order_payment
+
+AR_Utilities
+
+Deposit
+
+Withdrawal
+
+Sales
+
+
+//
+Bank_account
+    remaining_amount = Column(Float,nullable=False)
+    initial_amount = Column(Float,nullable=False)
+
+Prescription_bill
+    billing_date = Column(Date,nullable=False)
+    medicine_amount = Column(Float,nullable=False)
+    medical_amount = Column(Float,nullable=False) 
+    sub_total = Column(Float,nullable=False)
+    total_amount = Column(Float,nullable=False)
+Inpatient_prescription_payment
+    amount_paid = Column(Float,nullable=False)
+    date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+
+Lab_request_bill
+    total_amount
+Inpatient_lab_request_payment
+    amount_paid = Column(Float,nullable=False)
+    date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+Outpatient_lab_request_payment
+    amount_paid = Column(Float,nullable=False)
+    date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+
+Treatment_bill
+    total_amount = Column(Float, nullable=False)
+Inpatient_treatment_payment
+    amount_paid = Column(Float,nullable=False)
+    date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+Outpatient_treatment_payment
+    amount_paid = Column(Float,nullable=False)
+    date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+    
+Surgery_bill
+    total_amount = Column(Float, nullable=False)
+Inpatient_surgery_payment
+    amount_paid = Column(Float,nullable=False)
+    date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+
+Room_bill
+    no_of_days = Column(Integer, nullable=False)
+    total_amount = Column(Float, nullable=False)
+Inpatient_room_payment
+    amount_paid = Column(Float,nullable=False)
+    date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+
+Purchase_order_vendor_bill
+    total_vendor_bill = Column(Float, nullable=False)
+    date_of_billing = Column(Date, nullable=False)
+    due_date = Column(Date, nullable=False)
+    remaining_balance = Column(Float, nullable=False)
+Purchase_order_vendor_payment
+    total_amount_paid = Column(Float,nullable=False)
+    date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+
+Purchase_order_bill
+  total_bill = Column(Float, nullable=False)
+Purchase_order_payment
+  amount_paid = Column(Float,nullable=False)
+  date_of_payment = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+
+AR_Utilities
+    utility_type= Column(String(255),nullable=False)
+    utility_name= Column(String(255),nullable=False, index=True)
+    utility_bill= Column(Float, nullable=False)	 				
+    due_date= Column(Date, nullable=False)				
+    notes = Column(String(255), nullable=False)
+
+Deposit
+    amount = Column(Float,nullable=False)
+    description = Column(Text,nullable=False)
+    date_of_deposit = Column(Date,nullable=False)
+
+Withdrawal
+    amount = Column(Float,nullable=False)
+    description = Column(Text,nullable=False)
+    date_of_withdrawal = Column(Date,nullable=False)
+
+Sales
+    product_name = Column(String(255), nullable=False)
+    date = Column(Date,nullable=False)
+    gross_margin = Column(Float, nullable=False)
+    total_amount = Column(Float, nullable=False)
+
+
+/
+    Prescription_bill  
+    Lab_request_bill 
+    Treatment_bill
+    Surgery_bill
+    Room_bill 
+    Purchase_order_vendor_bill 
+    Purchase_order_bill 
+
+
+
+//
+Bank_account
+    remaining_amount
+    initial_amount
+
+Prescription_bill
+    billing_date
+    medicine_amount
+    medical_amount
+    sub_total
+    total_amount
+Inpatient_prescription_payment
+    amount_paid
+    date_of_payment 
+
+Lab_request_bill
+    total_amount
+Inpatient_lab_request_payment
+    amount_paid
+    date_of_payment
+Outpatient_lab_request_payment
+    amount_paid 
+    date_of_payment 
+
+Treatment_bill
+    total_amount
+Inpatient_treatment_payment
+    amount_paid
+    date_of_payment 
+Outpatient_treatment_payment
+    amount_paid 
+    date_of_payment
+    
+Surgery_bill
+    total_amount 
+Inpatient_surgery_payment
+    amount_paid 
+    date_of_payment
+
+Room_bill
+    no_of_days
+    total_amount 
+Inpatient_room_payment
+    amount_paid 
+    date_of_payment 
+
+Purchase_order_vendor_bill
+    total_vendor_bill 
+    date_of_billing
+    due_date
+    remaining_balance
+Purchase_order_vendor_payment
+    total_amount_paid 
+    date_of_payment 
+
+Purchase_order_bill
+  total_bill 
+Purchase_order_payment
+  amount_paid 
+  date_of_payment
+
+AR_Utilities
+    utility_type
+    utility_name
+    utility_bill			
+    due_date			
+    notes 
+
+Deposit
+    amount 
+    description 
+    date_of_deposit
+
+Withdrawal
+    amount
+    description 
+    date_of_withdrawal 
+
+Sales
+    product_name 
+    date 
+    gross_margin 
+    total_amount 
+
+
+
+
+
+
+
+
+Prescription_bill
+  billing_date
+  
+
+ 
+
+Room_bill 
+
+    no_of_days
+
+Purchase_order_vendor_bill
+    total_vendor_bill 
+    remaining_balance
+    date_of_billing
+    due_date
+
+Purchase_order_bill
+  total_bill 
+
+/for bill
+  total_amount
+/for payment
+  amount_paid
+  date_of_payment 
+
+/
+
+Bank_account
+  remaining_amount
+
+  initial_amount
+
+AR_Utilities
+    utility_bill			
+    due_date			
+    notes 
+
+    utility_type
+    utility_name
+
+Deposit / Withdrawal
+    amount 
+    description 
+    date_of_deposit_or_withdrawal
+
+Sales
+    date 
+    total_amount 
+
+    gross_margin
+
+
+/
+/general_ledger/accountant/data_source/Bank_account
+/general_ledger/accountant/data_source/Prescription_bill
+/general_ledger/accountant/data_source/Inpatient_prescription_payment
+/general_ledger/accountant/data_source/Lab_request_bill
+/general_ledger/accountant/data_source/Inpatient_lab_request_payment
+/general_ledger/accountant/data_source/Outpatient_lab_request_payment
+/general_ledger/accountant/data_source/Treatment_bill
+/general_ledger/accountant/data_source/Inpatient_treatment_payment
+/general_ledger/accountant/data_source/Outpatient_treatment_payment
+/general_ledger/accountant/data_source/Surgery_bill
+/general_ledger/accountant/data_source/Inpatient_surgery_payment
+/general_ledger/accountant/data_source/Room_bill
+/general_ledger/accountant/data_source/Inpatient_room_payment
+/general_ledger/accountant/data_source/Purchase_order_vendor_bill
+/general_ledger/accountant/data_source/Purchase_order_vendor_payment
+/general_ledger/accountant/data_source/Purchase_order_bill
+/general_ledger/accountant/data_source/Purchase_order_payment
+/general_ledger/accountant/data_source/AR_Utilities
+/general_ledger/accountant/data_source/Deposit
+/general_ledger/accountant/data_source/Withdrawal
+/general_ledger/accountant/data_source/Sales
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#AP & AR
+class Inpatient_bill(Base):
+    __tablename__ = "inpatient_bills"    
+    id 
+   
+    total_professional_fee
+    total_lab_test_fee
+    total_prescription_fee
+    total_treatment_fee
+    total_surgery_fee
+    total_room_fee
+    total_discounts
+    total_bill
+    remaining_balance
+    date_of_billing 
+    due_date
+    
+    status = Pending
+    created_at
+   
+class  Purchase_order_bill(Base):
+    __tablename__ = "purchase_order_bills"    
+
+    id 
+   
+    total_bill 
+
+    status = Pending
+    created_at
+
+   
+   
+
+// BILL
+    Pending > [incomplete] > paid
+
+    incomplete
+    pending
+    paid
+
+// PAYMENT
+    Active > paid 
+
+    Active
+    paid
+
+// UTILITIES
+    pending > Approved > [incomplete] > paid
+
+//Purchase_order_vendor_payment
+    Completed
+
+
+
+
+
+//Bank_account
+{
+    "id"
+    "created_at"
+
+    "status": "Active",
+    "status2"
+
+    "remaining_amount": 2250,
+}
+
+//Deposit,
+widthdrawal
+{
+    "id"
+    "created_at"
+
+    "status": "Active",  
+    "status2" 
+
+    "amount": 500,
+    "date_of_deposit": "2022-09-05", // date_of_withdrawal for widthdrawal
+    "description"
+}
+
+//AR_Utilities
+{
+    "id"
+    "created_at"
+
+    "status": "Approved",
+    "status2"
+
+    "due_date": "2022-02-28",
+    "utility_bill": 8000,
+    "notes"
+}
+
+//Purchase_order_payment,
+Outpatient_treatment_payment,
+Outpatient_lab_request_payment,
+Inpatient_treatment_payment,
+Inpatient_surgery_payment,
+Inpatient_room_payment,
+Inpatient_prescription_payment,
+Inpatient_lab_request_payment,
+Purchase_order_vendor_payment
+{
+    "id"
+     "created_at"
+
+    "status": "Active" // "Completed" for Purchase_order_vendor_payment
+    "status2"
+    
+    "amount_paid": 30000,// "total_amount_paid" for Purchase_order_vendor_payment
+    "date_of_payment": "2022-09-06T02:14:25",
+}   
+
+//Purchase_order_vendor_bill
+{
+    "id"    
+    "created_at"
+
+     "status": "Pending",
+     "status2"
+     
+    "date_of_billing": "2021-11-08",
+    "due_date": "2021-11-21",
+
+    "total_vendor_bill": 42000,
+}
+
+//Treatment_bill,
+Surgery_bill,
+Room_bill,
+Lab_request_bill,
+Purchase_order_bill,
+Prescription_bill
+{
+    "id"
+    "created_at"
+
+    "status": "Pending",
+    "status2"
+
+    "total_amount": 2500 // "total_bill" for Purchase_order_bill
+
+    "billing_date": "2021-11-19", // for Prescription_bill
+}
+   
+//Sales {
+    id
+    date
+    gross_margin
+    total_amount
+    status
+    status2
+    created_at
+}
+    
+     
+
+
+// SCHEMA
+        id: str
+        created_at: Optional[datetime]
+        status: str
+        status2: str
+
+        total_bill: float = 0 // for Purchase_order_bill
+        total_amount: float = 0 // for other bills and sales
+
+        billing_date: Optional[datetime]// for Prescription_bill
+
+        date_of_billing: Optional[datetime] // for Purchase_order_vendor_bill
+
+        due_date: Optional[datetime] // for Purchase_order_vendor_bill & AR_Utilities
+
+        total_vendor_bill: float = 0 //  for Purchase_order_vendor_bill
+
+        total_amount_paid: float = 0 // for Purchase_order_vendor_payment
+
+        amount_paid: float = 0 // for other payments
+        date_of_payment: Optional[datetime] // for payments
+
+        utility_bill: float = 0 // for AR_Utilities
+
+        notes: str = '' // for AR_Utilities
+
+        amount: float = 0 // for Deposit & widthdrawal
+
+        description: str = '' // for Deposit & widthdrawal
+
+        date_of_deposit: Optional[datetime] // for Deposit
+
+        date_of_withdrawal: Optional[datetime] // // for widthdrawal
+
+        remaining_amount: float = 0 // for Bank_account
+
+        date: Optional[date] # for Sales
+        gross_margin: float = 0 # for Sales
+
+
+
+
+
+Sales: no data
+
+
+//MANIPULATION
+    #for bills (Receivable)
+        //For bills: Pending > [Incomplete] > Paid
+        if ( /bill/gi.test(this.value) ) {
+            if ( responseData.status2 == "Not Journalized" 
+                && responseData.status == "Paid" 
+            ) {
+                //save 2 entry
+            } else {
+                 //save 1 entry
+            }
+        }
+
+        assets: receivables
+        liability: payables
+
+    #for Payments
+    
+        revenue: fees
+        expense: expense
+
+
+
+
+    # for modifying date
+        AR_Utilities
+        Bank_account
+        Inpatient_lab_request_payment
+        Inpatient_prescription_payment
+        Inpatient_room_payment
+        Inpatient_surgery_payment
+        Inpatient_treatment_payment
+        Lab_request_bill
+        Outpatient_lab_request_payment
+        Outpatient_treatment_payment
+        Purchase_order_bill
+        Purchase_order_payment
+        Purchase_order_vendor_payment
+        Room_bill
+        Sales
+        Surgery_bill
+        Treatment_bill
+
+
+
+
+
+//Bank_account
+    id 
+    status2
+
+    date: created_at
+    amount: remaining_amount
+    status: status
+
+    initial_amount
+
+//Deposit,
+Withdrawal
+    id
+    status2
+    
+    date: date_of_deposit|date_of_withdrawal
+    amount: amount
+    status: status
+    description: description
+    
+    bank_account_id
+
+//AR_Utilities
+    id
+    status2
+
+    date: created_at
+    amount: utility_bill
+    status: status
+    description: notes
+
+    due_date
+
+//Purchase_order_payment,
+Outpatient_treatment_payment,
+Outpatient_lab_request_payment,
+Inpatient_treatment_payment,
+Inpatient_surgery_payment,
+Inpatient_room_payment,
+Inpatient_prescription_payment,
+Inpatient_lab_request_payment,
+Purchase_order_vendor_payment
+    id
+    status2
+
+    date: date_of_payment
+    amount: amount_paid
+    status: status
+
+    purchase_order_vendor_payment_id
+    purchase_order_bill_id
+    
+    treatment_id
+    
+    lab_request_id
+    
+    treatment_bill_id
+    inpatient_payment_id
+    
+    surgery_bill_id
+    inpatient_payment_id
+    
+    room_bill_id
+    inpatient_payment_id
+    
+    prescription_bill_id
+    inpatient_payment_id
+   
+    lab_request_bill_id
+    inpatient_payment_id
+
+    total_amount_paid
+    purchase_order_vendor_bill_id
+    
+//Purchase_order_vendor_bill
+    id
+    status2
+
+    date: date_of_billing
+    amount: total_vendor_bill
+    status: status
+
+    due_date
+    remaining_balance
+    
+//Treatment_bill,
+Surgery_bill,
+Room_bill,
+Lab_request_bill,
+Purchase_order_bill,
+Prescription_bill
+    id
+    status2
+
+    date: created_at
+    amount: total_amount
+    status: status
+   
+    treatment_id
+    inpatient_bill_id
+
+    surgery_id
+    inpatient_bill_id
+   
+    room_admission_id
+    inpatient_bill_id
+    no_of_days
+     
+    lab_request_id
+    inpatient_bill_id
+
+    purchase_order_vendor_bill_id
+    purchase_order_id
+    total_bill
+
+    inpatient_bill_id
+    billing_date
+   
+//Sales
+    id
+    status2
+    
+    date: date
+    amount: total_amount
+    status: status
+
+    gross_margin
+     
+
+{
+    'date': '01/01/2022',
+    'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
+    'amount': 1000.00,
+    'description': 'Lorem ipsum'
+},
+
+
+
+//not ok
+
+AR_Utilities
+   
+
+Purchase_order_payment,
+Outpatient_treatment_payment,
+Outpatient_lab_request_payment,
+Inpatient_treatment_payment,
+Inpatient_surgery_payment,
+Inpatient_room_payment,
+Inpatient_prescription_payment,
+Inpatient_lab_request_payment,
+Purchase_order_vendor_payment
+
+Purchase_order_vendor_bill
+
+Treatment_bill,
+Surgery_bill,
+Room_bill,
+Lab_request_bill,
+Purchase_order_bill,
+Prescription_bill
+
+
+//OK
+Deposit,
+Withdrawal
+Sales
+
+
+#1st entry
+    if not journalized
+        if pending
+            1 entry
+        elif paid
+            2 entry
+                1 pending
+                1 paid
+    else
+        if pending or incomplete or approved
+
+
+    not journalized and not complete or paid
+
+
+
+
+    #to journalized
+
+       
+       
+       
+    if pending and not journalized
+        status2 = "pending_journalized"
+    if active and not journalized
+        status2= "active_journalized"
+    if approved and not journalized
+        status2= "approved_journalized"
+    if incomplete and not journalized
+        status2= "incomplete_journalized
+    if paid and not journalized
+         status2= "paid_journalized
+
+
+         
+        
+    #PENDING_JOURNALIZED
+        not journalized
+    #ACTIVE_JOURNALIZED
+         not journalized
+    #APPROVED_JOURNALIZED
+         not journalized
+    #INCOMPLETE_JOURNALIZED
+         not journalized
+    #PAID_JOURNALIZED
+        not journalized
+
+    if paid_journalized is False:
+        
+    
+        
+        receivable
+            fee
+        cash
+            receivable
+
+        cash
+            sales
+            
+        po expense
+            payable
+
+        payable
+            cash
+
+        utility expense
+            payable
+        payable 
+            cash
+
+
+        cash    
+            homies, capital
+        homies, drawing
+            cash
+
+
+1012
+
+//reset
+    1. reset modal form
+    2. on select2:select
+    3. 
+
+
+//
+
+
+        AR_Utilities
+            active
+            inactive
+            approved
+
+        
+        inpatient_payments
+
+        
+
+        outpatient_lab_request_payments
+        outpatient_treatment_payments
+
+        
+
+
+        Hello PD.
+Codebiz IT Solutions is hiring again for aspiring Junior Developers willing to be train as Full Stack .Net Developer
+Requirement
+- Analytical Thinker
+- Knowledgeable in Basic C# Programming
+- At least High-school graduate
+- Passionate and Hardworking
+- Owns a Laptop
+Chosen candidates will be trained for 2 months and will be given a monthly allowance.
+After the training the company will give an increase depending on the performance during the training period and will be issued a permanent laptop for work.
+Office location : 5F Gateway tower, Cubao Quezon City (Work from home for now)
+PM me for more info or you can email your CV,Resume to info@codebiz.com.ph
+
+
+
+
+
+
+// projects
+1. website
+2. pygame
+
+3. simple website
+3. c langauge
+4. c langauge
+5. java
+6. java
+7. cobol
+8. python
+9. ui design
+10. ui design
+11. website
+12.  node js
+13. system
+14. capstone
+15. ojt project
+16. web scraping
+17. data science 
+
+
+
+
+
+
+
+
+account_number: (
+                    tableName == "prescription_bill"
+                    ? 1032
+                    : tableName == "inpatient_prescription_payment"
+                      ? 4014
+                      : tableName == "lab_request_bill"
+                        ? 1033
+                        : /(inpatient_lab_request_payment|outpatient_lab_request_payment)/gi.test(tableName)
+                          ? 4015
+                          : tableName == "treatment_bill"
+                            ? 1034
+                            : /(inpatient_treatment_payment|outpatient_treatment_payment)/gi.test(tableName)
+                              ? 4016
+                              : tableName == "surgery_bill"
+                                ? 1035
+                                : tableName == "inpatient_surgery_payment"
+                                  ? 4017
+                                  : tableName == "room_bill"
+                                    ? 1036
+                                    : tableName == "inpatient_room_payment"
+                                      ? 4018
+                                      : /(purchase_order_vendor_bill|purchase_order_bill)/gi.test(tableName)
+                                        ? 2017
+                                        : /(purchase_order_vendor_payment|purchase_order_payment)/gi.test(tableName)
+                                          ? 5043
+                                          : tableName == "ar_utilities"
+                                            ? 2004
+                                            : tableName == "deposit"
+                                              ? 3001
+                                              : tableName == "withdrawal"
+                                                ? 3002
+                                                : 4001
+                  )
+
+
+
+        
+
+
+def create(request: CreateDeposit, db: Session):
+    id=str(uuid4())
+    today = date.today()
+    deposit_no="Deposit No." + str(today.year) + str(today.month) + str(today.day) + "0"+ str(random.randint(111, 999)),
+    new_deposit = API.Deposit(**request.dict(), id, deposit_no=deposit_no)
+
+    bank_account = db.query(API.Bank_account).filter(
+    API.Bank_account.id == request.bank_account_id)
+
+    remaining_amount = bank_account.first().remaining_amount + request.amount
+
+    db.add(new_deposit)
+    bank_account.update({"remaining_amount" : remaining_amount})
+    db.commit()
+    db.refresh(new_deposit)
+    
+    
+    journalize({
+        'id': uuid4(),
+        'source_document_path': None,
+        'entry_type': 'Initial',
+        'date': ,
+        'is_adjustable': false,
+        'explanation': description,
+        'status': 'Posted',
+        'originating_entry': None,
+        'adjusted_account': None,
+        'adjusted_balance': 0,
+        'journalized_by': user,
+        'posted_at': datetime.now(),
+        'posted_by': user,
+        'data_source': id
+        'accounts': [{
+            ''
+        }]
+    })
+    return "Deposit has been created."
+
+
+
+
+
+class Deposit(Base):   
+    __tablename__ = "deposits"    
+    id = Column(CHAR(36), primary_key=True)
+    bank_account_id = Column(CHAR(36), ForeignKey("bank_accounts.id"), nullable=False)
+    deposit_no = Column(String(255),nullable=False,unique=True)
+    amount = Column(Float,nullable=False)
+    description = Column(Text,nullable=False)
+    date_of_deposit = Column(Date,nullable=False)
+    status = Column(String(255), nullable=False, server_default="Active")
+
+    status2 = Column(String(255), nullable=False, server_default="Not Journalized")
+    
+    created_by = Column(CHAR(36), ForeignKey("users.id"), nullable=False)
+    created_at = Column(DateTime (timezone=True), nullable=False, server_default=func.now())
+    updated_by = Column(CHAR(36), ForeignKey("users.id"), nullable=True)
+    updated_at = Column(DateTime (timezone=True), nullable=True, onupdate=func.now())
+
+    deposit_bank_account = relationship("Bank_account", primaryjoin="and_(Bank_account.id==Deposit.bank_account_id)", back_populates="bank_account_deposit")
+
+
+is_adjustable
+
+entry_typeßåå

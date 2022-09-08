@@ -3,12 +3,14 @@ from fastapi import APIRouter, Request, Depends, responses
 from fastapi.responses import HTMLResponse
 from typing import List
 
+from sqlalchemy.orm import Session
+
 import dotenv
 
 #Homies
 from API.routers.__init__ import templates
-from API import security
-from API.schemas.general_ledger.data_source import DataSourceGetForTable, DataSourceGetAll, DataSourceGetForSelect
+from API import security, database
+from API.schemas.general_ledger.data_source import DataSourceGetForTable, DataSourceGetAll, DataSourceGetForSelect, DataSourceSchema
 from API.repository.general_ledger.accountant import data_source
 
 # Load .env file
@@ -142,267 +144,18 @@ async def de_activate(
 
 
 
-""" FIRST ENDPOINT """
+""" GET TRANSACTION TABLE DATA """
 
-@router.get('/data_source/am', status_code=200)
-async def get_first_endpoint_data(
+@router.get('/data_source/transaction_table/{table_name}', status_code=200, response_model=List[DataSourceSchema])
+async def get_transaction_table_data(
+    table_name: str,
+    db: Session = Depends(database.get_db),
     result = Depends(security.auth)
 ):
     try:
         return responses.RedirectResponse(result['url'], status_code=302)
     except:
-        return [
-            {
-                'date': '01/01/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 1000.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '01/02/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 1200.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '01/03/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 1400.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '01/04/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 1600.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '01/05/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 1800.00,
-                'description': 'Lorem ipsum'
-            }
-        ]
-
-
-
-""" SECOND ENDPOINT """
-
-@router.get('/data_source/procurement', status_code=200)
-async def get_second_endpoint_data(
-    result = Depends(security.auth)
-):
-    try:
-        return responses.RedirectResponse(result['url'], status_code=302)
-    except:
-        return [
-            {
-                'date': '02/06/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 2000.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '02/07/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 2200.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '02/08/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 2400.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '02/09/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 2600.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '02/10/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 2800.00,
-                'description': 'Lorem ipsum'
-            }
-        ]
-
-
-
-""" THIRD ENDPOINT """
-
-@router.get('/data_source/pharmacy', status_code=200)
-async def get_third_endpoint_data(
-    result = Depends(security.auth)
-):
-    try:
-        return responses.RedirectResponse(result['url'], status_code=302)
-    except:
-        return [
-            {
-                'date': '03/11/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 3000.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '03/12/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 3200.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '03/13/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 3400.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '03/14/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 3600.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '03/15/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 3800.00,
-                'description': 'Lorem ipsum'
-            }
-        ]
-
-
-
-""" FOURTH ENDPOINT """
-
-@router.get('/data_source/warehousing', status_code=200)
-async def get_fourth_endpoint_data(
-    result = Depends(security.auth)
-):
-    try:
-        return responses.RedirectResponse(result['url'], status_code=302)
-    except:
-        return [
-            {
-                'date': '04/16/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 4000.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '04/17/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 4200.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '04/18/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 4400.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '04/19/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 4600.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '04/20/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 4800.00,
-                'description': 'Lorem ipsum'
-            }
-        ]
-
-
-
-""" FIFTH ENDPOINT """
-
-@router.get('/data_source/ap_ar', status_code=200)
-async def get_fifth_endpoint_data(
-    result = Depends(security.auth)
-):
-    try:
-        return responses.RedirectResponse(result['url'], status_code=302)
-    except:
-        return [
-            {
-                'date': '05/21/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 5000.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '05/22/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 5200.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '05/23/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 5400.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '05/24/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 5600.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '05/25/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 5800.00,
-                'description': 'Lorem ipsum'
-            }
-        ]
-
-
-
-""" SIXTH ENDPOINT """
-
-@router.get('/data_source/cd', status_code=200)
-async def get_sixth_endpoint_data(
-    result = Depends(security.auth)
-):
-    try:
-        return responses.RedirectResponse(result['url'], status_code=302)
-    except:
-        return [
-            {
-                'date': '06/26/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 6000.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '06/27/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 6200.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '06/28/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 6400.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '06/29/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 6600.00,
-                'description': 'Lorem ipsum'
-            },
-            {
-                'date': '06/30/2022',
-                'source_document': 'assets/img/source_documents/cc3fe90a5fbebe9eec7b.jpeg',
-                'amount': 6800.00,
-                'description': 'Lorem ipsum'
-            }
-        ]
+        return data_source.get_transaction_table_data(table_name, db)
 
 
 

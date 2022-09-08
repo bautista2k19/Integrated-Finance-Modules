@@ -1,4 +1,5 @@
 #Module
+from datetime import datetime
 from fastapi import APIRouter, Request, Depends, responses, UploadFile, File, Form
 from fastapi.responses import HTMLResponse
 from typing import List, Optional
@@ -86,6 +87,11 @@ async def create(
     originating_entry: Optional[str] = Form(None),
     adjusted_account: Optional[str] = Form(None),
     adjusted_balance: Optional[float] = Form(0),
+    data_source: Optional[str] = Form(None),
+    data_source_date: Optional[str] = Form(None),
+    data_source_status: Optional[str] = Form(None),
+    data_source_status2: Optional[str] = Form(None),
+    data_source_table_name: Optional[str] = Form(None),
     result = Depends(security.auth)
 ):
     try:
@@ -113,7 +119,12 @@ async def create(
             'status': status,
             'originating_entry': (json.loads(originating_entry) if originating_entry else None),
             'adjusted_account': adjusted_account,
-            'adjusted_balance': adjusted_balance
+            'adjusted_balance': adjusted_balance,
+            'data_source': data_source,
+            'data_source_date': data_source_date,
+            'data_source_status': data_source_status,
+            'data_source_status2': data_source_status2,
+            'data_source_table_name': data_source_table_name
         }
         return journal_entry.create(data, result['user'].id)
                
@@ -204,6 +215,11 @@ async def overwrite(
     posted_at: Optional[str] = Form(None),
     posted_by: Optional[str] = Form(None),
     saved_filename: Optional[str] = Form(None),
+    data_source: Optional[str] = Form(None),
+    data_source_date: Optional[str] = Form(None),
+    data_source_status: Optional[str] = Form(None),
+    data_source_status2: Optional[str] = Form(None),
+    data_source_table_name: Optional[str] = Form(None),
     result = Depends(security.auth)
 ):
     try:
@@ -238,7 +254,12 @@ async def overwrite(
             'journalized_at': journalized_at,
             'journalized_by': journalized_by,
             'posted_at': posted_at,
-            'posted_by': posted_by 
+            'posted_by': posted_by,
+            'data_source': data_source,
+            'data_source_date': data_source_date,
+            'data_source_status': data_source_status,
+            'data_source_status2': data_source_status2,
+            'data_source_table_name': data_source_table_name
         }
         return journal_entry.overwrite(id, data, result['user'].id)
 

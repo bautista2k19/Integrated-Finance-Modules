@@ -150,7 +150,7 @@ label[for="source_document"],
   color: #777 !important;
 }
 #source-data-table > tbody > tr > td:nth-of-type(4) {
-  width: 50% !important;
+  width: 40% !important;
 }
 
 @media screen and (max-width: 992px) {
