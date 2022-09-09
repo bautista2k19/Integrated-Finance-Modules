@@ -79,7 +79,7 @@ async def post(
     try:
         return responses.RedirectResponse(result['url'], status_code=302)
     except:
-        return ledger_account.post(id, result['user'].user_id)
+        return ledger_account.post(id, result['user'].id)
 
 
 
@@ -97,4 +97,4 @@ async def unpost(
     except:
         # parse json to dict
         data = await request.json()
-        return ledger_account.unpost(data, result['user'].user_id)
+        return ledger_account.unpost(data, result['user'].id)

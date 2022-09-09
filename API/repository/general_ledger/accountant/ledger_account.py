@@ -22,7 +22,7 @@ def get_table_data(data: dict):
                   INNER JOIN journal_accounts AS JA
                     ON JE.id = JA.journal_entry
                   INNER JOIN chart_accounts AS CA
-                    ON JA.account_title = CA.chart_account_id
+                    ON JA.account_title = CA.id
                   WHERE JE.status = 'Posted'
                     AND JE.date LIKE '%{data['period']}%'"""
             if data['search']['value']:
@@ -47,7 +47,7 @@ def get_table_data(data: dict):
                   INNER JOIN journal_accounts AS JA
                     ON JE.id = JA.journal_entry
                   INNER JOIN chart_accounts AS CA
-                    ON JA.account_title = CA.chart_account_id
+                    ON JA.account_title = CA.id
                   WHERE JE.status = 'Posted'
                     AND JE.date LIKE '%{data['period']}%'"""
             # For searching

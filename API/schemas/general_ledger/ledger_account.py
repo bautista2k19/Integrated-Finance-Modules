@@ -7,8 +7,8 @@ class LedgerAccountGet(BaseModel):
     account_title: str
     date: str
     explanation: Optional[str] = None
-    debit: str
-    credit: str
+    debit: float #str
+    credit: float # str
     status: str
     entry: str
     entry_type: str
